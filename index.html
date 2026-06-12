@@ -960,76 +960,23 @@
 
         /* ====== 手机适配 ====== */
         @media (max-width: 600px) {
-            /* 手机端：模拟电脑显示器外框 */
+            /* 手机端：模拟CRT显示器外框 */
             body {
-                background: #2a2a2a !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                min-height: 100vh;
-                min-height: 100dvh;
+                background: #1a1a1a !important;
             }
-            
-            /* 显示器外壳 */
             .desktop {
+                position: relative !important;
                 width: 100vw !important;
                 height: 100vh !important;
                 height: 100dvh !important;
-                position: relative !important;
-                border: 6px solid #333 !important;
-                border-top: 4px solid #444 !important;
-                border-radius: 8px !important;
-                box-shadow: 
-                    0 0 0 2px #222,
-                    0 0 0 8px #1a1a1a,
-                    0 0 30px rgba(0,0,0,0.8),
-                    inset 0 0 60px rgba(0,0,0,0.3) !important;
+                box-sizing: border-box !important;
+                border: 4px solid #333 !important;
+                border-radius: 6px !important;
+                box-shadow: 0 0 0 1px #111, 0 4px 20px rgba(0,0,0,0.6) !important;
                 overflow: hidden !important;
             }
-            
-            /* 显示器底座 - 用伪元素 */
-            .desktop::after {
-                content: '';
-                display: none; /* 简化：不添加底座，让屏幕占满 */
-            }
-            
-            /* 启动画面也在屏幕内 */
             .boot-screen {
-                border-radius: 4px;
-                border: 6px solid #333;
-                border-top: 4px solid #444;
-                box-shadow: 
-                    0 0 0 2px #222,
-                    0 0 0 8px #1a1a1a,
-                    0 0 30px rgba(0,0,0,0.8);
-            }
-            
-            /* 所有fixed定位的子元素改为absolute（相对于desktop） */
-            .desktop > * {
-                position: absolute !important;
-            }
-            .taskbar {
-                position: absolute !important;
-                bottom: 0; left: 0; right: 0;
-            }
-            .progress-box {
-                position: absolute !important;
-            }
-            .toast {
-                position: absolute !important;
-            }
-            .qq-login-popup {
-                position: absolute !important;
-            }
-            .clue-overlay {
-                position: absolute !important;
-            }
-            .ending-overlay {
-                position: absolute !important;
-            }
-            .crt-scanlines {
-                position: absolute !important;
+                border-radius: 2px;
             }
             
             /* 桌面图标横排 */
@@ -1039,6 +986,7 @@
                 overflow-x: auto; overflow-y: hidden;
                 padding-bottom: 4px;
                 -webkit-overflow-scrolling: touch;
+                z-index: 1;
             }
             .desktop-icon {
                 flex-shrink: 0; width: 60px; padding: 3px;
@@ -1048,30 +996,40 @@
             
             /* 进度面板缩小 */
             .progress-box {
+                position: fixed !important;
                 top: auto; bottom: 44px; right: 8px; left: 8px;
                 padding: 6px 10px; font-size: 10px;
                 border-radius: 6px 6px 0 0;
                 max-height: 80px; overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
+                z-index: 50;
             }
             .progress-title { font-size: 11px; }
             
-            /* 任务栏加高 */
-            .taskbar { height: 40px; padding: 0 4px; }
+            /* 任务栏 */
+            .taskbar {
+                position: fixed !important;
+                bottom: 0; left: 0; right: 0;
+                height: 40px; padding: 0 4px;
+                z-index: 100;
+                width: 100%; 
+                box-sizing: border-box;
+            }
             .start-btn { font-size: 11px; padding: 3px 8px; }
             .taskbar-item { font-size: 10px; padding: 2px 6px; min-width: 40px; }
             .system-tray { font-size: 10px; gap: 5px; }
             
-            /* 窗口在显示器框内全屏 */
+            /* 窗口全屏化 */
             .xp-window {
                 position: absolute !important;
                 left: 0 !important; top: 0 !important;
                 width: 100% !important;
                 height: calc(100% - 40px) !important;
-                border-radius: 0;
-                border-left: none; border-right: none;
+                border-radius: 0 !important;
+                border-left: none !important; border-right: none !important;
                 display: flex !important;
                 flex-direction: column !important;
+                z-index: 10;
             }
             .xp-titlebar { padding: 6px 8px; flex-shrink: 0; }
             .xp-title { font-size: 11px; }
@@ -1086,7 +1044,6 @@
                 min-height: 0 !important;
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch;
-                touch-action: pan-y;
             }
             
             /* 文件夹窗口 */
@@ -1106,11 +1063,9 @@
             .folder-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             
             /* 记事本 */
-            .notepad-window { width: 100% !important; }
             .notepad-content { font-size: 13px; padding: 12px; }
             
             /* QQ主界面 */
-            .qq-main-window { width: 100% !important; }
             .qq-header { padding: 10px; flex-shrink: 0; }
             .qq-my-avatar { width: 42px; height: 42px; }
             .qq-my-name { font-size: 13px; }
@@ -1124,7 +1079,6 @@
             .qq-contact-badge { font-size: 10px; padding: 2px 5px; }
             
             /* QQ聊天窗口 */
-            .qq-chat-window { width: 100% !important; }
             .qq-chat-header { padding: 8px 10px; flex-shrink: 0; }
             .qq-chat-avatar { width: 36px; height: 36px; }
             .qq-chat-name { font-size: 13px; }
@@ -1137,7 +1091,6 @@
             .qq-chat-btn { padding: 8px 20px; font-size: 13px; }
             
             /* QQ空间 */
-            .qzone-window { width: 100% !important; }
             .qzone-banner { height: 90px; }
             .qzone-profile { padding: 0 12px; }
             .qzone-avatar { width: 60px; height: 60px; }
@@ -1147,18 +1100,15 @@
             .qzone-post-text { font-size: 13px; }
             
             /* 笔记本 */
-            .notebook-window { width: 100% !important; }
             .notebook-header { flex-shrink: 0; }
             .notebook-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             
             /* IE浏览器 */
-            .ie-window { width: 100% !important; }
             .ie-toolbar { flex-shrink: 0; }
             .ie-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             .ie-status { flex-shrink: 0; }
             
             /* 资源管理器 */
-            .explorer-window { width: 100% !important; }
             .explorer-toolbar { flex-shrink: 0; }
             .explorer-content { 
                 flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
@@ -1174,15 +1124,35 @@
             }
             
             /* QQ登录弹窗 */
+            .qq-login-popup {
+                position: fixed !important;
+                z-index: 200;
+            }
             .qq-login-box { width: 90vw; max-width: 320px; }
             .qq-login-input { font-size: 16px; padding: 10px; height: 44px; }
             .qq-login-btn { padding: 10px; font-size: 14px; }
             
             /* 线索弹窗 */
+            .clue-overlay {
+                position: fixed !important;
+                z-index: 200;
+            }
             .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
             .clue-text { font-size: 13px; }
             
-            /* 手机端：标题栏左侧添加返回按钮 */
+            /* 结局画面 */
+            .ending-overlay {
+                position: fixed !important;
+                z-index: 300;
+            }
+            
+            /* CRT扫描线 */
+            .crt-scanlines {
+                position: fixed !important;
+                z-index: 99998;
+            }
+            
+            /* 返回按钮（手机端显示） */
             .mobile-back-btn {
                 display: block !important;
                 background: rgba(255,255,255,0.2);
@@ -1200,7 +1170,7 @@
             }
             .mobile-back-btn:active { background: rgba(255,255,255,0.4); }
             
-            /* 手机端：关闭按钮加大点击区域 */
+            /* 关闭按钮加大 */
             .xp-btn.close {
                 min-width: 44px !important;
                 min-height: 32px !important;
@@ -1216,7 +1186,11 @@
             .glitch-btn { padding: 10px 36px; font-size: 14px; }
             
             /* 提示 */
-            .toast { font-size: 12px; padding: 10px 16px; bottom: 56px; }
+            .toast {
+                position: fixed !important;
+                font-size: 12px; padding: 10px 16px; bottom: 56px;
+                z-index: 500;
+            }
             
             /* 禁用拖拽（触控设备） */
             .xp-titlebar { cursor: default; }
@@ -1224,13 +1198,13 @@
             /* 全局触摸优化 */
             * { -webkit-tap-highlight-color: transparent; }
             button, .qq-contact, .qq-tab, .desktop-icon, .folder-sidebar-item,
-            .ie-history-item, .explorer-item, .folder-item, .qzone-tab {
+            .ie-history-item, .explorer-item, .folder-item, .qzone-tab,
+            .mobile-back-btn, .xp-btn, .qq-chat-tab, .start-btn, .taskbar-item {
                 min-height: 36px;
                 min-width: 36px;
             }
             
             /* 确保所有可滚动区域支持触摸 */
-            .xp-window { touch-action: pan-y; }
             .qq-contacts, .qq-chat-messages, .qzone-body, .notebook-content,
             .ie-content, .explorer-content, .folder-content, .folder-sidebar,
             .ending-content, .notepad-content {
