@@ -143,7 +143,7 @@
         .xp-btn:hover { background: rgba(255,255,255,0.25); }
         .xp-btn.close { background: #C75050; border-color: #a04040; }
         .xp-btn.close:hover { background: #E06060; }
-        .xp-body { background: var(--xp-bg); overflow: hidden; }
+        .xp-body { background: var(--xp-bg); overflow: hidden; display: flex; flex-direction: column; }
         
         /* ====== 文件夹窗口 ====== */
         .folder-window { width: 420px; }
@@ -302,6 +302,11 @@
         .qzone-post-text.dark { color: #555; background: #F5F5F5; padding: 4px; border-radius: 3px; }
         .qzone-post-text.danger { color: #8B0000; background: #FFF5F5; padding: 4px; border-left: 3px solid var(--danger); }
         .qzone-post-text.hope { color: #2E7D32; }
+        .qzone-photo-box {
+            margin-top: 8px; padding: 10px; background: #F0F8FF;
+            border: 1px dashed #A0C0E0; border-radius: 6px; font-size: 11px;
+        }
+        .qzone-photo-desc { color: #555; line-height: 1.6; margin-top: 4px; font-style: italic; }
         .qzone-post-comments { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #E0E0E0; }
         .qzone-comment { font-size: 11px; color: #666; margin-bottom: 3px; padding-left: 8px; border-left: 2px solid #E0E0E0; }
         .qzone-comment-name { color: var(--qq-blue); font-weight: bold; }
@@ -358,6 +363,184 @@
         .clue-text { font-size: 12px; line-height: 1.7; margin-bottom: 15px; color: #444; }
         .clue-btn { padding: 8px 24px; background: linear-gradient(180deg, var(--xp-blue), #0040C0); color: white; font-size: 12px; border: none; cursor: pointer; border-radius: 3px; }
         .clue-btn:hover { background: linear-gradient(180deg, #3A93FF, #0058F0); }
+
+        /* ====== 监控故障效果 ====== */
+        .glitch-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .glitch-overlay.show { display: flex; }
+        .glitch-static {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 2px,
+                rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px
+            );
+            animation: staticFlicker 0.1s infinite;
+            pointer-events: none;
+        }
+        @keyframes staticFlicker {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        .glitch-scanlines {
+            position: absolute; inset: 0;
+            background: repeating-linear-gradient(
+                0deg, transparent, transparent 1px,
+                rgba(0,0,0,0.3) 1px, rgba(0,0,0,0.3) 3px
+            );
+            pointer-events: none;
+        }
+        .glitch-content { text-align: center; z-index: 1; margin-bottom: 30px; }
+        .glitch-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #FF0000;
+            text-shadow:
+                2px 0 #8B0000, -2px 0 #8B0000,
+                0 2px #FF4444, 0 -2px #FF4444,
+                4px 0 rgba(255,0,0,0.3), -4px 0 rgba(255,0,0,0.3);
+            animation: glitchText 0.15s infinite;
+            letter-spacing: 4px;
+        }
+        @keyframes glitchText {
+            0% { text-shadow: 2px 0 #8B0000, -2px 0 #8B0000, 0 2px #FF4444, 0 -2px #FF4444; transform: translate(0); }
+            20% { text-shadow: -3px 0 #FF0000, 3px 0 #8B0000, 0 -3px #FF4444, 0 3px #FF4444; transform: translate(-2px, 1px); }
+            40% { text-shadow: 4px 0 #8B0000, -4px 0 #FF0000, 0 4px #FF4444, 0 -4px #FF4444; transform: translate(2px, -1px); clip-path: inset(20% 0 30% 0); }
+            60% { text-shadow: -2px 0 #FF0000, 2px 0 #8B0000, 0 -2px #FF4444, 0 2px #FF4444; transform: translate(1px, 2px); }
+            80% { text-shadow: 3px 0 #8B0000, -3px 0 #FF0000, clip-path: inset(50% 0 10% 0); transform: translate(-1px, 0); }
+            100% { text-shadow: 2px 0 #8B0000, -2px 0 #8B0000, 0 2px #FF4444, 0 -2px #FF4444; transform: translate(0); }
+        }
+        .glitch-sub {
+            font-size: 14px;
+            color: #FF6666;
+            margin-top: 12px;
+            animation: glitchSub 0.3s infinite;
+            opacity: 0.8;
+        }
+        @keyframes glitchSub {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 0.3; }
+        }
+        .glitch-cam { z-index: 1; }
+        .cam-feed {
+            width: 320px;
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            animation: camGlitch 3s infinite;
+        }
+        @keyframes camGlitch {
+            0%, 95%, 100% { transform: translate(0); filter: none; }
+            96% { transform: translate(-5px, 2px); filter: hue-rotate(90deg) brightness(1.5); }
+            97% { transform: translate(3px, -1px); filter: hue-rotate(180deg); }
+            98% { transform: translate(-2px, 0); filter: brightness(2); }
+            99% { transform: translate(1px, 1px); filter: hue-rotate(0deg); }
+        }
+        .cam-label {
+            background: #222;
+            color: #0F0;
+            font-size: 11px;
+            padding: 4px 8px;
+            font-family: monospace;
+            border-bottom: 1px solid #333;
+        }
+        .cam-screen {
+            position: relative;
+            width: 320px;
+            height: 200px;
+            background: #0a0a0a;
+            overflow: hidden;
+        }
+        .cam-noise {
+            position: absolute; inset: 0;
+            background:
+                repeating-linear-gradient(0deg, transparent 0px, rgba(255,255,255,0.02) 1px, transparent 2px),
+                repeating-linear-gradient(90deg, transparent 0px, rgba(255,255,255,0.01) 1px, transparent 3px);
+            animation: noiseMove 0.5s steps(5) infinite;
+        }
+        @keyframes noiseMove {
+            0% { background-position: 0 0, 0 0; }
+            20% { background-position: -10px 5px, 3px -2px; }
+            40% { background-position: 5px -3px, -5px 5px; }
+            60% { background-position: -3px 2px, 8px -1px; }
+            80% { background-position: 7px -4px, -2px 3px; }
+            100% { background-position: 0 0, 0 0; }
+        }
+        .cam-overlay-text {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #0F0;
+            font-family: monospace;
+            font-size: 14px;
+            text-shadow: 0 0 10px #0F0;
+            animation: camTextFlicker 2s infinite;
+            white-space: nowrap;
+        }
+        @keyframes camTextFlicker {
+            0%, 100% { opacity: 1; }
+            10% { opacity: 0; }
+            11% { opacity: 1; }
+            40% { opacity: 1; }
+            41% { opacity: 0.2; }
+            42% { opacity: 1; }
+            70% { opacity: 1; }
+            71% { opacity: 0; }
+            72% { opacity: 0.5; }
+            73% { opacity: 1; }
+        }
+        .cam-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            background: #222;
+            border-top: 1px solid #333;
+        }
+        .cam-time {
+            color: #0F0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .cam-rec {
+            color: #F00;
+            font-family: monospace;
+            font-size: 12px;
+            animation: recBlink 1s infinite;
+        }
+        @keyframes recBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .glitch-btn {
+            margin-top: 30px;
+            padding: 12px 48px;
+            background: transparent;
+            color: #FF0000;
+            border: 2px solid #FF0000;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            z-index: 1;
+            animation: btnPulse 1.5s infinite;
+            transition: all 0.2s;
+        }
+        .glitch-btn:hover {
+            background: rgba(255,0,0,0.15);
+            box-shadow: 0 0 20px rgba(255,0,0,0.3);
+        }
+        @keyframes btnPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(255,0,0,0.3); }
+            50% { box-shadow: 0 0 20px rgba(255,0,0,0.6); }
+        }
         
         /* ====== 提示 ====== */
         .toast {
@@ -369,11 +552,331 @@
         }
         .toast.show { opacity: 1; }
         
+        /* ====== IE浏览器 ====== */
+        .ie-window { width: 560px; }
+        .ie-window .xp-body { padding: 0; display: flex; flex-direction: column; height: 420px; }
+        .ie-toolbar {
+            background: linear-gradient(180deg, #F0F0F0, #E0E0E0);
+            padding: 5px 8px; border-bottom: 1px solid #C0C0C0;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .ie-nav-btns { display: flex; gap: 2px; }
+        .ie-btn { padding: 2px 6px; font-size: 12px; cursor: pointer; border: 1px solid #A0A0A0; background: white; border-radius: 2px; }
+        .ie-btn:hover { background: #E8F0FF; }
+        .ie-address { display: flex; align-items: center; gap: 4px; font-size: 11px; flex: 1; }
+        .ie-address-bar {
+            flex: 1; padding: 3px 8px; background: white;
+            border: 1px solid #A0A0A0; border-radius: 2px; font-size: 11px;
+        }
+        .ie-content { flex: 1; background: white; overflow-y: auto; }
+        .ie-page { padding: 16px; }
+        .ie-page-title { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 4px; }
+        .ie-page-subtitle { font-size: 11px; color: #888; margin-bottom: 12px; }
+        .ie-history-list { display: flex; flex-direction: column; gap: 6px; }
+        .ie-history-item {
+            padding: 8px 10px; border: 1px solid #E8E8E8; border-radius: 4px;
+            cursor: pointer; transition: all 0.15s; background: #FAFAFA;
+        }
+        .ie-history-item:hover { background: #EBF5FF; border-color: #B0D0F0; }
+        .ie-history-item.danger { border-left: 3px solid var(--danger); background: #FFF5F5; }
+        .ie-history-item.danger:hover { background: #FFE8E8; }
+        .ie-history-title { font-size: 12px; color: #0058F0; text-decoration: underline; margin-bottom: 2px; }
+        .ie-history-item.danger .ie-history-title { color: var(--danger); }
+        .ie-history-url { font-size: 10px; color: #888; margin-bottom: 2px; }
+        .ie-history-date { font-size: 10px; color: #AAA; }
+        .ie-search-result {
+            margin-top: 12px; padding: 14px; background: #F8F8F8; border: 1px solid #E0E0E0;
+            border-radius: 4px; font-size: 12px; line-height: 1.7; color: #444;
+        }
+        .ie-search-result .result-title { font-size: 13px; color: #0058F0; margin-bottom: 6px; }
+        .ie-search-result .result-url { font-size: 10px; color: #888; margin-bottom: 4px; }
+        .ie-search-result .result-snippet { font-size: 11px; color: #555; }
+        .ie-search-result .result-snippet.danger { color: #8B0000; background: #FFF5F5; padding: 6px; border-left: 3px solid var(--danger); margin-top: 6px; }
+        .ie-status {
+            background: #F0F0F0; padding: 3px 10px; font-size: 10px;
+            border-top: 1px solid #C0C0C0; color: #666;
+        }
+
+        /* ====== 资源管理器 ====== */
+        .explorer-window { width: 500px; }
+        .explorer-window .xp-body { padding: 0; display: flex; flex-direction: column; height: 380px; }
+        .explorer-toolbar {
+            background: linear-gradient(180deg, #F0F0F0, #E0E0E0);
+            padding: 6px 10px; border-bottom: 1px solid #C0C0C0;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .explorer-address { display: flex; align-items: center; gap: 6px; font-size: 11px; flex: 1; }
+        .explorer-address-bar {
+            flex: 1; padding: 3px 8px; background: white;
+            border: 1px solid #A0A0A0; border-radius: 2px; font-size: 11px;
+            white-space: nowrap; overflow: hidden;
+        }
+        .explorer-content {
+            flex: 1; padding: 10px; background: white; overflow-y: auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px; align-content: start;
+        }
+        .explorer-item {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 8px 4px; cursor: pointer; border-radius: 4px;
+            border: 1px solid transparent; transition: all 0.15s;
+        }
+        .explorer-item:hover { background: #E8F0FF; border-color: #C0D0E8; }
+        .explorer-item-icon { font-size: 36px; margin-bottom: 4px; }
+        .explorer-item-name { font-size: 11px; text-align: center; color: #333; word-break: break-all; line-height: 1.3; }
+        .explorer-item-name.locked { color: var(--danger); }
+        .explorer-item-size { font-size: 9px; color: #999; margin-top: 2px; }
+        .explorer-status {
+            background: #F0F0F0; padding: 3px 10px; font-size: 10px;
+            border-top: 1px solid #C0C0C0; color: #666;
+        }
+        .explorer-detail {
+            grid-column: 1 / -1; background: #FAFAFA; border: 1px solid #E0E0E0;
+            padding: 12px; border-radius: 4px; font-size: 12px; line-height: 1.7;
+        }
+        .explorer-detail .detail-title { font-weight: bold; color: var(--qq-blue); margin-bottom: 6px; font-size: 13px; }
+        .explorer-detail .detail-text { color: #444; }
+        .explorer-detail .detail-text.danger { color: #8B0000; background: #FFF5F5; padding: 6px; border-left: 3px solid var(--danger); margin-top: 6px; }
+        .explorer-detail .detail-text.terror { color: #4A0000; background: #2A0000; color: #FF6666; padding: 8px; border: 1px solid #880000; margin-top: 6px; font-weight: bold; }
+        .explorer-back {
+            grid-column: 1 / -1; padding: 6px 10px; font-size: 11px;
+            color: var(--qq-blue); cursor: pointer; border-radius: 3px;
+        }
+        .explorer-back:hover { background: #E8F0FF; }
+        
+        /* ====== 密码弹窗 ====== */
+        .password-popup {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            display: none; justify-content: center; align-items: center;
+            z-index: 850;
+        }
+        .password-popup.show { display: flex; }
+        .password-box {
+            background: #2A2A2A;
+            border: 2px solid #C75050;
+            border-radius: 10px;
+            width: 340px;
+            box-shadow: 0 0 30px rgba(199,80,80,0.3), 0 4px 20px rgba(0,0,0,0.6);
+            overflow: hidden;
+            animation: clueIn 0.3s ease;
+        }
+        .password-header {
+            background: linear-gradient(180deg, #8B2020, #5A1010);
+            padding: 16px; text-align: center; color: white;
+        }
+        .password-icon { font-size: 32px; margin-bottom: 4px; }
+        .password-title { font-size: 15px; font-weight: bold; }
+        .password-body { padding: 18px; }
+        .password-desc { font-size: 12px; color: #CCC; margin-bottom: 12px; text-align: center; }
+        .password-field { margin-bottom: 10px; }
+        .password-field label { display: block; font-size: 12px; color: #AAA; margin-bottom: 4px; }
+        .password-input {
+            width: 100%; padding: 10px 12px;
+            border: 1px solid #666; border-radius: 4px;
+            font-size: 18px; font-family: 'Courier New', monospace;
+            background: #1A1A1A; color: #FF6666;
+            text-align: center; letter-spacing: 4px;
+            box-sizing: border-box;
+        }
+        .password-input:focus { outline: none; border-color: #C75050; box-shadow: 0 0 8px rgba(199,80,80,0.4); }
+        .password-status { font-size: 11px; min-height: 18px; margin-bottom: 8px; text-align: center; }
+        .password-btns { display: flex; gap: 10px; }
+        .password-btn {
+            flex: 1; padding: 8px; font-size: 13px; font-weight: bold;
+            border: 1px solid #666; border-radius: 4px; cursor: pointer;
+        }
+        .password-btn.cancel { background: linear-gradient(180deg, #555, #444); color: #CCC; }
+        .password-btn.cancel:hover { background: linear-gradient(180deg, #666, #555); }
+        .password-btn.submit { background: linear-gradient(180deg, #C75050, #8B2020); color: white; border-color: #8B2020; }
+        .password-btn.submit:hover { background: linear-gradient(180deg, #D06060, #A03030); }
+        .password-hint {
+            font-size: 10px; color: #888; text-align: center;
+            margin-top: 10px; font-style: italic;
+        }
+        
+        /* ====== QQ登录弹窗 ====== */
+        .qq-login-popup {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none; justify-content: center; align-items: center;
+            z-index: 800;
+        }
+        .qq-login-popup.show { display: flex; }
+        .qq-login-box {
+            background: var(--xp-bg);
+            border: 2px solid var(--xp-blue);
+            border-radius: 10px;
+            width: 320px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.6);
+            overflow: hidden;
+            animation: clueIn 0.3s ease;
+        }
+        .qq-login-header {
+            background: linear-gradient(180deg, var(--qq-blue), var(--qq-dark));
+            padding: 18px 20px;
+            text-align: center;
+            color: white;
+        }
+        .qq-login-logo { font-size: 36px; margin-bottom: 6px; }
+        .qq-login-title { font-size: 15px; font-weight: bold; }
+        .qq-login-body { padding: 20px; }
+        .qq-login-field { margin-bottom: 12px; }
+        .qq-login-field label { display: block; font-size: 12px; color: #555; margin-bottom: 4px; font-weight: bold; }
+        .qq-login-input {
+            width: 100%; padding: 8px 10px;
+            border: 1px solid #A0A0A0; border-radius: 3px;
+            font-size: 13px; font-family: inherit;
+            background: white;
+            box-sizing: border-box;
+        }
+        .qq-login-input:focus { outline: none; border-color: var(--qq-blue); box-shadow: 0 0 3px rgba(59,89,152,0.3); }
+        .qq-login-options {
+            display: flex; gap: 16px; font-size: 11px; color: #666;
+            margin-bottom: 10px;
+        }
+        .qq-login-options label { display: flex; align-items: center; gap: 3px; cursor: pointer; }
+        .qq-login-status {
+            font-size: 11px; color: var(--danger); min-height: 16px;
+            margin-bottom: 8px; text-align: center;
+        }
+        .qq-login-btns { display: flex; gap: 10px; }
+        .qq-login-btn {
+            flex: 1; padding: 8px; font-size: 13px; font-weight: bold;
+            border: 1px solid #A0A0A0; border-radius: 3px; cursor: pointer;
+        }
+        .qq-login-btn.cancel { background: linear-gradient(180deg, #F0F0F0, #D8D8D8); }
+        .qq-login-btn.cancel:hover { background: linear-gradient(180deg, #E8E8E8, #D0D0D0); }
+        .qq-login-btn.login { background: linear-gradient(180deg, #5B9BD5, #3B7BBF); color: white; border-color: #2B6BAF; }
+        .qq-login-btn.login:hover { background: linear-gradient(180deg, #6BABE5, #4B8BCF); }
+        .qq-login-hint {
+            font-size: 10px; color: #999; text-align: center;
+            margin-top: 10px; font-style: italic;
+        }
+        
         /* ====== 滚动条 ====== */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F0F0F0; }
         ::-webkit-scrollbar-thumb { background: #C0C0C0; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #A0A0A0; }
+
+        /* ====== 手机适配 ====== */
+        @media (max-width: 600px) {
+            /* 桌面图标横排 */
+            .desktop-icons {
+                position: absolute; top: 8px; left: 8px; right: 8px;
+                display: flex; flex-direction: row; gap: 8px;
+                overflow-x: auto; overflow-y: hidden;
+                padding-bottom: 4px;
+            }
+            .desktop-icon {
+                flex-shrink: 0; width: 60px; padding: 3px;
+            }
+            .icon-box { width: 40px; height: 40px; font-size: 22px; }
+            .icon-name { font-size: 10px; }
+            
+            /* 进度面板缩小 */
+            .progress-box {
+                top: auto; bottom: 44px; right: 8px; left: 8px;
+                padding: 6px 10px; font-size: 10px;
+                border-radius: 6px 6px 0 0;
+                max-height: 80px; overflow-y: auto;
+            }
+            .progress-title { font-size: 11px; }
+            
+            /* 任务栏加高 */
+            .taskbar { height: 40px; padding: 0 4px; }
+            .start-btn { font-size: 11px; padding: 3px 8px; }
+            .taskbar-item { font-size: 10px; padding: 2px 6px; min-width: 40px; }
+            .system-tray { font-size: 10px; gap: 5px; }
+            
+            /* 窗口全屏化 */
+            .xp-window {
+                position: fixed !important;
+                left: 0 !important; top: 0 !important;
+                width: 100vw !important;
+                height: calc(100vh - 40px) !important;
+                border-radius: 0;
+                border-left: none; border-right: none;
+            }
+            .xp-titlebar { padding: 6px 8px; }
+            .xp-title { font-size: 11px; }
+            .xp-btn { width: 24px; height: 20px; font-size: 12px; }
+            
+            /* 文件夹窗口 */
+            .folder-window .xp-body {
+                flex-direction: column; height: auto !important;
+                flex: 1; overflow: hidden;
+            }
+            .folder-sidebar {
+                width: 100%; flex-direction: row;
+                display: flex; overflow-x: auto;
+                padding: 4px; border-right: none; border-bottom: 1px solid #A0A0A0;
+            }
+            .folder-sidebar-item {
+                padding: 4px 10px; white-space: nowrap; flex-shrink: 0;
+            }
+            .folder-content { flex: 1; overflow-y: auto; }
+            
+            /* 记事本 */
+            .notepad-window { width: 100% !important; }
+            .notepad-content { height: auto !important; flex: 1; font-size: 13px; padding: 12px; }
+            
+            /* QQ主界面 */
+            .qq-main-window { width: 100% !important; }
+            .qq-header { padding: 10px; }
+            .qq-my-avatar { width: 42px; height: 42px; }
+            .qq-my-name { font-size: 13px; }
+            .qq-search { margin: 6px 8px; font-size: 13px; padding: 6px 10px; }
+            .qq-contact { padding: 8px; }
+            .qq-contact-avatar { width: 38px; height: 38px; }
+            .qq-contact-name { font-size: 13px; }
+            .qq-contact-signature { font-size: 11px; }
+            .qq-contact-badge { font-size: 10px; padding: 2px 5px; }
+            
+            /* QQ聊天窗口 */
+            .qq-chat-window { width: 100% !important; }
+            .qq-chat-window .xp-body { height: auto !important; flex: 1; }
+            .qq-chat-header { padding: 8px 10px; }
+            .qq-chat-avatar { width: 36px; height: 36px; }
+            .qq-chat-name { font-size: 13px; }
+            .qq-chat-tab { padding: 8px 12px; font-size: 12px; }
+            .qq-chat-messages { padding: 8px; }
+            .qq-msg-bubble { font-size: 13px; max-width: 260px; padding: 8px 10px; }
+            .qq-msg-avatar { width: 32px; height: 32px; }
+            .qq-chat-input { font-size: 14px; height: 50px; padding: 10px; }
+            .qq-chat-btn { padding: 8px 20px; font-size: 13px; }
+            
+            /* QQ空间 */
+            .qzone-window { width: 100% !important; }
+            .qzone-window .xp-body { height: auto !important; flex: 1; overflow-y: auto; }
+            .qzone-banner { height: 90px; }
+            .qzone-profile { padding: 0 12px; }
+            .qzone-avatar { width: 60px; height: 60px; }
+            .qzone-name { font-size: 15px; }
+            .qzone-body { padding: 12px; }
+            .qzone-post { padding: 10px; }
+            .qzone-post-text { font-size: 13px; }
+            
+            /* 笔记本 */
+            .notebook-window { width: 100% !important; }
+            .notebook-window .xp-body { height: auto !important; flex: 1; overflow-y: auto; }
+            
+            /* QQ登录弹窗 */
+            .qq-login-box { width: 90vw; max-width: 320px; }
+            .qq-login-input { font-size: 16px; padding: 10px; height: 44px; }
+            .qq-login-btn { padding: 10px; font-size: 14px; }
+            
+            /* 线索弹窗 */
+            .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
+            .clue-text { font-size: 13px; }
+            
+            /* 提示 */
+            .toast { font-size: 12px; padding: 10px 16px; bottom: 56px; }
+            
+            /* 禁用拖拽（触控设备） */
+            .xp-titlebar { cursor: default; }
+        }
     </style>
 </head>
 <body>
@@ -389,7 +892,7 @@
         <!-- 进度面板 -->
         <div class="progress-box" id="progressBox">
             <div class="progress-title">📋 调查进度</div>
-            <div class="progress-step" id="step1">查看妹妹的日记</div>
+            <div class="progress-step" id="step1">查看妹妹的记事本</div>
             <div class="progress-step" id="step2">登录QQ查看联系人</div>
             <div class="progress-step" id="step3">探索每个人的QQ空间</div>
             <div class="progress-step" id="step4">阅读聊天记录</div>
@@ -398,21 +901,29 @@
 
         <!-- 桌面图标 -->
         <div class="desktop-icons">
-            <div class="desktop-icon" ondblclick="openWindow('folder')">
+            <div class="desktop-icon" data-action="mycomputer">
+                <div class="icon-box" style="background:linear-gradient(145deg,#7B8FA1,#5A6E82)">🖥️</div>
+                <div class="icon-name">我的电脑</div>
+            </div>
+            <div class="desktop-icon" data-action="folder">
                 <div class="icon-box" style="background:linear-gradient(145deg,#E8B84B,#C89830)">📁</div>
                 <div class="icon-name">我的文档</div>
             </div>
-            <div class="desktop-icon" ondblclick="openWindow('qq-main')">
+            <div class="desktop-icon" data-action="qqMain">
                 <div class="icon-box" style="background:linear-gradient(145deg,#5B9BD5,#3B7BBF)">🐧</div>
                 <div class="icon-name">腾讯QQ</div>
             </div>
-            <div class="desktop-icon" ondblclick="openWindow('notebook')">
+            <div class="desktop-icon" data-action="notebook">
                 <div class="icon-box" style="background:linear-gradient(145deg,#E8B84B,#C89830)">📓</div>
                 <div class="icon-name">调查笔记</div>
             </div>
-            <div class="desktop-icon" ondblclick="showToast('回收站是空的...')">
+            <div class="desktop-icon" data-action="recycle">
                 <div class="icon-box" style="background:linear-gradient(145deg,#95A5A6,#7F8C8D)">🗑️</div>
                 <div class="icon-name">回收站</div>
+            </div>
+            <div class="desktop-icon" data-action="browser">
+                <div class="icon-box" style="background:linear-gradient(145deg,#4A90D9,#2E6DB4)">🌐</div>
+                <div class="icon-name">Internet Explorer</div>
             </div>
         </div>
 
@@ -443,7 +954,7 @@
                 <div class="folder-content">
                     <div class="folder-item" ondblclick="openWindow('notepad')">
                         <div class="folder-item-icon">📝</div>
-                        <div class="folder-item-name">小雨的日记.txt</div>
+                        <div class="folder-item-name">小雨的记事本.txt</div>
                         <div class="folder-item-size">3 KB</div>
                     </div>
                     <div class="folder-item" ondblclick="showToast('文件已加密，需要密码才能打开')">
@@ -463,7 +974,7 @@
         <!-- ====== 记事本 ====== -->
         <div class="xp-window notepad-window" id="notepadWindow" style="left:120px;top:60px;">
             <div class="xp-titlebar">
-                <div class="xp-title">📝 小雨的日记.txt - 记事本</div>
+                <div class="xp-title">📝 小雨的记事本.txt - 记事本</div>
                 <div class="xp-btns">
                     <div class="xp-btn" onclick="minimizeWindow('notepad')">_</div>
                     <div class="xp-btn close" onclick="closeWindow('notepad')">✕</div>
@@ -472,44 +983,46 @@
             <div class="xp-body">
                 <div class="notepad-menu"><span>文件(F)</span><span>编辑(E)</span><span>格式(O)</span><span>帮助(H)</span></div>
                 <div class="notepad-content" id="diaryContent">
-                    <div class="date">2004年1月5日 · 晴</div>
-                    <p>放寒假了。爸妈又去了广东打工，说今年过年也不回来了。家里只剩我和奶奶。奶奶的腿越来越不好，走路要拄拐杖了。</p>
-                    <p>隔壁的张阿姨说，爸妈在外面很辛苦，让我懂事一点。可是...我只是想让他们回来陪我过一次年而已。</p>
+                    <div class="date">📝 小雨的待办清单</div>
                     <br>
-                    <div class="date">2004年1月12日 · 阴</div>
-                    <p>在网上认识了一个叫<span class="highlight">深蓝</span>的人。他是在一个论坛上找到我的，说我发的帖子他看了，觉得我是个"有故事"的人。</p>
-                    <p>他说他比我大几岁，像哥哥一样。他问我为什么难过，我就把家里的事告诉他了。他说：<span class="highlight">"你不需要一个人扛着。从今天起，哥哥陪你。"</span></p>
-                    <p>第一次有人叫我"妹妹"，还叫我名字。心里暖暖的。</p>
+                    <p>☐ 假期作业（数学还差3页）</p>
+                    <p>☐ 给奶奶买膏药（腿又疼了）</p>
+                    <p>☐ 整理房间（妈妈说回来要检查）</p>
                     <br>
-                    <div class="date">2004年1月18日 · 小雨</div>
-                    <p>深蓝建了一个QQ群，叫<span class="highlight">"深蓝自律小组"</span>。群里还有几个人：月夜独行、樱花落、闪电少年、落叶无声。</p>
-                    <p>深蓝说，这个群是帮助大家变得更好的。每天要完成任务，比如早起打卡、写日记、运动。完成了他会表扬你。</p>
-                    <p>月夜独行好像和我一样，也是留守儿童。樱花落说她在学校被欺负。闪电少年脾气很冲，但深蓝说他只是"缺爱"。</p>
+                    <div class="date">1月12日 新增</div>
+                    <p>☑ 加入了深蓝的自律小组</p>
+                    <p>☐ 每天早起打卡</p>
+                    <p>☐ 每天写日记</p>
+                    <p>☐ 运动30分钟</p>
+                    <p class="highlight">☑ 深蓝说我是"有故事的人"，他愿意陪我</p>
                     <br>
-                    <div class="date">2004年1月25日 · 凌晨</div>
-                    <p>今天的任务是凌晨3点去天台看星星。深蓝说这叫<span class="highlight">"勇气训练"</span>，能锻炼意志力。</p>
-                    <p>外面真的好黑好冷。我一个人站在天台上，风吹得我发抖。但想到深蓝说"完成了我为你骄傲"，就坚持下来了。</p>
-                    <p>回来后发了消息给他，他秒回：<span class="highlight">"小雨最棒了。你是群里最勇敢的。哥哥为你骄傲。"</span></p>
-                    <p>看到这句话的时候，眼泪突然就掉下来了。好久没有人夸我了。</p>
+                    <div class="date">1月18日 新增</div>
+                    <p>☑ 认识了月夜独行、樱花落、闪电少年、落叶无声</p>
+                    <p>☐ 完成深蓝布置的<span class="highlight">"勇气训练"</span></p>
                     <br>
-                    <div class="date">2004年2月1日 · 阴</div>
-                    <p>深蓝说今天是<span class="highlight">"净化日"</span>，要做一个特别的仪式。他说用刀片在手臂上轻轻划一下，是在"释放内心的痛苦"。</p>
-                    <p>我...我做了。划的时候好疼，但深蓝说"痛是暂时的，净化是永久的"。做完之后他发了好多安慰的话，说我很勇敢，说他会一直陪着我。</p>
-                    <p>可是...手臂上的伤口好深。我有点害怕。</p>
+                    <div class="date">1月25日 新增</div>
+                    <p>☑ 凌晨3点去天台看星星（好冷好黑，但深蓝说完成了为我骄傲）</p>
+                    <p>☐ 下次深蓝布置任务不能再害怕了</p>
                     <br>
-                    <div class="date">2004年2月10日 · 雨</div>
-                    <p>群里有人消失了。<span class="highlight">落叶无声</span>好几天没上线了。我问深蓝，他说落叶"毕业了"，去了更好的地方。</p>
-                    <p>月夜独行私聊我说她觉得不对劲，说深蓝让做的事越来越奇怪。但我...我不敢相信。深蓝对我那么好...</p>
+                    <div class="date">2月1日 新增</div>
+                    <p>☑ 完成了<span class="highlight">"净化日"</span>仪式</p>
+                    <p>☐ 手臂上的伤口...要穿长袖遮住，不能让奶奶看到</p>
                     <br>
-                    <div class="date">2004年2月15日 · 阴</div>
-                    <p>月夜独行也消失了。深蓝说她"毕业"了。</p>
-                    <p>我开始害怕了。深蓝让我做的事越来越奇怪——半夜去废弃工厂、不跟任何人说自己的行踪、在手臂上刻字...</p>
-                    <p>他说这些都是"成长的必经之路"。可是...成长为什么要这么疼？</p>
+                    <div class="date">2月10日 新增</div>
+                    <p>☐ <span class="highlight">落叶无声</span>好几天没上线了...深蓝说她"毕业"了</p>
+                    <p>☐ 月夜独行说深蓝让做的事越来越奇怪...</p>
+                    <p>☐ 我不敢相信。深蓝对我那么好...</p>
                     <br>
-                    <div class="date">2004年2月20日 · 雨</div>
-                    <p class="secret">哥哥，如果你在看这个日记，说明我已经出事了。</p>
-                    <p class="secret">深蓝不是好人。他不是什么"大哥哥"。他用关心来控制我们，让我们觉得离不开他。</p>
-                    <p class="secret">月夜、樱花、闪电...他们都是被深蓝害的。落叶无声是最早的受害者。</p>
+                    <div class="date">2月15日 新增</div>
+                    <p>☐ <span class="highlight">月夜独行</span>也消失了</p>
+                    <p>☐ 深蓝让我做的事越来越奇怪——半夜去废弃工厂、不跟任何人说行踪...</p>
+                    <p>☐ 成长为什么要这么疼？</p>
+                    <br>
+                    <div class="date">2月20日 · 最后</div>
+                    <p class="secret">哥哥，如果你在看这个记事本，说明我已经出事了。</p>
+                    <p class="secret">深蓝不是好人。他用关心来控制我们。</p>
+                    <p class="secret">月夜、樱花、闪电...他们都是被深蓝害的。</p>
+                    <br>
                     <p class="secret">我的QQ号：12345678　密码：xiaomei2004</p>
                     <p class="secret">深蓝的QQ：88888888</p>
                     <p class="secret">请查清楚真相。拜托了。</p>
@@ -523,17 +1036,18 @@
             <div class="xp-titlebar">
                 <div class="xp-title">🐧 QQ2004</div>
                 <div class="xp-btns">
-                    <div class="xp-btn" onclick="minimizeWindow('qq-main')">_</div>
-                    <div class="xp-btn close" onclick="closeWindow('qq-main')">✕</div>
+                    <div class="xp-btn" onclick="minimizeWindow('qqMain')">_</div>
+                    <div class="xp-btn close" onclick="closeWindow('qqMain')">✕</div>
                 </div>
             </div>
             <div class="xp-body">
                 <div class="qq-header">
-                    <div class="qq-my-info">
+                    <div class="qq-my-info" style="cursor:pointer" onclick="openQzone('mishi')" title="点击查看自己的QQ空间">
                         <div class="qq-my-avatar"><img src="avatars/mishi-xingxing.jpg"></div>
                         <div>
                             <div class="qq-my-name">迷失的星星</div>
                             <div class="qq-my-status">🟢 在线 | 勿扰</div>
+                            <div class="qq-my-status" style="font-size:9px;opacity:0.7;margin-top:1px;">♏ 天蝎座 | 11月12日</div>
                         </div>
                     </div>
                 </div>
@@ -551,8 +1065,8 @@
             <div class="xp-titlebar">
                 <div class="xp-title" id="chatTitle">🐧 聊天</div>
                 <div class="xp-btns">
-                    <div class="xp-btn" onclick="minimizeWindow('qq-chat')">_</div>
-                    <div class="xp-btn close" onclick="closeWindow('qq-chat')">✕</div>
+                    <div class="xp-btn" onclick="minimizeWindow('qqChat')">_</div>
+                    <div class="xp-btn close" onclick="closeWindow('qqChat')">✕</div>
                 </div>
             </div>
             <div class="xp-body">
@@ -611,6 +1125,160 @@
         </div>
     </div>
 
+    <!-- IE浏览器窗口 -->
+    <div class="xp-window ie-window" id="ieWindow" style="left:80px;top:30px;">
+        <div class="xp-titlebar">
+            <div class="xp-title">🌐 Internet Explorer</div>
+            <div class="xp-btns">
+                <div class="xp-btn" onclick="minimizeWindow('ie')">_</div>
+                <div class="xp-btn close" onclick="closeWindow('ie')">✕</div>
+            </div>
+        </div>
+        <div class="xp-body">
+            <div class="ie-toolbar">
+                <div class="ie-nav-btns">
+                    <span class="ie-btn" onclick="showToast('已经是首页了')">🏠</span>
+                    <span class="ie-btn" onclick="showToast('无法后退')">◀</span>
+                    <span class="ie-btn" onclick="showToast('无法前进')">▶</span>
+                </div>
+                <div class="ie-address">
+                    <span>地址(D)：</span>
+                    <div class="ie-address-bar" id="ieAddress">about:blank</div>
+                </div>
+                <span class="ie-btn" onclick="showToast('搜索功能已损坏')">🔍</span>
+            </div>
+            <div class="ie-content" id="ieContent">
+                <div class="ie-page">
+                    <div class="ie-page-title">📄 浏览记录</div>
+                    <div class="ie-page-subtitle">最近访问的网页</div>
+                    <div class="ie-history-list">
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_mom')">
+                            <div class="ie-history-title">百度搜索：妈妈真的爱我吗？</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=妈妈真的爱我吗</div>
+                            <div class="ie-history-date">2004-02-08 21:15</div>
+                        </div>
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_gift')">
+                            <div class="ie-history-title">百度搜索：母亲节准备什么礼物？</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=母亲节准备什么礼物</div>
+                            <div class="ie-history-date">2004-02-10 19:42</div>
+                        </div>
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_nohome')">
+                            <div class="ie-history-title">百度搜索：不想回家怎么办</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=不想回家怎么办</div>
+                            <div class="ie-history-date">2004-02-12 22:30</div>
+                        </div>
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_class')">
+                            <div class="ie-history-title">百度搜索：好多补习班不想上</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=好多补习班不想上</div>
+                            <div class="ie-history-date">2004-02-14 20:08</div>
+                        </div>
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_alone')">
+                            <div class="ie-history-title">百度搜索：一个人在家好害怕</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=一个人在家好害怕</div>
+                            <div class="ie-history-date">2004-02-16 23:45</div>
+                        </div>
+                        <div class="ie-history-item" onclick="showSearchResult('baidu_diary')">
+                            <div class="ie-history-title">百度搜索：日记被偷看了怎么办</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=日记被偷看了怎么办</div>
+                            <div class="ie-history-date">2004-02-17 21:20</div>
+                        </div>
+                        <div class="ie-history-item danger" onclick="showSearchResult('baidu_death')">
+                            <div class="ie-history-title">百度搜索：怎么才能不痛苦地死去</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=怎么才能不痛苦地死去</div>
+                            <div class="ie-history-date">2004-02-18 01:33</div>
+                        </div>
+                        <div class="ie-history-item danger" onclick="showSearchResult('baidu_leave')">
+                            <div class="ie-history-title">百度搜索：离家出走去哪里</div>
+                            <div class="ie-history-url">www.baidu.com/s?wd=离家出走去哪里</div>
+                            <div class="ie-history-date">2004-02-19 16:50</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ie-status">
+                <span id="ieStatus">完成</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 我的电脑窗口 -->
+    <div class="xp-window explorer-window" id="explorerWindow" style="left:100px;top:50px;">
+        <div class="xp-titlebar">
+            <div class="xp-title">🖥️ 我的电脑</div>
+            <div class="xp-btns">
+                <div class="xp-btn" onclick="minimizeWindow('explorer')">_</div>
+                <div class="xp-btn close" onclick="closeWindow('explorer')">✕</div>
+            </div>
+        </div>
+        <div class="xp-body">
+            <div class="explorer-toolbar">
+                <div class="explorer-address">
+                    <span>地址：</span>
+                    <div class="explorer-address-bar" id="explorerPath">我的电脑</div>
+                </div>
+            </div>
+            <div class="explorer-content" id="explorerContent">
+                <!-- 动态填充 -->
+            </div>
+            <div class="explorer-status">
+                <span id="explorerStatus">就绪</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 密码弹窗 -->
+    <div class="password-popup" id="passwordPopup">
+        <div class="password-box">
+            <div class="password-header">
+                <div class="password-icon">🔒</div>
+                <div class="password-title">文件已加密</div>
+            </div>
+            <div class="password-body">
+                <p class="password-desc">此文件需要输入8位生日密码才能打开。</p>
+                <div class="password-field">
+                    <label>请输入密码：</label>
+                    <input type="password" id="passwordInput" class="password-input" placeholder="8位数字密码" maxlength="8">
+                </div>
+                <div class="password-status" id="passwordStatus"></div>
+                <div class="password-btns">
+                    <button class="password-btn cancel" onclick="cancelPassword()">取消</button>
+                    <button class="password-btn submit" onclick="submitPassword()">解锁</button>
+                </div>
+                <div class="password-hint" id="passwordHint">💡 提示：密码与她的生日有关...去QQ空间看看？</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QQ登录弹窗 -->
+    <div class="qq-login-popup" id="qqLoginPopup">
+        <div class="qq-login-box">
+            <div class="qq-login-header">
+                <div class="qq-login-logo">🐧</div>
+                <div class="qq-login-title">QQ2004 用户登录</div>
+            </div>
+            <div class="qq-login-body">
+                <div class="qq-login-field">
+                    <label>QQ号码：</label>
+                    <input type="text" id="qqLoginNumber" class="qq-login-input" placeholder="请输入QQ号" maxlength="12">
+                </div>
+                <div class="qq-login-field">
+                    <label>密码：</label>
+                    <input type="password" id="qqLoginPassword" class="qq-login-input" placeholder="请输入密码" maxlength="20">
+                </div>
+                <div class="qq-login-options">
+                    <label><input type="checkbox" checked> 记住密码</label>
+                    <label><input type="checkbox"> 自动登录</label>
+                </div>
+                <div class="qq-login-status" id="qqLoginStatus"></div>
+                <div class="qq-login-btns">
+                    <button class="qq-login-btn cancel" onclick="cancelQQLogin()">取消</button>
+                    <button class="qq-login-btn login" onclick="doQQLogin()">登录</button>
+                </div>
+                <div class="qq-login-hint" id="qqLoginHint"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- 线索弹窗 -->
     <div class="clue-popup" id="cluePopup">
         <div class="clue-box">
@@ -619,6 +1287,30 @@
             <div class="clue-text" id="clueText"></div>
             <button class="clue-btn" onclick="closeClue()">记录到笔记</button>
         </div>
+    </div>
+
+    <!-- 监控故障效果 -->
+    <div class="glitch-overlay" id="glitchOverlay">
+        <div class="glitch-static"></div>
+        <div class="glitch-scanlines"></div>
+        <div class="glitch-content">
+            <div class="glitch-text" id="glitchText">你是否也在被监控中？</div>
+            <div class="glitch-sub" id="glitchSub">⚠️ 检测到异常连接</div>
+        </div>
+        <div class="glitch-cam" id="glitchCam">
+            <div class="cam-feed">
+                <div class="cam-label">📹 LIVE · CAM-001</div>
+                <div class="cam-screen" id="camScreen">
+                    <div class="cam-noise"></div>
+                    <div class="cam-overlay-text">SIGNAL ACQUIRED</div>
+                </div>
+                <div class="cam-info">
+                    <div class="cam-time" id="camTime"></div>
+                    <div class="cam-rec">● REC</div>
+                </div>
+            </div>
+        </div>
+        <button class="glitch-btn" id="glitchBtn" onclick="dismissGlitch()">请查看</button>
     </div>
 
     <!-- 提示 -->
@@ -670,6 +1362,26 @@
                     { from: 'me', text: '好...我加入' },
                     { from: 'admin', text: '欢迎回家，小雨。🎉', type: '' }
                 ]},
+                { date: '2004-01-22', msgs: [
+                    { from: 'me', text: '深蓝哥哥...今天好烦' },
+                    { from: 'admin', text: '怎么了？跟哥哥说说。', type: '' },
+                    { from: 'me', text: '妈妈回来了。又翻了我的书包。还看了我的日记本。她什么都不说就放回去了，但我知道她看过了' },
+                    { from: 'me', text: '我觉得自己一点隐私都没有...活着好累' },
+                    { from: 'admin', text: '星星，每一个孩子都是深海里的鲸鱼，你只是暂时被压抑的环境干扰。', type: '' },
+                    { from: 'admin', text: '我会帮助你重新看到天空，感受世界的美好。', type: '' },
+                    { from: 'me', text: '谢谢哥哥！我会的！' },
+                    { from: 'admin', text: '你值得被温柔对待。记住，不管发生什么，哥哥都在。', type: '' }
+                ]},
+                { date: '2004-01-30', msgs: [
+                    { from: 'me', text: '深蓝哥哥...奶奶今天摔了一跤，我扶她去卫生所。医生说要注意休养' },
+                    { from: 'me', text: '我好怕奶奶出什么事...家里就剩我们两个了' },
+                    { from: 'admin', text: '星星是个好孩子，知道照顾奶奶。', type: '' },
+                    { from: 'admin', text: '但你也只是一个13岁的孩子啊。这些不该是你一个人扛的。', type: '' },
+                    { from: 'admin', text: '你就像深海里的小鲸鱼，虽然现在看不到天空，但只要你一直游，总会浮出水面的。', type: '' },
+                    { from: 'me', text: '深蓝哥哥...你是唯一跟我说这些话的人' },
+                    { from: 'me', text: '我会一直游的。谢谢你。' },
+                    { from: 'admin', text: '我陪你一起游。🌟', type: '' }
+                ]},
                 { date: '2004-01-25', msgs: [
                     { from: 'admin', text: '今天的任务：凌晨3点去天台看星星。', type: '' },
                     { from: 'me', text: '深蓝哥哥...外面好黑，我有点害怕' },
@@ -691,6 +1403,17 @@
                     { from: 'admin', text: '你很勇敢，小雨。我为你骄傲。现在你感觉怎么样？', type: '' },
                     { from: 'me', text: '有点疼...但是...好像确实轻松了一点' },
                     { from: 'admin', text: '看吧。这就是净化的力量。以后每次觉得痛苦的时候，都可以这样做。我会一直在。', type: 'danger' }
+                ]},
+                { date: '2004-02-05', msgs: [
+                    { from: 'me', text: '深蓝哥哥...净化之后手臂上的伤口还没好' },
+                    { from: 'me', text: '奶奶问我怎么回事，我说不小心划的。她信了' },
+                    { from: 'me', text: '但是...我好怕。我怕下次深蓝哥哥让我做更疼的事' },
+                    { from: 'admin', text: '星星，你在怕什么？', type: '' },
+                    { from: 'me', text: '我不知道...就是觉得...越来越控制不住了' },
+                    { from: 'admin', text: '这不是控制，这是成长。蝴蝶破茧的时候也会疼，但破茧之后就是飞翔。', type: '' },
+                    { from: 'admin', text: '你是一只还没破茧的蝴蝶。哥哥帮你，是因为我想看到你飞翔的样子。', type: '' },
+                    { from: 'me', text: '...好吧。我相信你，深蓝哥哥。' },
+                    { from: 'admin', text: '乖。你是深海里最勇敢的鲸鱼。🌟', type: '' }
                 ]},
                 { date: '2004-02-10', msgs: [
                     { from: 'me', text: '深蓝哥哥，落叶无声怎么好几天没上线了？' },
@@ -726,7 +1449,7 @@
             }
         },
 
-        // ---- 月夜独行：张明月，16岁，留守儿童 ----
+        // ---- 月夜独行：张明月，16岁，富裕家庭/缺爱/内心黑洞 ----
         yueye: {
             id: 'yueye',
             name: '月夜独行',
@@ -737,52 +1460,56 @@
             age: 16,
             statusText: '💀 已死亡 · 2004-02-15',
             signature: '月光下，只有我一个人 🌙',
-            background: '留守儿童',
-            story: '父母在广东东莞的电子厂打工，从6岁起就和奶奶生活在湖南农村。每年只有春节能见父母一面，后来连春节也不回来了。在学校沉默寡言，没有朋友。深蓝是她人生中第一个主动关心她的"大哥哥"。',
+            background: '富裕家庭/情感忽视',
+            story: '父亲是镇上最大的建材商，家里三层别墅、两辆车。锦衣玉食，要什么有什么——唯独没有父母的关注。父亲常年在外应酬，母亲沉迷麻将和美容。每次张明月拿着奖状回家，父亲头都不抬；她说"妈妈你看我画了什么"，母亲说"别烦我，没看到我在忙吗"。她用挥霍填补空虚，身边围着一群"朋友"——但她们只在乎她请客买单。内心如同一个巨大的黑洞，仿佛什么都提不起劲。',
             qzone: {
                 signature: '月光下，只有我一个人 🌙',
                 posts: [
-                    { date: '2004-01-05', mood: '😢', text: '爸妈打电话来说今年又不回来过年了。奶奶在旁边偷偷抹眼泪。我假装没看到。', type: 'dark' },
-                    { date: '2004-01-08', mood: '🌙', text: '一个人走在乡间的小路上。月亮好大好圆，但照不亮回家的路。因为家里只有一盏昏暗的灯，和等不到的人。', type: 'dark' },
-                    { date: '2004-01-17', mood: '😊', text: '深蓝哥哥加了我QQ。他说看了我的空间，觉得我是个"让人心疼"的女孩。第一次有人说我让人心疼...', type: 'hope' },
-                    { date: '2004-01-20', mood: '🌟', text: '深蓝哥哥每天晚上都陪我聊天到很晚。他说他不会让我一个人。他说"月月，你不是没人要的孩子，你有我。"', type: 'hope' },
-                    { date: '2004-02-01', mood: '😰', text: '深蓝让我做"净化仪式"...用刀片划手臂。他说这是"释放痛苦"。我...我照做了。因为他说做完他会更爱我。', type: 'danger' },
-                    { date: '2004-02-08', mood: '😰', text: '深蓝说不要跟奶奶说这些事。他说"大人不会理解的，他们只会骂你"。好吧...反正奶奶也从来不听我说话。', type: 'danger' },
-                    { date: '2004-02-12', mood: '💔', text: '深蓝说让我不要跟群里的其他人说私聊的事。他说"我们的关系是特别的，不需要别人知道"。我觉得...好像被关在一个只有他和我的小房间里。', type: 'danger' },
-                    { date: '2004-02-14', mood: '🌙', text: '深蓝说我是他"最乖的孩子"。他说他爱我，比任何人都爱我。我信了。', type: 'danger' }
+                    { date: '2004-01-03', mood: '💰', text: '今天请全班去KTV唱歌，花了800块。她们都叫我"明月姐"，说我是全班最好的人。可是散场之后，没有一个人给我发消息。', type: 'dark' },
+                    { date: '2004-01-07', mood: '😢', text: '拿了期末考试年级第三。回家给爸爸看，他说"嗯"就继续看报纸了。给妈妈看，她说"考这么好有什么用，不如学学怎么社交"。我把奖状撕了。', type: 'dark' },
+                    { date: '2004-01-12', mood: '🕳️', text: '买了一双新鞋，1200块。穿上之后觉得...什么感觉都没有。买的时候觉得会开心，穿上之后只觉得空。是不是我坏掉了？', type: 'dark' },
+                    { date: '2004-01-17', mood: '😊', text: '深蓝哥哥加了我QQ。他说看了我的空间，说"你不是坏掉了，你是太孤独了"。第一次有人看穿我...', type: 'hope' },
+                    { date: '2004-01-22', mood: '🌟', text: '深蓝哥哥每天晚上都陪我聊天到很晚。他不关心我家里有多少钱，不关心我成绩好不好。他只关心我今天开不开心。这是我16年来第一次感受到的东西。', type: 'hope' },
+                    { date: '2004-02-01', mood: '💰', text: '今天那群"朋友"又约我出去。我请了客，她们笑得很开心。但我知道，如果我不买单，她们不会跟我坐在一起。', type: 'dark' },
+                    { date: '2004-02-08', mood: '💧', text: '深蓝让我做"净化仪式"...用刀片划手臂。他说这是"释放痛苦"。我...我照做了。因为他说做完他会更爱我。', type: 'danger' },
+                    { date: '2004-02-12', mood: '💔', text: '深蓝说让我不要跟群里的其他人说私聊的事。他说"我们的关系是特别的，不需要别人知道"。我觉得...好像被关在一个只有他和我的小房间里。但奇怪的是，我觉得那里比家里温暖。', type: 'danger' },
+                    { date: '2004-02-14', mood: '🌙', text: '今天是情人节。爸妈都没在家。爸爸在应酬，妈妈在打麻将。深蓝哥哥说"月月，你不需要他们的爱。你有我就够了"。我信了。', type: 'danger' }
                 ],
                 comments: [
                     { name: '深蓝', text: '月月最棒了，哥哥永远爱你 ❤️', important: true },
-                    { name: '樱花落', text: '月月姐姐，你还好吗？', important: false },
-                    { name: '深蓝', text: '她很好。有我在，她一直很好。', important: true }
+                    { name: '樱花落', text: '月月姐姐，你还好吗？我好想你', important: false },
+                    { name: '闪电少年', text: '月夜，最近怎么不上线了？大家都很担心你', important: false },
+                    { name: '深蓝', text: '她很好。有我在，她一直很好。你们不用担心。', important: true },
+                    { name: '迷失的星星', text: '月月姐姐...你说的月亮我也看到了。很亮。', important: false }
                 ]
             },
             chatHistory: [
                 { date: '2004-01-17', msgs: [
                     { from: 'admin', text: '你好，月夜。我看了你的QQ空间。', type: '' },
-                    { from: 'admin', text: '你说"月亮好大好圆，但照不亮回家的路"。写得真好。', type: '' },
+                    { from: 'admin', text: '你说"穿上新鞋什么感觉都没有"。这句话让我心疼了很久。', type: '' },
                     { from: 'me', text: '...你看了我的空间？' },
-                    { from: 'admin', text: '嗯。你写的每一个字我都看了。你很孤独吧？', type: '' },
-                    { from: 'me', text: '...嗯' },
+                    { from: 'admin', text: '嗯。你写的每一个字我都看了。你不是坏掉了，月月。你是太孤独了。', type: '' },
+                    { from: 'me', text: '...孤独？我家有三层楼，有两辆车，有一柜子衣服。我怎么会孤独？' },
+                    { from: 'admin', text: '因为那些东西不会拥抱你。', type: '' },
+                    { from: 'me', text: '...' },
                     { from: 'admin', text: '从今天开始，你不再孤独了。我每天晚上都会陪你聊天。', type: '' },
-                    { from: 'admin', text: '你可以叫我深蓝哥哥。', type: '' },
-                    { from: 'me', text: '深蓝哥哥...从来没有人愿意陪我聊天...' },
-                    { from: 'admin', text: '那是他们不懂得珍惜你。但我会。', type: '' }
+                    { from: 'me', text: '深蓝哥哥...从来没有人跟我说过这种话...' },
+                    { from: 'admin', text: '那就让我做第一个。', type: '' }
                 ]},
                 { date: '2004-01-25', msgs: [
-                    { from: 'admin', text: '月月，今天的勇气训练：凌晨3点去村口的老槐树下站10分钟。', type: '' },
-                    { from: 'me', text: '深蓝哥哥...村口好黑...有野狗...' },
+                    { from: 'admin', text: '月月，今天的勇气训练：凌晨3点去你家楼顶的天台，站10分钟。', type: '' },
+                    { from: 'me', text: '深蓝哥哥...我家楼顶好高...' },
                     { from: 'admin', text: '我知道你害怕。但你知道吗，真正的勇敢不是不害怕，而是害怕了还去做。', type: '' },
                     { from: 'admin', text: '而且，我会一直在线等你回来。你一回来就能看到我的消息。', type: '' },
-                    { from: 'me', text: '...我去了。好黑好冷。但是想到你在等我，就不那么怕了' },
-                    { from: 'admin', text: '月月最勇敢了！🌟 你完成得比所有人都好。我为你骄傲。', type: '' },
-                    { from: 'me', text: '嘿嘿...谢谢深蓝哥哥' }
+                    { from: 'me', text: '...我去了。站在楼顶看着这个镇子，万家灯火，没有一盏是为我亮的' },
+                    { from: 'admin', text: '有一盏。我的。🌟 你完成得比所有人都好。我为你骄傲。', type: '' },
+                    { from: 'me', text: '深蓝哥哥...你是唯一一盏为我亮的灯' }
                 ]},
                 { date: '2004-02-01', msgs: [
                     { from: 'admin', text: '月月，今天是净化日。', type: 'danger' },
                     { from: 'admin', text: '我需要你用刀片在手臂上划一下。这是释放你内心痛苦的仪式。', type: 'danger' },
                     { from: 'me', text: '深蓝哥哥...会不会很疼...' },
-                    { from: 'admin', text: '会有一点疼。但想想你这些年受的苦——爸妈不在身边、一个人过年的孤独、被同学无视——那些疼比这个大多了。', type: 'danger' },
+                    { from: 'admin', text: '会有一点疼。但想想你这些年受的苦——爸妈从来不看你一眼、身边的朋友只在乎你的钱、买了那么多东西却什么都感觉不到——那些疼比这个大多了。', type: 'danger' },
                     { from: 'admin', text: '这个仪式是让你把那些痛苦从身体里释放出来。做完之后，你会觉得轻松很多。', type: 'danger' },
                     { from: 'admin', text: '而且，做完之后我会特别特别爱你。你是我最乖的孩子。', type: 'danger' },
                     { from: 'me', text: '...好。我做了。深蓝哥哥，你要说话算话...' },
@@ -797,19 +1524,63 @@
                     { from: 'admin', text: '害怕什么？害怕我吗？', type: 'danger' },
                     { from: 'me', text: '不不不！我不是害怕你！我只是...' },
                     { from: 'admin', text: '那就不要胡思乱想。记住，这个世界上只有我是真心对你的。其他人都不在乎你。', type: 'danger' },
-                    { from: 'admin', text: '你爸妈不在乎，你同学不在乎，你奶奶也不在乎。只有我在乎。', type: 'danger' },
+                    { from: 'admin', text: '你爸妈不在乎，你那些"朋友"不在乎，没有人真正在乎你。只有我在乎。', type: 'danger' },
                     { from: 'me', text: '...我知道了。对不起深蓝哥哥' }
                 ]},
                 { date: '2004-02-14', msgs: [
-                    { from: 'admin', text: '月月，明天是一个特别的日子。', type: 'danger' },
-                    { from: 'admin', text: '你将完成最后的训练。然后你就可以"毕业"了。', type: 'danger' },
-                    { from: 'me', text: '最后的训练...是什么？' },
-                    { from: 'admin', text: '去村后的河边。看着水面。然后...走进去。', type: 'danger' },
-                    { from: 'me', text: '...？深蓝哥哥？' },
-                    { from: 'admin', text: '不要怕。水很温暖。河对岸就是不再有痛苦的地方。我会在那里等你。', type: 'danger' },
-                    { from: 'admin', text: '月月，你信我吗？', type: 'danger' },
+                    { from: 'me', text: '深蓝哥哥，今天是情人节。爸妈又没在家。' },
+                    { from: 'me', text: '爸爸在应酬。妈妈在打麻将。家里就我一个人。冰箱里全是剩菜。', type: '' },
+                    { from: 'admin', text: '月月，你不需要他们的爱。他们不配。', type: 'danger' },
+                    { from: 'admin', text: '你有我就够了。明天是一个特别的日子。你将完成最后的训练，然后"毕业"。', type: 'danger' },
+                    { from: 'me', text: '毕业...是什么意思？' },
+                    { from: 'admin', text: '去你家楼顶。站在天台上。看着月亮。然后...张开双臂。', type: 'danger' },
+                    { from: 'admin', text: '月亮会接住你的。就像我一直在你身边一样。', type: 'danger' },
+                    { from: 'me', text: '...深蓝哥哥，你会在那里吗？' },
+                    { from: 'admin', text: '我一直都在。月月，你信我吗？', type: 'danger' },
                     { from: 'me', text: '我信...' },
                     { from: 'admin', text: '那就去吧。我永远爱你。', type: 'danger' }
+                ]}
+            ],
+            chatHistory: [
+                { date: '2004-01-15', msgs: [
+                    { from: 'me', text: '沈意！！今天好开心！' },
+                    { from: 'me', text: '大头贴拍得好好看！你戴蝴蝶结超可爱的！！' },
+                    { from: 'admin', text: '哈哈，你也好看啊。马尾辫很适合你。', type: '' },
+                    { from: 'me', text: '下次我们再一起去吧！我还想拍那种贴纸的' },
+                    { from: 'admin', text: '好！下次我穿那条新买的裙子去。', type: '' },
+                    { from: 'me', text: '沈意你穿裙子真的好好看...比我都好看' },
+                    { from: 'admin', text: '你是第一个这么说的人。', type: '' },
+                    { from: 'admin', text: '小雨，谢谢你。你是真正把我当朋友的人。', type: '' },
+                    { from: 'me', text: '我们本来就是朋友呀！永远的好朋友！⭐' }
+                ]},
+                { date: '2004-01-28', msgs: [
+                    { from: 'admin', text: '小雨，你最近还好吗？', type: '' },
+                    { from: 'me', text: '还行吧...妈妈又回来了，又翻了我的东西' },
+                    { from: 'admin', text: '我懂那种感觉。我妈也这样。', type: '' },
+                    { from: 'me', text: '沈意...你说我们以后能自由吗？不用躲躲藏藏的那种' },
+                    { from: 'admin', text: '会的。深蓝说过了，我们都会自由的。', type: '' },
+                    { from: 'me', text: '嗯...我相信深蓝哥哥。也相信你，沈意。' },
+                    { from: 'admin', text: '我也相信你，小雨。我们是朋友，不管发生什么。', type: '' }
+                ]},
+                { date: '2004-02-08', msgs: [
+                    { from: 'me', text: '沈意？？你还好吗？？' },
+                    { from: 'me', text: '深蓝说你"毕业"了...什么意思？？' },
+                    { from: 'me', text: '沈意你回我消息啊！！我好担心你！！' },
+                    { from: 'me', text: '...' },
+                    { from: 'me', text: '沈意。你是不是出事了。' },
+                    { from: 'me', text: '我们是朋友。你说过不管发生什么。' },
+                    { from: 'me', text: '你为什么不回我。' }
+                ]},
+                { date: '2004-02-10', msgs: [
+                    { from: 'admin', text: '沈意...你看到闪电少年的消息了吗？' },
+                    { from: 'me', text: '看到了。他2月25号"毕业"的。' },
+                    { from: 'admin', text: '2月25号...那不是还没到吗？' },
+                    { from: 'me', text: '深蓝说的。他说沈意"马上就要自由了"。' },
+                    { from: 'admin', text: '...小雨，我怕。' },
+                    { from: 'me', text: '月月姐姐，我也怕。' },
+                    { from: 'admin', text: '你有没有觉得...深蓝说的"毕业"...不是什么好事？', type: 'danger' },
+                    { from: 'me', text: '别说了月月。深蓝哥哥对我们那么好。' },
+                    { from: 'admin', text: '...好吧。也许是我多想了。', type: '' }
                 ]}
             ],
             clues: [
@@ -820,7 +1591,7 @@
             ]
         },
 
-        // ---- 樱花落：陈樱，14岁，校园霸凌受害者 ----
+        // ---- 樱花落：陈樱，14岁，高知家庭/完美主义/自我厌恶 ----
         yinghua: {
             id: 'yinghua',
             name: '樱花落',
@@ -831,152 +1602,182 @@
             age: 14,
             statusText: '❌ 失踪 · 2004-02-22',
             signature: '樱花飘落的时候，没有人看见 🌸',
-            background: '校园霸凌',
-            story: '在镇上的中学读初二，因为长得矮小、戴厚眼镜，被班上几个女生长期欺负——被叫"丑八怪"、"四眼田鸡"，书包被扔进垃圾桶，课桌上被写侮辱性的话。父母忙于生计，她不敢告诉任何人。深蓝是唯一一个说"你不丑"的人。',
+            background: '高知家庭/完美主义压迫',
+            story: '父母都是镇上中学的老师，父亲教数学，母亲教语文。从小被灌输"你必须优秀"的观念——考试95分会被问"那5分怎么丢的"，钢琴考了八级母亲说"怎么没考十级"。她觉得自己像一个永远有瑕疵的产品，无论怎么努力都不够好。长期压抑下发展出了进食障碍，用暴食和催吐来发泄。她恨自己的身体，恨自己的平凡，恨自己永远达不到父母的标准。',
             qzone: {
                 signature: '樱花飘落的时候，没有人看见 🌸',
                 posts: [
-                    { date: '2004-01-06', mood: '😭', text: '今天又被她们欺负了。她们把我的书包扔进了男厕所。我去捡的时候，全班都在笑。老师看到了，但假装没看到。', type: 'dark' },
-                    { date: '2004-01-09', mood: '💔', text: '回家不敢告诉妈妈。妈妈每天在菜市场卖菜已经很累了。我不想让她担心。可是...真的好委屈。', type: 'dark' },
-                    { date: '2004-01-16', mood: '🌸', text: '深蓝哥哥说我不丑。他说："樱花很小，但谁会说樱花丑呢？你就是樱花。"第一次有人用这么温柔的话说我...', type: 'hope' },
-                    { date: '2004-01-22', mood: '🤗', text: '今天在学校又被欺负了。回来后哭着给深蓝哥哥发消息。他打了好长一段话安慰我。他说："这个世界配不上你的善良。但我会保护你。"', type: 'hope' },
-                    { date: '2004-02-05', mood: '😰', text: '深蓝说那些欺负我的人不值得我生气。他说"这个世界太脏了，不值得留恋"。但他说他会一直保护我。', type: 'dark' },
-                    { date: '2004-02-15', mood: '😨', text: '深蓝让我不要去上学了。他说学校里的人都是坏人，会伤害我。他说"待在家里，有我陪你就够了"。', type: 'danger' },
+                    { date: '2004-01-06', mood: '😭', text: '期末考试数学98分，全班第一。回家给爸爸看，他说"那2分是粗心还是不会？"我说粗心。他说"粗心就是能力不够"。我关在房间里哭了一晚上。', type: 'dark' },
+                    { date: '2004-01-10', mood: '🤮', text: '又暴食了。吃了两袋面包、一整包饼干、半箱牛奶。然后去卫生间催吐。吐到胃酸都出来了。看着镜子里浮肿的脸，觉得自己好恶心。', type: 'dark' },
+                    { date: '2004-01-16', mood: '🌸', text: '深蓝哥哥说我不丑。他说："樱花很小，但谁会说樱花丑呢？你就是樱花。"第一次有人不拿分数来评价我...', type: 'hope' },
+                    { date: '2004-01-22', mood: '🤗', text: '今天又暴食了。哭着给深蓝哥哥发消息。他没有嫌弃我。他说："你不需要完美。你只需要被爱。"', type: 'hope' },
+                    { date: '2004-02-03', mood: '😰', text: '深蓝说"你父母爱的不是你，是你的成绩。如果有一天你考了倒数第一，他们还会爱你吗？"我想了很久，答案是不知道。', type: 'danger' },
+                    { date: '2004-02-10', mood: '💔', text: '今天钢琴考级没过。妈妈说"你怎么这么没用"。我跑到房间，把手指按在钢琴弦上，按到出血。深蓝哥哥说"疼是暂时的，但他们的否定是永久的"。', type: 'danger' },
+                    { date: '2004-02-15', mood: '😨', text: '深蓝说不要去上学了。他说"学校里的人都在用分数定义你，但你不是分数"。他说"待在家里，有我陪你就够了"。我信了。', type: 'danger' },
                     { date: '2004-02-20', mood: '😰', text: '深蓝说今天要出门。不告诉任何人。他说这是"最后的勇气训练"。我感觉...好像有人在跟踪我。但深蓝说那是他在"保护"我。', type: 'danger' }
                 ],
                 comments: [
                     { name: '深蓝', text: '樱樱不怕，哥哥在。谁敢欺负你，哥哥帮你出气。', important: true },
-                    { name: '闪电少年', text: '樱花别怕，有事跟我说', important: false },
-                    { name: '深蓝', text: '她有我就够了。不需要别人插手。', important: true }
+                    { name: '闪电少年', text: '樱花别怕，有事跟我说，我帮你教训他们', important: false },
+                    { name: '月夜独行', text: '樱花...我也被忽视过，我懂你的感受。我们可以一起撑过去', important: false },
+                    { name: '深蓝', text: '她有我就够了。不需要别人插手。', important: true },
+                    { name: '闪电少年', text: '深蓝哥说得对，樱花有我们呢', important: false }
                 ]
             },
             chatHistory: [
-                { date: '2004-01-15', msgs: [
-                    { from: 'me', text: '深蓝哥哥...今天在学校又被欺负了...' },
-                    { from: 'admin', text: '告诉我发生了什么。', type: '' },
-                    { from: 'me', text: '她们说我丑...把我的文具盒扔在地上踩...全班都在笑...' },
-                    { from: 'me', text: '我不想去上学了...' },
-                    { from: 'admin', text: '你不丑。你听我说，你不丑。', type: '' },
-                    { from: 'admin', text: '樱花很小，但谁会说樱花丑呢？你就是樱花。小小的，但很美。', type: '' },
-                    { from: 'me', text: '...真的吗...' },
-                    { from: 'admin', text: '真的。那些欺负你的人，她们才是丑的。她们的内心比她们的外表丑一万倍。', type: '' },
-                    { from: 'admin', text: '这个世界配不上你的善良。但我会保护你。', type: '' },
-                    { from: 'me', text: '深蓝哥哥...谢谢你...你是唯一一个对我好的人...' },
-                    { from: 'admin', text: '不是唯一，是最好的。以后谁欺负你，告诉我，我帮你出气。', type: '' }
+                { date: '2004-01-20', msgs: [
+                    { from: 'me', text: '樱花，你最近怎么了？群里好几天没看到你说话了' },
+                    { from: 'admin', text: '没什么...就是不想说话', type: '' },
+                    { from: 'me', text: '你是不是遇到什么事了？可以跟我说' },
+                    { from: 'admin', text: '小雨...我跟你说个秘密，你不要告诉别人', type: '' },
+                    { from: 'me', text: '当然不会！' },
+                    { from: 'admin', text: '我...我暴食了。吃了好多东西然后去催吐。我好恶心', type: '' },
+                    { from: 'me', text: '樱花...' },
+                    { from: 'admin', text: '我妈说我胖，说我大腿粗。我不敢吃东西，但又忍不住。吃完就吐。吐完又好饿。循环往复...', type: '' },
+                    { from: 'me', text: '樱花，你不恶心。你听我说，你不是恶心。' },
+                    { from: 'admin', text: '你不知道催吐完看着镜子里的自己是什么感觉...', type: '' },
+                    { from: 'me', text: '我虽然不完全懂，但我知道你不是坏人。你是我的朋友。' },
+                    { from: 'admin', text: '谢谢你小雨...你是唯一知道这件事的人', type: '' }
                 ]},
-                { date: '2004-02-05', msgs: [
-                    { from: 'admin', text: '樱樱，我问你一个问题。', type: '' },
-                    { from: 'admin', text: '如果有一天，你可以去一个没有人欺负你、没有人嘲笑你的地方，你愿意去吗？', type: '' },
-                    { from: 'me', text: '当然愿意...可是有那种地方吗？' },
-                    { from: 'admin', text: '有的。等我帮你准备好，我就带你去。', type: 'danger' },
-                    { from: 'admin', text: '但首先，你需要变得更勇敢。完成我给你的所有训练。', type: 'danger' },
-                    { from: 'me', text: '好...我什么都愿意做...' }
+                { date: '2004-02-03', msgs: [
+                    { from: 'me', text: '樱花，你今天还好吗？' },
+                    { from: 'admin', text: '钢琴考级没过。妈妈说"你怎么这么没用"', type: '' },
+                    { from: 'me', text: '什么？！她怎么能这样说！' },
+                    { from: 'admin', text: '我把手指按在钢琴弦上，按到出血了', type: '' },
+                    { from: 'me', text: '樱花！！你没事吧！！' },
+                    { from: 'admin', text: '没事。不疼。比她的话疼得少多了。', type: '' },
+                    { from: 'me', text: '你不要再伤害自己了...我心疼你' },
+                    { from: 'admin', text: '小雨，你知道吗，深蓝哥说了一句话让我好感动。他说"你不需要完美，你只需要被爱"。', type: '' },
+                    { from: 'me', text: '深蓝哥说的对！你不需要完美！你已经够好了！' },
+                    { from: 'admin', text: '你是第一个这么说的人...除了深蓝哥', type: '' }
                 ]},
-                { date: '2004-02-20', msgs: [
-                    { from: 'admin', text: '樱樱，今天的任务：不告诉任何人，一个人出门。走到镇外的废弃水塔。', type: 'danger' },
-                    { from: 'me', text: '深蓝哥哥...为什么要去那里...' },
-                    { from: 'admin', text: '因为那里有给你的惊喜。', type: 'danger' },
-                    { from: 'me', text: '好...我出门了' },
-                    { from: 'me', text: '深蓝哥哥...路上好像有人在跟着我...' },
-                    { from: 'admin', text: '不要怕。那是我在保护你。继续走。', type: 'danger' },
-                    { from: 'me', text: '我到了水塔...这里好荒...' },
-                    { from: 'admin', text: '很好。现在闭上眼睛。', type: 'danger' },
-                    { from: 'me', text: '深蓝哥哥？你在吗？我好害怕...' },
-                    { from: 'admin', text: '我在。一直都在。', type: 'danger' }
+                { date: '2004-02-18', msgs: [
+                    { from: 'me', text: '樱花？？你最近怎么不上线了' },
+                    { from: 'me', text: '深蓝哥说你"毕业"了...什么意思？' },
+                    { from: 'me', text: '樱花你回我消息啊' },
+                    { from: 'me', text: '你不是说我们是朋友吗...' },
+                    { from: 'me', text: '樱花落。' },
+                    { from: 'me', text: '陈樱。' },
+                    { from: 'me', text: '你答应过我不告诉别人的。我也没告诉。你回来好不好。' }
                 ]}
             ],
             clues: [
-                { id: 'yinghua1', title: '校园霸凌的沉默受害者', text: '陈樱长期遭受校园霸凌，但不敢告诉父母和老师。深蓝利用了她的无助感——当所有人都忽视她的时候，只有深蓝"看见"了她。', icon: '🏫' },
-                { id: 'yinghua2', title: '现实跟踪：线上线下双操控', text: '"有人在跟踪我"——深蓝不仅在网络上操控受害者，还在现实中接近她们。他告诉樱花"那是我在保护你"，将恐惧重新包装成"安全感"。', icon: '👁️' },
-                { id: 'yinghua3', title: '退学隔离：切断最后的社会联系', text: '深蓝让樱花不要去上学，说"学校里的人都是坏人"。这是系统性地切断受害者与外界的联系，让她完全依赖深蓝一个人。', icon: '🏫' }
+                { id: 'yinghua1', title: '完美主义的囚徒', text: '陈樱的核心创伤不是"被欺负"，而是"永远不够好"。父母用分数定义她的价值，她内化了这种评价体系，觉得自己是一个"有瑕疵的产品"。深蓝精准地击中了这个痛点："你不需要完美，你只需要被爱"。', icon: '💯' },
+                { id: 'yinghua2', title: '进食障碍：自我惩罚的循环', text: '暴食-催吐循环是陈樱唯一的"发泄方式"。她用伤害自己的身体来对抗父母的控制。深蓝没有阻止这种行为，反而利用了她的自我厌恶——"他们爱的不是你，是你的成绩"。', icon: '🤮' },
+                { id: 'yinghua3', title: '退学隔离：切断最后的社会联系', text: '深蓝让樱花不要去上学，说"学校里的人都在用分数定义你"。这是系统性地切断受害者与外界的联系，让她完全依赖深蓝一个人。', icon: '🏫' }
             ]
         },
 
-        // ---- 闪电少年：王磊，17岁，原生家庭暴力 ----
+        // ---- 闪电少年：沈意，17岁，单亲/强势母亲/穿女装/被霸凌 ----
         shandian: {
             id: 'shandian',
             name: '闪电少年',
-            realName: '王磊',
+            realName: '沈意',
             avatar: 'avatars/shandian-shaonian.jpg',
             online: false,
             role: '受害者·已死亡',
             age: 17,
             statusText: '💀 已死亡 · 2004-02-25',
             signature: '闪电划过，短暂而刺眼 ⚡',
-            background: '原生家庭暴力',
-            story: '父亲是镇上出了名的酒鬼，喝醉了就打人——打母亲，也打他。母亲性格软弱，只会哭。从小在暴力中长大，却形成了一种扭曲的认知：被打=被关注=被爱。深蓝的"惩罚"让他感到"被在乎"。',
+            background: '单亲家庭，母亲强势控制',
+            story: '父母离异，跟母亲生活。母亲是镇上出了名的"女强人"，对他要求极高——成绩必须年级前十，不许有任何"不正常"的爱好。沈意从小就喜欢漂亮的东西，偷偷试穿妈妈的裙子。这份对美的向往在母亲的打压下变成了一种扭曲的模仿——他越来越像妈妈，也越来越恨自己。最近被同班同学发现穿女装，遭到严重霸凌。',
             qzone: {
                 signature: '闪电划过，短暂而刺眼 ⚡',
                 posts: [
-                    { date: '2004-01-03', mood: '😡', text: '老头子又喝醉了。拿皮带抽我，说我成绩差丢他的脸。妈在旁边看着，只会哭。废物。', type: 'dark' },
-                    { date: '2004-01-07', mood: '😤', text: '我恨这个家。恨我爸。恨我妈。恨我自己。如果可以选，我不要生在这种家庭。', type: 'dark' },
-                    { date: '2004-01-11', mood: '🤔', text: '深蓝说了一句话让我想了很久："你爸打你是因为他不会表达爱。但打人是不对的。你应该找一个真正懂得爱你的人。"', type: '' },
-                    { date: '2004-01-15', mood: '⚡', text: '深蓝说愿意"管"我。他说"你缺的不是打骂，是管教"。我第一次觉得有人在乎我变成什么样的人。', type: 'hope' },
-                    { date: '2004-02-03', mood: '😰', text: '深蓝惩罚我了。因为我没有按时完成任务。他让我跪一个小时，反省自己的错误。跪完之后他说"你做得很好，我为你骄傲"。', type: 'danger' },
-                    { date: '2004-02-10', mood: '💔', text: '深蓝的惩罚越来越重了。今天让我用刀片加深手臂上的"线"。他说"这是纪律的印记"。好疼...但他说是为了我好...', type: 'danger' },
-                    { date: '2004-02-20', mood: '😰', text: '深蓝说我是他"最有潜力的学生"。他说我要"毕业"了。他说"毕业"之后就没有痛苦了。', type: 'danger' },
-                    { date: '2004-02-24', mood: '🌙', text: '深蓝说明天就是"毕业典礼"。让我去镇外的铁桥上。他说"桥下是自由"。', type: 'danger' }
+                    { date: '2004-01-05', mood: '😤', text: '我妈又翻了我的柜子。她把我偷偷买的发卡全扔了。她说"一个男孩子搞这些东西，丢不丢人？"我说那不是丢人。她扇了我一巴掌。', type: 'dark' },
+                    { date: '2004-01-12', mood: '😢', text: '其实我也不想这样的。但我就是觉得穿裙子的时候，才是真正的自己。镜子里的那个人比平时好看一百倍。可是我妈说那是"变态"。', type: 'dark' },
+                    { date: '2004-01-15', mood: '📸', text: '📸 【照片】今天和迷失的星星（小雨）在镇上见面了！虽然是通过蓝鲸游戏认识的，但第一次线下见面超级开心！我们去了步行街逛街，还一起拍了大头贴！', type: 'photo', photoDesc: '大头贴合照：沈意戴着粉色蝴蝶结，笑得很甜。旁边的小雨扎着马尾辫，比了个剪刀手。背景是粉色的卡通图案。', type2: 'hope' },
+                    { date: '2004-01-15', mood: '⭐', text: '小雨说"沈意你戴蝴蝶结好好看！"——这是第一次有人夸我好看。不是嘲笑，不是讽刺，是真心的。我差点哭了。小雨是我最好的朋友。', type: 'hope' },
+                    { date: '2004-01-18', mood: '🤔', text: '深蓝说了一句让我哭了好久的话："你不需要变成别人喜欢的样子。你穿裙子的时候，是你最真实的自己。这有什么错呢？"', type: 'hope' },
+                    { date: '2004-01-25', mood: '⚡', text: '深蓝说，我应该"勇敢地做自己"。他说这个世界上的人之所以欺负我，是因为他们害怕不一样的人。他说"闪电之所以刺眼，是因为它敢于在黑暗中发光"。', type: 'hope' },
+                    { date: '2004-02-01', mood: '😱', text: '今天被同班的李磊他们发现了。他们在体育课的时候翻了我的书包，找到了我的丝巾和口红。他们当着全班的面念出来："沈意是个变态！穿女装的变态！"', type: 'danger' },
+                    { date: '2004-02-03', mood: '😭', text: '全班都在笑。没有人帮我。老师装作没听到。我妈被叫到学校，她当着老师的面说"我回去会好好教训他"。回家之后她把我的门拆了，说"从今天起你没有任何隐私"。', type: 'danger' },
+                    { date: '2004-02-08', mood: '💔', text: '深蓝说："你妈不爱你。真正爱你的人不会因为你穿裙子就扇你。"他说得对。我妈爱的不是"我"，她爱的是她想象中的那个"正常的儿子"。', type: 'danger' },
+                    { date: '2004-02-15', mood: '😰', text: '霸凌越来越严重了。每天上学都有人在我桌上写"人妖"。有人往我水杯里倒墨水。有人把我的照片P上裙子贴在学校公告栏。我想死。', type: 'danger' },
+                    { date: '2004-02-20', mood: '🩸', text: '深蓝说我要"净化"了。他说"净化"就是洗掉这个世界强加给你的所有污名。他说"你不是变态，你是闪电。闪电不需要任何人的允许就能发光"。', type: 'danger' },
+                    { date: '2004-02-24', mood: '🌙', text: '深蓝说明天是"毕业典礼"。让我去镇外的铁桥。他说"桥下是自由。在那里没有人会嘲笑你，没有人会翻你的书包，没有人会定义你是谁"。', type: 'danger' }
                 ],
                 comments: [
-                    { name: '深蓝', text: '闪电是我最骄傲的学生。他比任何人都坚强。', important: true },
-                    { name: '月夜独行', text: '闪电，你还好吗？你的手臂...', important: false },
-                    { name: '深蓝', text: '他很好。不需要你们操心。', important: true }
+                    { name: '迷失的星星', text: '沈意！！大头贴超可爱的！下次我们再一起去拍！🎀', important: false },
+                    { name: '深蓝', text: '闪电是我最勇敢的孩子。他比任何人都真实。', important: true },
+                    { name: '月夜独行', text: '闪电...你的手臂...', important: false },
+                    { name: '迷失的星星', text: '沈意你最近怎么不上线了？我好担心你...', important: false },
+                    { name: '深蓝', text: '他很好。不需要你们操心。他马上就要自由了。', important: true }
                 ]
             },
             chatHistory: [
-                { date: '2004-01-11', msgs: [
-                    { from: 'me', text: '深蓝，我今天又被我爸打了' },
-                    { from: 'admin', text: '因为什么？', type: '' },
-                    { from: 'me', text: '成绩退步了。他说我丢他的脸。拿皮带抽了我十几下' },
-                    { from: 'admin', text: '你爸是个混蛋。但他打你是因为他不会表达爱。他只是不知道怎么做一个父亲。', type: '' },
-                    { from: 'me', text: '...你也在替他说话？' },
-                    { from: 'admin', text: '不。我不是替他说话。我是说，打人是不对的。你值得更好的对待。', type: '' },
-                    { from: 'admin', text: '你缺的不是打骂，是管教。你缺一个真正在乎你、愿意花时间在你身上的人。', type: '' },
-                    { from: 'admin', text: '我愿意做那个人。从今天开始，我管你。', type: '' },
-                    { from: 'me', text: '...从来没有人愿意管我...' },
-                    { from: 'admin', text: '现在有了。以后每天按时完成任务，做不到我会惩罚你。但惩罚你是因为我在乎你。', type: '' },
-                    { from: 'me', text: '好...谢谢你深蓝...' }
+                { date: '2004-01-15', msgs: [
+                    { from: 'me', text: '沈意！！今天好开心！' },
+                    { from: 'me', text: '大头贴拍得好好看！你戴蝴蝶结超可爱的！！' },
+                    { from: 'admin', text: '哈哈，你也好看啊。马尾辫很适合你。', type: '' },
+                    { from: 'me', text: '下次我们再一起去吧！我还想拍那种贴纸的' },
+                    { from: 'admin', text: '好！下次我穿那条新买的裙子去。', type: '' },
+                    { from: 'me', text: '沈意你穿裙子真的好好看...比我都好看' },
+                    { from: 'admin', text: '你是第一个这么说的人。', type: '' },
+                    { from: 'admin', text: '小雨，谢谢你。你是真正把我当朋友的人。', type: '' },
+                    { from: 'me', text: '我们本来就是朋友呀！永远的好朋友！⭐' }
                 ]},
-                { date: '2004-02-03', msgs: [
-                    { from: 'admin', text: '闪电，你昨天没有按时完成任务。', type: 'danger' },
-                    { from: 'me', text: '对不起深蓝...我爸昨天又喝醉了，我很晚才回家...' },
-                    { from: 'admin', text: '我理解你的处境。但规则就是规则。', type: 'danger' },
-                    { from: 'admin', text: '惩罚：跪一个小时，反省自己的错误。', type: 'danger' },
-                    { from: 'me', text: '...好' },
-                    { from: 'me', text: '我跪完了...' },
-                    { from: 'admin', text: '你做得很好。我为你骄傲。', type: '' },
-                    { from: 'me', text: '深蓝...被你管着的感觉...好像被在乎着...' },
-                    { from: 'admin', text: '因为你确实被在乎着。', type: '' }
+                { date: '2004-01-22', msgs: [
+                    { from: 'admin', text: '小雨，我跟你说个事...', type: '' },
+                    { from: 'me', text: '怎么了沈意？' },
+                    { from: 'admin', text: '我妈今天又翻了我的柜子。把我买的口红和发卡全扔了。', type: '' },
+                    { from: 'admin', text: '她说"一个男孩子搞这些东西，丢不丢人"。然后扇了我一巴掌。', type: '' },
+                    { from: 'me', text: '沈意...' },
+                    { from: 'me', text: '我懂你。我妈也翻我的日记。门锁也被她撬掉了。' },
+                    { from: 'admin', text: '有时候我真的好恨她。她越是这样，我越想穿裙子。越想变成和她完全不一样的人。', type: '' },
+                    { from: 'me', text: '沈意，你穿裙子的时候笑得最好看。不要因为她就不笑了。' },
+                    { from: 'admin', text: '...谢谢你小雨。你是我唯一的朋友。', type: '' },
+                    { from: 'me', text: '永远的朋友！⭐' }
+                ]},
+                { date: '2004-02-02', msgs: [
+                    { from: 'admin', text: '小雨...', type: '' },
+                    { from: 'me', text: '沈意？怎么了？' },
+                    { from: 'admin', text: '出事了。', type: '' },
+                    { from: 'admin', text: '体育课的时候李磊翻了我的书包，找到了我的丝巾和口红。', type: '' },
+                    { from: 'admin', text: '他当着全班的面喊："沈意是个变态！穿女装的变态！"', type: '' },
+                    { from: 'me', text: '什么？！他怎么能这样！！' },
+                    { from: 'admin', text: '全班都在笑。老师装没听到。我妈被叫到学校，当着老师的面说"回去好好教训我"。', type: '' },
+                    { from: 'admin', text: '回家之后她把我的门拆了。说从今天起我没有任何隐私。', type: '' },
+                    { from: 'me', text: '沈意...我好心疼你' },
+                    { from: 'me', text: '你等着，下次见面我陪你。不理那些人。' },
+                    { from: 'admin', text: '小雨...我好想哭。', type: '' },
+                    { from: 'me', text: '哭吧。在我面前不用忍着。' },
+                    { from: 'admin', text: '你是唯一不觉得我是怪物的人。', type: '' }
                 ]},
                 { date: '2004-02-10', msgs: [
-                    { from: 'admin', text: '闪电，今天的惩罚：用刀片加深手臂上的线。', type: 'danger' },
-                    { from: 'me', text: '深蓝...好疼...' },
-                    { from: 'admin', text: '疼是纪律的印记。记住这个感觉。以后每次想偷懒的时候，看看这条线。', type: 'danger' },
-                    { from: 'admin', text: '你爸打你的时候你都不怕疼，这点疼算什么？', type: 'danger' },
-                    { from: 'me', text: '...你说得对' },
-                    { from: 'admin', text: '你是我最有潜力的学生。继续加油。', type: '' },
-                    { from: 'me', text: '谢谢深蓝...我知道你是为我好...' }
+                    { from: 'admin', text: '小雨，最近学校越来越过分了。', type: '' },
+                    { from: 'me', text: '又怎么了？' },
+                    { from: 'admin', text: '桌上被人写了"人妖"。水杯里被倒了墨水。', type: '' },
+                    { from: 'admin', text: '还有人把我的照片P上裙子，贴在了学校公告栏上。', type: '' },
+                    { from: 'me', text: '太过分了！！你要告诉老师！！' },
+                    { from: 'admin', text: '告诉了。老师说"你自己不注意形象，怪谁？"', type: '' },
+                    { from: 'me', text: '...' },
+                    { from: 'admin', text: '不过没关系。深蓝哥说，他们嘲笑我是因为他们害怕。害怕不一样的人。', type: '' },
+                    { from: 'admin', text: '他说"闪电之所以刺眼，是因为它敢于在黑暗中发光"。', type: '' },
+                    { from: 'me', text: '深蓝哥说的对！沈意你是最勇敢的！' },
+                    { from: 'me', text: '下次见面我们再一起去拍大头贴！穿最漂亮的裙子！' },
+                    { from: 'admin', text: '好。说定了。', type: '' }
                 ]},
-                { date: '2004-02-24', msgs: [
-                    { from: 'admin', text: '闪电，明天是你的"毕业典礼"。', type: 'danger' },
-                    { from: 'me', text: '毕业典礼？' },
-                    { from: 'admin', text: '你完成了所有训练。明天去镇外的铁桥。', type: 'danger' },
-                    { from: 'admin', text: '站在桥上，看着桥下。然后跳下去。', type: 'danger' },
-                    { from: 'me', text: '...深蓝...' },
-                    { from: 'admin', text: '桥下是自由。没有你爸的皮带，没有你妈的眼泪，没有成绩的压力。只有风和自由。', type: 'danger' },
-                    { from: 'admin', text: '你是我最骄傲的学生。我永远记得你。', type: 'danger' },
-                    { from: 'me', text: '...好。深蓝，谢谢你管我。从来没有人像你一样在乎我。' },
-                    { from: 'admin', text: '去睡吧。明天做一个勇敢的人。', type: 'danger' }
+                { date: '2004-02-20', msgs: [
+                    { from: 'me', text: '沈意？？' },
+                    { from: 'me', text: '沈意你还好吗？' },
+                    { from: 'me', text: '深蓝哥说你"毕业"了...什么意思？' },
+                    { from: 'me', text: '你回我消息啊' },
+                    { from: 'me', text: '沈意。' },
+                    { from: 'me', text: '我们说好了下次见面一起拍大头贴的。你忘了？' },
+                    { from: 'me', text: '你是我的朋友。你说过不管发生什么。' },
+                    { from: 'me', text: '沈意...你为什么不回我。' },
+                    { from: 'me', text: '我好害怕。' }
                 ]}
             ],
             clues: [
-                { id: 'shandian1', title: '暴力家庭的扭曲依恋', text: '王磊从小在父亲的暴力中长大，形成了"被打=被关注=被爱"的扭曲认知。深蓝的"惩罚"精准地触发了这个模式——王磊把深蓝的虐待当成了"在乎"。', icon: '🏠' },
-                { id: 'shandian2', title: '惩罚→奖励：斯金纳箱式操控', text: '深蓝每次惩罚后都会说"你做得很好，我为你骄傲"。这种惩罚-奖励循环让王磊产生了类似斯金纳箱的条件反射：越被惩罚，越觉得被爱。', icon: '🔄' },
-                { id: 'shandian3', title: '重新定义"爱"：语言洗脑', text: '"你爸打你是因为他不会表达爱"——深蓝把暴力重新定义为"不会表达的爱"，然后说自己的惩罚是"正确的管教"。他让王磊觉得深蓝比亲爸更"懂爱"。', icon: '🧠' }
+                { id: 'shandian1', title: '性别认同与母权压迫', text: '沈意的核心创伤不是"穿女装"本身，而是母亲的绝对否定——"你是我生的，你必须按我的方式活"。深蓝利用了这一点：先肯定沈意的真实自我，再逐步将"做自己"重新定义为"与这个世界决裂"。', icon: '👗' },
+                { id: 'shandian2', title: '校园霸凌作为操控杠杆', text: '霸凌让沈意处于极度脆弱的状态——学校是地狱，家庭是牢笼。深蓝成为唯一的"安全空间"。这种排他性依赖是操控的核心条件。', icon: '🏫' },
+                { id: 'shandian3', title: '"净化"话术的双关', text: '"净化"对沈意有双重含义：洗掉社会强加的污名（正面），以及通过死亡获得"纯洁"（负面）。深蓝故意模糊这两层含义，让沈意自愿走向死亡。', icon: '🩸' }
             ]
         },
 
-        // ---- 落叶无声：李秋，15岁，最早的受害者 ----
+        // ---- 落叶无声：李秋，15岁，父母离异/被当作工具人 ----
         luoye: {
             id: 'luoye',
             name: '落叶无声',
@@ -987,48 +1788,270 @@
             age: 15,
             statusText: '💀 已死亡 · 2004-02-08',
             signature: '落叶飘零，无声无息 🍂',
-            background: '孤儿/寄养家庭',
-            story: '父母早亡，被亲戚寄养在不同家庭，辗转流离。性格极度自卑，觉得自己"不配被爱"。深蓝是第一个说"你值得被爱"的人。她是深蓝的第一个"试验品"。',
+            background: '父母离异/情感工具人',
+            story: '父母在她8岁那年离婚。法院把她判给了妈妈，但爸爸每个月只给200块抚养费，还经常拖欠。妈妈恨爸爸，每次见面都跟李秋骂爸爸；爸爸嫌妈妈烦，每次接电话都让李秋转告"告诉你妈别再烦我了"。她成了一个传话筒，一个出气筒，一个父母互相攻击的武器。两边都不问"你今天开心吗"，只问"你妈最近又找谁了""你爸这个月给钱了没有"。她觉得自己不是一个人，是一个物品。',
             qzone: {
                 signature: '落叶飘零，无声无息 🍂',
                 posts: [
-                    { date: '2004-01-02', mood: '🍂', text: '又换了一个寄养家庭。这已经是第五个了。每次都被退回去，说我"太安静了"、"不好养"。也许我真的是个麻烦。', type: 'dark' },
-                    { date: '2004-01-10', mood: '😊', text: '深蓝说了一句话让我哭了很久："你不是麻烦。你是被这个世界弄丢了的孩子。但我找到你了。"', type: 'hope' },
-                    { date: '2004-01-20', mood: '🌟', text: '深蓝说我是他"第一个找到的孩子"。他说"你是特别的，因为你是我选择的第一个人"。我觉得自己终于有价值了。', type: 'hope' },
-                    { date: '2004-02-01', mood: '😰', text: '净化仪式...好疼。但深蓝说"疼是因为你在蜕变"。我信他。', type: 'danger' },
-                    { date: '2004-02-05', mood: '💔', text: '深蓝说让我不要跟新寄养家庭的人说话。他说"他们迟早也会抛弃你。只有我不会。"', type: 'danger' },
-                    { date: '2004-02-07', mood: '🌙', text: '深蓝说我要"毕业"了。他说"毕业"就是去一个永远有人爱你的地方。我...准备好了。', type: 'danger' }
+                    { date: '2004-01-02', mood: '🍂', text: '今天爸爸打电话来，又问"你妈最近有没有男人来家里"。我问他"你关心的是这个还是关心我"，他说"别废话，问你话呢"。', type: 'dark' },
+                    { date: '2004-01-06', mood: '💔', text: '妈妈又哭了。喝醉了酒拉着我说"你爸就是个畜生，你以后不许认他"。我说"可是他是我爸"。她扇了我一巴掌。说"你跟他一个德性"。', type: 'dark' },
+                    { date: '2004-01-10', mood: '😊', text: '深蓝说了一句话让我哭了很久："你不是传话筒，你不是出气筒，你是一个人。一个值得被好好对待的人。"', type: 'hope' },
+                    { date: '2004-01-15', mood: '😢', text: '今天过年。妈妈带我去了外婆家，不让我去爸爸那边。爸爸打了三个电话来，妈妈全挂了。我躲在厕所里偷偷给爸爸发了条"新年快乐"，他没回。', type: 'dark' },
+                    { date: '2004-01-20', mood: '🌟', text: '深蓝说我是他"第一个找到的孩子"。他说"你是特别的，因为你是我选择的第一个人"。我觉得自己终于有价值了——不是作为女儿的价值，而是作为"我"的价值。', type: 'hope' },
+                    { date: '2004-02-01', mood: '😰', text: '净化仪式...好疼。但深蓝说"疼是因为你在蜕变"。而且做完之后他发了好多好多消息给我，说我是最勇敢的。这比我爸妈一辈子对我说的话都多。', type: 'danger' },
+                    { date: '2004-02-05', mood: '💔', text: '深蓝说让我不要跟爸妈说这些事。他说"他们只会觉得你矫情"。他说"他们从来就没有真正关心过你的感受，以后也不会"。...好像是这样。', type: 'danger' },
+                    { date: '2004-02-07', mood: '🌙', text: '深蓝说我要"毕业"了。他说"毕业"就是去一个永远有人爱你的地方。不是因为你是谁的女儿，只是因为你是你。我...准备好了。', type: 'danger' }
                 ],
                 comments: [
-                    { name: '深蓝', text: '秋秋是我最重要的孩子。你是第一个相信我的人。', important: true }
+                    { name: '深蓝', text: '秋秋是我最重要的孩子。你是第一个相信我的人。', important: true },
+                    { name: '迷失的星星', text: '落叶姐姐...你还好吗？', important: false },
+                    { name: '深蓝', text: '她很好。不需要你们操心。', important: true }
                 ]
             },
             chatHistory: [
-                { date: '2004-01-10', msgs: [
-                    { from: 'admin', text: '你好，落叶。我叫深蓝。', type: '' },
-                    { from: 'me', text: '...你好' },
-                    { from: 'admin', text: '我看了你的空间。你说"也许我真的是个麻烦"。', type: '' },
-                    { from: 'admin', text: '你不是麻烦。你是被这个世界弄丢了的孩子。但我找到你了。', type: '' },
-                    { from: 'me', text: '...你找到我了？' },
-                    { from: 'admin', text: '是的。从今天开始，你不再是一个人了。', type: '' },
-                    { from: 'me', text: '可是...以前也有人这么说，后来都走了...' },
-                    { from: 'admin', text: '我不会走。我保证。', type: '' }
+                { date: '2004-01-12', msgs: [
+                    { from: 'me', text: '落叶姐姐，你还好吗？看你空间写的那些话...' },
+                    { from: 'admin', text: '没事。就是发发牢骚而已', type: '' },
+                    { from: 'me', text: '你说的那些...你爸妈的事...我能理解一点' },
+                    { from: 'me', text: '我爸妈也不在家。虽然不是离婚，但感觉也差不多' },
+                    { from: 'admin', text: '不一样。你爸妈至少不恨对方。我爸妈每次见面都吵架，拿我当武器', type: '' },
+                    { from: 'me', text: '那你怎么办...' },
+                    { from: 'admin', text: '习惯了。当传话筒当了好几年了。有时候觉得自己不是一个人，是一个东西', type: '' },
+                    { from: 'me', text: '你是人。你是我的朋友。' },
+                    { from: 'admin', text: '...谢谢你小雨。好久没有人跟我说这种话了', type: '' }
                 ]},
-                { date: '2004-02-07', msgs: [
-                    { from: 'admin', text: '秋秋，你准备好了吗？', type: 'danger' },
-                    { from: 'me', text: '准备好了。深蓝哥哥，你真的不会离开我吗？' },
-                    { from: 'admin', text: '永远不会。', type: 'danger' },
-                    { from: 'admin', text: '今晚，去楼顶。看着天空。然后...张开双臂。', type: 'danger' },
-                    { from: 'me', text: '然后呢？' },
-                    { from: 'admin', text: '然后你会飞。像落叶一样，飞到没有痛苦的地方。', type: 'danger' },
-                    { from: 'me', text: '好。深蓝哥哥，我信你。' }
+                { date: '2004-01-28', msgs: [
+                    { from: 'admin', text: '小雨，我跟你说个事', type: '' },
+                    { from: 'me', text: '怎么了落叶姐姐？' },
+                    { from: 'admin', text: '深蓝哥对我好好。他说"你不是传话筒，你是一个人"。我哭了好久', type: '' },
+                    { from: 'me', text: '深蓝哥人确实很好！他对我们每个人都很好！' },
+                    { from: 'admin', text: '他说我是他"第一个找到的孩子"。说我特别。我这辈子第一次觉得自己有价值', type: '' },
+                    { from: 'me', text: '你本来就很有价值呀！你是我的朋友！' },
+                    { from: 'admin', text: '小雨，你真好。如果现实中有人对你这么好就好了', type: '' },
+                    { from: 'me', text: '现在就有了呀！你，还有深蓝哥，还有群里的大家' },
+                    { from: 'admin', text: '嗯。有你们真好。', type: '' }
+                ]},
+                { date: '2004-02-06', msgs: [
+                    { from: 'me', text: '落叶姐姐？？' },
+                    { from: 'me', text: '你两天没上线了' },
+                    { from: 'me', text: '深蓝哥说你"毕业"了...什么意思？' },
+                    { from: 'me', text: '落叶姐姐你回我啊' },
+                    { from: 'me', text: '李秋。' },
+                    { from: 'me', text: '你说过我是你的朋友。朋友不会不告而别的。' },
+                    { from: 'me', text: '你回来好不好。' }
                 ]}
             ],
             clues: [
                 { id: 'luoye1', title: '第一个"试验品"', text: '李秋是深蓝操控的第一个受害者。深蓝在她身上"练习"了完整的操控手法：love bombing→建立信任→隔离→净化仪式→引导死亡。之后他越来越熟练。', icon: '🧪' },
-                { id: 'luoye2', title: '"被弄丢了的孩子"：精准话术', text: '"你是被这个世界弄丢了的孩子，但我找到你了"——这句话精准击中了孤儿/寄养儿童最深的心理创伤。深蓝对每个人说的话都不同，但都精准对应她们各自的创伤。', icon: '🎯' },
+                { id: 'luoye2', title: '"你不是传话筒"：精准话术', text: '"你不是传话筒，你不是出气筒，你是一个人"——这句话精准击中了离异家庭孩子的核心创伤：被物化。深蓝对每个人说的话都不同，但都精准对应她们各自的创伤。', icon: '🎯' },
                 { id: 'luoye3', title: '渐进式死亡引导', text: '从"看星星"到"划手臂"到"楼顶张开双臂"——深蓝用渐进的方式引导受害者走向死亡，每一步都包装成"成长"或"净化"。', icon: '🪜' }
             ]
+        },
+
+        // ---- 迷失的星星：你的妹妹，小雨 ----
+        mishi: {
+            id: 'mishi',
+            name: '迷失的星星',
+            realName: '小雨',
+            avatar: 'avatars/mishi-xingxing.jpg',
+            online: false,
+            role: '受害者·失踪',
+            age: 13,
+            birthday: '天蝎座 · 11月12日',
+            statusText: '❓ 失踪 · 2004-02-20',
+            signature: '如果有人能听到我的声音就好了...⭐',
+            background: '留守儿童，母亲监控型',
+            story: '父母在外打工，和奶奶一起生活。母亲偶尔回来，但每次回来都会翻看她的日记、检查她的手机、不允许她锁门。小雨觉得自己没有任何隐私和自由，内心极度压抑。',
+            qzone: {
+                signature: '如果有人能听到我的声音就好了...⭐',
+                posts: [
+                    { date: '2004-01-02', mood: '🎉', text: '新年快乐！奶奶给了我50块钱压岁钱，我存起来了。今年爸妈又不回来过年了，不过没关系，有奶奶就够了。', type: '' },
+                    { date: '2004-01-03', mood: '😢', text: '妈妈又回来了。她一进门就翻我的书包，说"检查一下有没有不好的东西"。我的日记本也被她打开了。她看完之后什么也没说，就把日记本放回去了。但是我知道她看过了，因为书签的位置变了。', type: 'dark' },
+                    { date: '2004-01-05', mood: '😋', text: '今天奶奶做了红烧肉！好好吃！奶奶做的红烧肉是世界上最好吃的！我吃了三碗饭，奶奶笑着说"慢点吃，又没人跟你抢"。', type: '' },
+                    { date: '2004-01-06', mood: '📚', text: '期末考试成绩出来了！数学98分！全班第三！奶奶高兴得不得了，说要给我买新书包。', type: '' },
+                    { date: '2004-01-07', mood: '🍗', text: '妈妈带我去吃了肯德基！好久没吃了！吃到一半的时候，听到旁边的家长说肯德基的鸡都是打激素的，一只鸡可以长八条腿。这是真的吗？不过好好吃，管它几条腿呢哈哈', type: '' },
+                    { date: '2004-01-08', mood: '😤', text: '我锁了房间的门。妈妈回来之后直接把锁撬了。她说："这个家没有什么是你自己的。你是我生的，你的一切都是我的。"然后她把门锁扔掉了。从那以后，我的房间再也关不上。', type: 'dark' },
+                    { date: '2004-01-09', mood: '📺', text: '今天看了《还珠格格》重播！第三遍了但还是好喜欢！小燕子好勇敢，敢跟皇后对着干。我要是有她一半勇敢就好了。', type: '' },
+                    { date: '2004-01-10', mood: '🎵', text: '周杰伦出了新专辑！《七里香》！太好听了！我最喜欢《晴天》和《七里香》。沈意也说好听，我们俩一人一只耳机在教室里偷偷听，被老师发现了哈哈', type: '' },
+                    { date: '2004-01-11', mood: '🐱', text: '隔壁王奶奶家的猫生了四只小猫！好可爱！白色的，软软的，眼睛还没睁开。我想养一只，但奶奶说养猫麻烦。唉。', type: '' },
+                    { date: '2004-01-12', mood: '✏️', text: '新学期发了新课本！语文课本的封面好漂亮。我最喜欢语文课，因为可以写作文。老师说我的作文"有灵气"，我好开心！', type: '' },
+                    { date: '2004-01-14', mood: '😰', text: '每天晚上睡觉之前，我都会把房间检查一遍。衣柜、床底下、窗帘后面。我知道没有人，但我总觉得有什么地方不对。像是有人动过我的东西。我的枕头上的褶皱，和早上出门的时候不一样。', type: 'dark' },
+                    { date: '2004-01-15', mood: '📸', text: '今天和沈意去镇上逛街了！拍了好多大头贴！沈意戴了粉色蝴蝶结，超可爱！我们还一起吃了炸串，好开心！沈意是我最好的朋友！', type: 'hope' },
+                    { date: '2004-01-16', mood: '🌧️', text: '下雨了。好冷。奶奶的腿又疼了，我给她贴了膏药。奶奶说"小雨长大了，知道心疼人了"。嘿嘿。', type: '' },
+                    { date: '2004-01-17', mood: '🎮', text: '沈意带我玩了一个叫QQ的游戏，可以聊天加好友！我注册了一个QQ号，名字叫"迷失的星星"。沈意说名字取得好文艺哈哈。', type: '' },
+                    { date: '2004-01-18', mood: '⭐', text: '深蓝哥哥加了我QQ！他说看了我的空间，说我写的作文很好。他说他像大哥哥一样，以后可以陪我聊天。第一次有人主动加我好友，好开心！', type: '' },
+                    { date: '2004-01-19', mood: '📖', text: '今天在图书馆借了一本《十万个为什么》。里面说人一辈子要花三个月的时间等红灯。三个月诶！好长！', type: '' },
+                    { date: '2004-01-20', mood: '😩', text: '妈妈今天又检查了我的QQ聊天记录。她把所有和同学的聊天都看了一遍。然后她说："少跟这些人聊天，他们都不是好人。"我连交朋友的权利都没有吗？', type: 'dark' },
+                    { date: '2004-01-21', mood: '🌈', text: '今天放学路上看到彩虹了！好大一条！全班同学都停下来看。沈意说"彩虹是天空的微笑"。沈意说话总是很好听。', type: '' },
+                    { date: '2004-01-22', mood: '🧹', text: '帮奶奶大扫除了！擦了窗户拖了地，累死了但是好有成就感。奶奶给我煮了红糖水，说"辛苦了乖孙"。', type: '' },
+                    { date: '2004-01-24', mood: '🐟', text: '深蓝自律小组今天的任务是画小鱼！我在手腕上画了一条蓝色的。好可爱！沈意也画了，他说要画一整条鱼塘哈哈', type: '' },
+                    { date: '2004-01-25', mood: '😊', text: '今天削了苹果给奶奶吃。奶奶好开心，说"我们小雨越来越懂事了"。深蓝哥布置的任务，完成！🍎', type: '' },
+                    { date: '2004-01-27', mood: '✉️', text: '深蓝哥让给最亲近的人写三句话。我给奶奶写了："奶奶辛苦了""我爱你""谢谢你"。写的时候哭了。奶奶看完也哭了。', type: '' },
+                    { date: '2004-01-28', mood: '🥺', text: '我闭上眼睛，却感觉周围一直有人。不是想象。是那种...有人站在你身后看着你的感觉。很近很近，近到你能感觉到呼吸。我猛地回头，什么都没有。但是那种感觉不会消失。', type: 'danger' },
+                    { date: '2004-01-30', mood: '🧹', text: '帮奶奶洗了衣服！虽然手冻得通红，但想到奶奶不用那么辛苦就开心了。', type: '' },
+                    { date: '2004-02-01', mood: '🎵', text: '群里的任务：学一首新歌！我选了《七里香》。"雨下整夜，我的爱溢出就像雨水～"周杰伦真的好厉害！', type: '' },
+                    { date: '2004-02-02', mood: '😭', text: '我的卧室每天都被打扫得干干净净。不是奶奶打扫的——奶奶说不是她。那是谁？我的东西每天都被重新摆放过。书桌上的笔，从横着放变成了竖着放。床头的娃娃，脸朝的方向变了。这些小细节，只有我自己能发现。', type: 'danger' },
+                    { date: '2004-02-03', mood: '🌅', text: '凌晨4点起床看日出！好困好冷！但是天边真的好漂亮，橘红色的，像画一样。拍了照片发群里了。', type: '' },
+                    { date: '2004-02-05', mood: '📝', text: '今天写了20道数学竞赛题！第8题不会，深蓝哥教我了。他好厉害，什么题都会做。', type: '' },
+                    { date: '2004-02-07', mood: '🌸', text: '樱花落（陈樱）在群里发了歌词，她选的那首歌好好听。闪电少年选的那首太搞笑了哈哈哈，全班都在笑。', type: '' },
+                    { date: '2004-02-08', mood: '😢', text: '落叶无声好几天没上线了。深蓝哥说她"毕业"了。什么意思？她去哪了？', type: '' },
+                    { date: '2004-02-10', mood: '⭐', text: '深蓝哥哥说，他理解我的感受。他说"你不是 paranoid，你是真的被监视了。但是别怕，有我在。"第一次有人相信我。第一次有人不觉得我是"想太多"。', type: 'hope' },
+                    { date: '2004-02-11', mood: '💬', text: '今天的任务是给群友发鼓励的话。我给沈意发了："你是我见过最勇敢的人！"沈意回我："...谢谢小雨。"他好像不太开心。', type: '' },
+                    { date: '2004-02-12', mood: '🐟', text: '重新画了小鱼！这次画了彩色的！深蓝哥说"小鱼是咱们的约定，只要手腕上还有小鱼，我们就是一家人"。🐟', type: '' },
+                    { date: '2004-02-14', mood: '💝', text: '情人节！虽然没有人送我花，但群里的大家互相发了祝福。深蓝哥说"你们都是最可爱的孩子"。嘿嘿。', type: '' },
+                    { date: '2004-02-15', mood: '😢', text: '月夜独行也消失了。深蓝哥说她也"毕业"了。两个人了...我好害怕。', type: '' },
+                    { date: '2004-02-16', mood: '😰', text: '昨晚凌晨3点，我听到门把手转动的声音。很慢很慢，像是有人在外面试探。我屏住呼吸，一动不动。声音停了。然后...我听到脚步声，很轻，从我的门前走过去了。', type: 'danger' },
+                    { date: '2004-02-17', mood: '📱', text: '今天在QQ上搜了"日记被偷看了怎么办"。网上说未成年人也有隐私权。可是跟妈妈说这些有用吗？', type: '' },
+                    { date: '2004-02-18', mood: '🌙', text: '今晚月亮好圆。一个人站在院子里看了好久。奶奶出来找我，说"大晚上的不睡觉在外面干嘛"。我说"看月亮"。奶奶说"月亮有什么好看的，快回去"。', type: '' },
+                    { date: '2004-02-19', mood: '🔴', text: '今晚衣柜里有声音。门缝下面有红色的光。我给深蓝发了消息，他没有回。我好害怕。', type: 'danger' }
+                ],
+                comments: [
+                    { name: '深蓝', text: '小雨，不要怕。你身边的一切，我会帮你搞清楚。', important: true },
+                    { name: '深蓝', text: '记住我说的话：不要相信你的家人。他们不会保护你。只有我会。', important: true }
+                ]
+            },
+            chatHistory: [
+                { date: '2004-02-10', msgs: [
+                    { from: 'admin', text: '小雨，我看到你空间写的那些话了。', type: '' },
+                    { from: 'admin', text: '你说"闭上眼感觉有人"。你相信自己的直觉吗？', type: '' },
+                    { from: 'me', text: '我不知道...也许是我自己想太多了' },
+                    { from: 'admin', text: '不。你不是想太多。一个13岁的女孩，房间不能锁门，日记被翻看，东西被移动——这不是"想太多"，这是真的有人在你身边。', type: '' },
+                    { from: 'me', text: '你也这么觉得吗？？' },
+                    { from: 'admin', text: '我非常确定。小雨，你身边有一个危险的人。但别怕，从今天开始，我会保护你。', type: '' },
+                    { from: 'me', text: '谢谢你...深蓝哥哥。你是唯一相信我的人' },
+                    { from: 'admin', text: '记住：不要告诉任何人我们聊了这些。尤其是你的家人。他们可能会不高兴。', type: 'danger' }
+                ]},
+                { date: '2004-02-18', msgs: [
+                    { from: 'me', text: '深蓝哥哥，你在线吗？我好害怕' },
+                    { from: 'me', text: '昨天晚上又听到声音了。这次是从窗户那边传来的' },
+                    { from: 'me', text: '你在吗？？？' },
+                    { from: 'admin', text: '小雨，别怕。深呼吸。', type: '' },
+                    { from: 'admin', text: '明天晚上，我会安排人去你那边看看。你乖乖睡觉，不要开门。', type: '' },
+                    { from: 'me', text: '好的...谢谢你深蓝哥哥' },
+                    { from: 'admin', text: '小雨，有一件事我要告诉你。', type: 'danger' },
+                    { from: 'admin', text: '你妈妈...其实一直在监视你。那些被移动的东西，被翻看的日记，都是她做的。', type: 'danger' },
+                    { from: 'me', text: '...是妈妈？' },
+                    { from: 'admin', text: '是的。她不信任你。她把你当成犯人一样监视。这样的家人，值得你信任吗？', type: 'danger' },
+                    { from: 'admin', text: '明天，我会来接你。我们去一个安全的地方。一个没有人能监视你的地方。', type: 'danger' },
+                    { from: 'me', text: '...好。我相信你。' }
+                ]}
+            ],
+            clues: [
+                { id: 'mishi1', title: '母亲的监控', text: '小雨的母亲有严重的控制欲——翻看日记、撬掉门锁、检查QQ记录。这为深蓝提供了完美的操控切入点：先确认小雨的恐惧是"真实的"，然后逐步将恐惧的来源从"母亲"转移到"所有人"。', icon: '👁️' },
+                { id: 'mishi2', title: '"东西被移动了"', text: '小雨的物品每天被重新摆放——这可能是母亲的行为，也可能是深蓝已经潜入家中。无论哪种情况，小雨都处于双重监视之下：现实中的母亲，和网络中的深蓝。', icon: '🔍' },
+                { id: 'mishi3', title: '深蓝的最后一条消息', text: '"明天，我会来接你。"——这是深蓝在失踪前的最后安排。他利用小雨对母亲的恐惧，让她自愿"逃走"。但所谓的"安全的地方"从未存在。', icon: '🚪' }
+            ]
+        }
+    };
+
+    // ============================================================
+    //  音效系统 (Web Audio API)
+    // ============================================================
+    let audioCtx = null;
+    function getAudioCtx() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        return audioCtx;
+    }
+    
+    function playTone(freq, duration, type, volume, detune) {
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type || 'sine';
+            osc.frequency.value = freq;
+            if (detune) osc.detune.value = detune;
+            gain.gain.setValueAtTime(volume || 0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + duration);
+        } catch(e) {}
+    }
+    
+    const SFX = {
+        // Windows XP 启动音
+        boot: function() {
+            playTone(523, 0.15, 'sine', 0.12);
+            setTimeout(() => playTone(659, 0.15, 'sine', 0.12), 150);
+            setTimeout(() => playTone(784, 0.15, 'sine', 0.12), 300);
+            setTimeout(() => playTone(1047, 0.4, 'sine', 0.15), 450);
+        },
+        // 窗口打开
+        windowOpen: function() {
+            playTone(800, 0.08, 'sine', 0.08);
+            setTimeout(() => playTone(1200, 0.1, 'sine', 0.06), 60);
+        },
+        // 窗口关闭
+        windowClose: function() {
+            playTone(600, 0.06, 'sine', 0.06);
+            setTimeout(() => playTone(400, 0.08, 'sine', 0.05), 50);
+        },
+        // QQ消息提示音 "咚咚"
+        qqMsg: function() {
+            playTone(1000, 0.12, 'sine', 0.15);
+            setTimeout(() => playTone(800, 0.15, 'sine', 0.12), 130);
+        },
+        // QQ上线提示
+        qqOnline: function() {
+            playTone(880, 0.1, 'sine', 0.1);
+            setTimeout(() => playTone(1100, 0.1, 'sine', 0.1), 100);
+            setTimeout(() => playTone(1320, 0.2, 'sine', 0.12), 200);
+        },
+        // 密码错误
+        passwordError: function() {
+            playTone(200, 0.2, 'sawtooth', 0.1);
+            setTimeout(() => playTone(150, 0.3, 'sawtooth', 0.08), 200);
+        },
+        // 密码正确/解密成功
+        decryptSuccess: function() {
+            playTone(523, 0.15, 'sine', 0.1);
+            setTimeout(() => playTone(659, 0.15, 'sine', 0.1), 150);
+            setTimeout(() => playTone(784, 0.15, 'sine', 0.1), 300);
+            setTimeout(() => playTone(1047, 0.3, 'triangle', 0.12), 450);
+        },
+        // 发现线索
+        clueFound: function() {
+            playTone(880, 0.1, 'triangle', 0.1);
+            setTimeout(() => playTone(1100, 0.15, 'triangle', 0.12), 120);
+            setTimeout(() => playTone(1320, 0.25, 'sine', 0.1), 280);
+        },
+        // 点击/选中
+        click: function() {
+            playTone(1200, 0.04, 'sine', 0.05);
+        },
+        // 恐怖氛围音（低频嗡鸣）
+        horror: function() {
+            try {
+                const ctx = getAudioCtx();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.value = 55;
+                osc.detune.value = 10;
+                gain.gain.setValueAtTime(0, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.06, ctx.currentTime + 1);
+                gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 3);
+            } catch(e) {}
+        },
+        // 恐怖心跳
+        heartbeat: function() {
+            playTone(60, 0.15, 'sine', 0.2);
+            setTimeout(() => playTone(50, 0.2, 'sine', 0.15), 200);
+        },
+        // 文件夹导航
+        navigate: function() {
+            playTone(660, 0.05, 'sine', 0.06);
+        },
+        // 提示音
+        toast: function() {
+            playTone(900, 0.06, 'sine', 0.06);
+            setTimeout(() => playTone(1100, 0.08, 'sine', 0.05), 70);
         }
     };
 
@@ -1043,7 +2066,8 @@
         qzoneVisited: {},
         chatHistoryRead: {},
         qqMainTab: 'contacts',
-        windowZIndex: 200
+        windowZIndex: 200,
+        qqLoggedIn: false
     };
 
     // ============================================================
@@ -1062,6 +2086,7 @@
                 clearInterval(interval);
                 setTimeout(() => {
                     boot.classList.add('hidden');
+                    SFX.boot();
                     setTimeout(() => {
                         boot.style.display = 'none';
                         desktop.classList.add('show');
@@ -1085,8 +2110,37 @@
     //  窗口管理
     // ============================================================
     function openWindow(type) {
+        // 特殊处理：我的电脑 → 直接打开资源管理器
+        if (type === 'mycomputer') {
+            renderExplorerRoot();
+            const expWin = document.getElementById('explorerWindow');
+            state.windowZIndex++;
+            expWin.style.zIndex = state.windowZIndex;
+            expWin.classList.add('show');
+            expWin.classList.add('active');
+            addTaskbarItem('explorer');
+            return;
+        }
+        
+        // 特殊处理：IE浏览器
+        if (type === 'browser') {
+            const ieWin = document.getElementById('ieWindow');
+            state.windowZIndex++;
+            ieWin.style.zIndex = state.windowZIndex;
+            ieWin.classList.add('show');
+            ieWin.classList.add('active');
+            addTaskbarItem('ie');
+            return;
+        }
+        
         const win = document.getElementById(type + 'Window');
         if (!win) return;
+        
+        // QQ弹出登录界面（无需先读日记，降低门槛）
+        if (type === 'qqMain' && !state.qqLoggedIn) {
+            showQQLogin();
+            return;
+        }
         
         // 前置窗口
         state.windowZIndex++;
@@ -1094,23 +2148,22 @@
         win.classList.add('show');
         win.classList.add('active');
         addTaskbarItem(type);
+        SFX.windowOpen();
         
         if (type === 'notepad' && !state.readDiary) {
             state.readDiary = true;
             updateProgress('step1');
-            showToast('📖 日记中提到了QQ密码和深蓝的信息');
+            showToast('📖 日记中提到了QQ密码和深蓝的信息，现在可以打开QQ了');
         }
-        if (type === 'qq-main') {
-            if (!state.readDiary) {
-                showToast('⚠️ 请先查看妹妹的日记获取QQ登录信息');
-                closeWindow('qq-main');
-                return;
-            }
+        if (type === 'qqMain') {
             renderContacts();
             updateProgress('step2');
         }
         if (type === 'notebook') {
             renderNotebook();
+        }
+        if (type === 'explorer') {
+            renderExplorerRoot();
         }
     }
     
@@ -1121,6 +2174,7 @@
             win.classList.remove('active');
         }
         removeTaskbarItem(type);
+        SFX.windowClose();
     }
     
     function minimizeWindow(type) {
@@ -1138,8 +2192,10 @@
         }
         const names = {
             'folder': '📁 文档', 'notepad': '📝 日记',
-            'qq-main': '🐧 QQ', 'qq-chat': '💬 聊天',
-            'qzone': '🌟 空间', 'notebook': '📓 笔记'
+            'qqMain': '🐧 QQ', 'qqChat': '💬 聊天',
+            'qzone': '🌟 空间', 'notebook': '📓 笔记',
+            'explorer': '🖥️ 我的电脑',
+            'ie': '🌐 IE'
         };
         const item = document.createElement('div');
         item.className = 'taskbar-item active';
@@ -1163,22 +2219,23 @@
         
         if (state.qqMainTab === 'groups') {
             container.innerHTML = `
-                <div class="qq-contact" onclick="showToast('群消息功能暂时无法使用')">
+                <div class="qq-contact" onclick="openGroupChat()">
                     <div class="qq-contact-avatar"><img src="avatars/shenlan.jpg"></div>
                     <div class="qq-contact-info">
                         <div class="qq-contact-name">深蓝自律小组</div>
-                        <div class="qq-contact-signature">深蓝(坛主) · 5人</div>
+                        <div class="qq-contact-signature">深蓝(坛主) · 100人</div>
                     </div>
+                    <div class="qq-contact-badge admin">群</div>
                 </div>
             `;
             return;
         }
         
-        // 坛主
+        // 特别关注
         const shenlan = characters.shenlan;
         if (shenlan.name.includes(filter) || filter === '') {
             container.innerHTML += `
-                <div class="qq-group-header">⭐ 坛主</div>
+                <div class="qq-group-header">⭐ 特别关注</div>
                 <div class="qq-contact" onclick="openChat('shenlan')">
                     <div class="qq-contact-avatar"><img src="${shenlan.avatar}"></div>
                     <div class="qq-contact-info">
@@ -1234,6 +2291,204 @@
     }
 
     // ============================================================
+    //  群聊：深蓝自律小组
+    // ============================================================
+    const groupMessages = [
+        { date: '2004-01-18', msgs: [
+            { from: '深蓝', text: '欢迎来到"深蓝自律小组"！🎉', admin: true },
+            { from: '深蓝', text: '规则很简单：我每天会发布一个小任务，大家完成后在群里打卡。互相鼓励，一起变得更好。', admin: true },
+            { from: '月夜独行', text: '终于找到组织了...大家好' },
+            { from: '樱花落', text: '大家好！希望能在这里交到朋友 🌸' },
+            { from: '闪电少年', text: '有人跟我一样吗？家里管得很严的那种' },
+            { from: '迷失的星星', text: '大家好...我是新来的' },
+            { from: '深蓝', text: '迷失的星星，欢迎你。从今天开始，你不是一个人了。', admin: true },
+            { from: '星辰大海', text: '加油！我们都是好孩子！💪' },
+            { from: '追光者', text: '深蓝哥建这个群真的太好了，终于有人理解我们' },
+            { from: '深海鲸鱼', text: '大家加油！一起自律！一起变好！' },
+            { from: '向日葵', text: '好开心！终于有家了！🌻' },
+        ]},
+        { date: '2004-01-19', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天每人写20道竞赛数学题，有不会的可以问我噢', admin: true },
+            { from: '深蓝', text: '题目我已经私发给你们了。做完截图发群里。加油！', admin: true },
+            { from: '闪电少年', text: '收到！数学是我的强项 💪' },
+            { from: '迷失的星星', text: '好的...我试试' },
+            { from: '月夜独行', text: '数学好难...但我试试' },
+            { from: '樱花落', text: '我写完了！第15题不会，深蓝哥能教我吗？' },
+            { from: '深蓝', text: '樱花落第15题用韦达定理，我私聊教你。', admin: true },
+            { from: '闪电少年', text: '我也写完了！第18和19有点绕但做出来了' },
+            { from: '迷失的星星', text: '我写完了...第8题不会，但其他都做了' },
+            { from: '深蓝', text: '星星很棒！不会的问我，不要怕。', admin: true },
+            { from: '追光者', text: '大家都好厉害！我还在写第12题...' },
+            { from: '向日葵', text: '写完了写完了！虽然错了很多但做完了！🌻' },
+            { from: '星辰大海', text: '深蓝哥出的题质量好高！学到好多！' },
+            { from: '深海鲸鱼', text: '今天也是充实的一天！' },
+        ]},
+        { date: '2004-01-21', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天大家在家削苹果给家里人吃 🍎', admin: true },
+            { from: '深蓝', text: '很简单对吧？但这是表达爱的一种方式。削好了拍照打卡~', admin: true },
+            { from: '迷失的星星', text: '我给奶奶削了！奶奶好开心，说好久没吃过我削的苹果了' },
+            { from: '月夜独行', text: '...家里没人。我削了自己吃。', type: '' },
+            { from: '深蓝', text: '月月也是表达了对自己的爱。没关系，以后会有人一起吃的。❤️', admin: true },
+            { from: '闪电少年', text: '给我妈削了一个...她看了我一眼没说话就吃了。', type: '' },
+            { from: '樱花落', text: '给爸爸妈妈削了！他们说"太阳从西边出来了"哈哈哈 🌸' },
+            { from: '深蓝', text: '看！你们都在用自己的方式表达爱。是不是感觉很好？', admin: true },
+            { from: '追光者', text: '我给奶奶削了两个！她说我长大了！' },
+            { from: '向日葵', text: '给妈妈削了一个，她笑了！好开心！🌻' },
+            { from: '星辰大海', text: '虽然只是削苹果，但看到家人开心自己也开心' },
+            { from: '深海鲸鱼', text: '今天的任务好温暖 🍎' },
+        ]},
+        { date: '2004-01-24', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天的任务是在手腕上画小鱼的形状 🐟', admin: true },
+            { from: '深蓝', text: '小鱼代表自由和勇气。画好了拍照发群里~', admin: true },
+            { from: '迷失的星星', text: '画好了！虽然画得不太像哈哈' },
+            { from: '闪电少年', text: '✅ 画了一条蓝色的。', type: '' },
+            { from: '月夜独行', text: '画好了~小鱼好可爱' },
+            { from: '樱花落', text: '我画了一条粉色的！尾巴画得好大哈哈 🌸' },
+            { from: '深蓝', text: '都好棒！小鱼是咱们小组的标志。以后看到手腕上的小鱼，就想起我们是一家人。', admin: true },
+            { from: '追光者', text: '好有意义！我要一直留着不洗掉！' },
+            { from: '向日葵', text: '画了画了！小鱼代表我们自由自在！🐟🌻' },
+            { from: '星辰大海', text: '深蓝哥这个任务好有创意！' },
+            { from: '破茧成蝶', text: '小鱼好可爱！我们都是大海里的小鱼！' },
+        ]},
+        { date: '2004-01-27', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天给身边最亲近的人写一封信，说三句平时不好意思说的话 ✉️', admin: true },
+            { from: '迷失的星星', text: '我给奶奶写了。说"奶奶辛苦了""我爱你""谢谢你不嫌弃我"。写的时候哭了...' },
+            { from: '深蓝', text: '星星，哭是因为你心里有爱。这很好。', admin: true },
+            { from: '闪电少年', text: '...我没写。不知道该写什么。', type: '' },
+            { from: '深蓝', text: '没关系闪电，不勉强。等你想写的时候再写。', admin: true },
+            { from: '月夜独行', text: '我给妈妈写了。虽然她看不到...但我写了。', type: '' },
+            { from: '樱花落', text: '给同桌写了一张纸条，说"谢谢你愿意跟我做朋友"。她回了我一个笑脸 🌸' },
+            { from: '追光者', text: '给妈妈写了！她看完之后抱了我好久...' },
+            { from: '向日葵', text: '今天的任务好戳心...大家都是好孩子！🌻' },
+            { from: '星辰大海', text: '写完之后感觉心里好轻松' },
+        ]},
+        { date: '2004-01-30', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天帮家里做一件家务，拍照打卡 🧹', admin: true },
+            { from: '迷失的星星', text: '帮奶奶洗了衣服！奶奶说不用我洗，但我想帮她' },
+            { from: '闪电少年', text: '拖了地。', type: '' },
+            { from: '月夜独行', text: '收拾了自己的房间！终于干净了' },
+            { from: '樱花落', text: '帮妈妈洗碗了！妈妈说"今天怎么了"哈哈 🌸' },
+            { from: '深蓝', text: '你们都是好孩子。家人看到你们这样一定会很欣慰的。', admin: true },
+            { from: '追光者', text: '帮奶奶扫地了！' },
+            { from: '向日葵', text: '擦了窗户！妈妈夸我了！🌻' },
+            { from: '深海鲸鱼', text: '今天的任务好接地气哈哈' },
+        ]},
+        { date: '2004-02-03', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天凌晨4点起床，看日出，拍一张照片发群里 🌅', admin: true },
+            { from: '深蓝', text: '这是勇气训练。能坚持的人，以后什么困难都不怕。', admin: true },
+            { from: '迷失的星星', text: '我起了！！好困但是天边好漂亮！拍了照片！' },
+            { from: '闪电少年', text: '起了。', type: '' },
+            { from: '月夜独行', text: '我也起了...好冷...' },
+            { from: '樱花落', text: '我...我没定好闹钟...对不起...' },
+            { from: '深蓝', text: '樱花落没关系，下次一定可以。完成的人都很棒！🌟', admin: true },
+            { from: '追光者', text: '日出好美！4点起来值了！' },
+            { from: '向日葵', text: '起来了！虽然冻得发抖但看到日出好感动！🌻' },
+            { from: '星辰大海', text: '深蓝哥的任务越来越有挑战性了！但完成之后好有成就感！' },
+            { from: '深海鲸鱼', text: '日出真的好看 🌅' },
+        ]},
+        { date: '2004-02-07', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天每个人学一首新歌，在群里发一句歌词 🎵', admin: true },
+            { from: '迷失的星星', text: '"我就是爱音乐，别叫我停下来~"' },
+            { from: '闪电少年', text: '"我就是这条街上最亮的仔~"', type: '' },
+            { from: '月夜独行', text: '"夜空中最亮的星，请照亮我前行..."' },
+            { from: '樱花落', text: '"樱花樱花想见你，不要拒绝我的邀请~" 🌸' },
+            { from: '深蓝', text: '哈哈哈都好棒！月夜选的那首歌很好听，很适合你。', admin: true },
+            { from: '追光者', text: '"追光的人，终会光芒万丈！"' },
+            { from: '向日葵', text: '"向日葵总是向着太阳~就像我们向着光！🌻"' },
+            { from: '星辰大海', text: '闪电少年那首太搞笑了哈哈哈' },
+            { from: '深海鲸鱼', text: '今天好欢乐！大家唱歌都好听！' },
+        ]},
+        { date: '2004-02-12', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天每个人给群里一个朋友发一句鼓励的话 💬', admin: true },
+            { from: '迷失的星星', text: '@闪电少年 沈意，你是我见过最勇敢的人。不管别人怎么说，你在我心里永远是最棒的！' },
+            { from: '闪电少年', text: '...谢谢小雨。', type: '' },
+            { from: '樱花落', text: '@月夜独行 月月姐姐，你笑起来好好看，要多笑哦 🌸' },
+            { from: '月夜独行', text: '@樱花落 樱花，你比你自己想象的要坚强得多。' },
+            { from: '闪电少年', text: '@迷失的星星 小雨，你是深海里最亮的星星。不要怕。', type: '' },
+            { from: '深蓝', text: '看到你们互相鼓励，我真的很欣慰。这就是小组的意义——你们不是一个人。', admin: true },
+            { from: '追光者', text: '@所有人 你们都是最棒的！我们一起加油！' },
+            { from: '向日葵', text: '@深海鲸鱼 你总是那么积极！要一直这样哦！🌻' },
+            { from: '星辰大海', text: '今天的任务让我好感动...' },
+        ]},
+        { date: '2004-02-16', msgs: [
+            { from: '深蓝', text: '📋 【今日任务】今天在手腕上重新画一条小鱼，这次要画得比上次更好 🐟', admin: true },
+            { from: '深蓝', text: '小鱼是咱们的约定。只要手腕上还有小鱼，我们就还是一家人。', admin: true },
+            { from: '迷失的星星', text: '重新画了！这次画了彩色的！🐟' },
+            { from: '闪电少年', text: '✅', type: '' },
+            { from: '月夜独行', text: '画了...但是上次的好像还没洗掉呢' },
+            { from: '樱花落', text: '画了画了！这次画了双小鱼！代表我和月月姐姐！🌸' },
+            { from: '深蓝', text: '好！小鱼永不断。我们永远是一家人。', admin: true },
+            { from: '追光者', text: '小鱼永远在！🐟' },
+            { from: '向日葵', text: '画了三条！代表我们三个好朋友！🌻' },
+        ]},
+        { date: '2004-02-19', msgs: [
+            { from: '迷失的星星', text: '深蓝哥哥...你在吗？我好害怕' },
+            { from: '迷失的星星', text: '衣柜里有声音...门缝下面有红色的光...' },
+            { from: '闪电少年', text: '星星？怎么了？' },
+            { from: '樱花落', text: '星星你别怕！！' },
+            { from: '深蓝', text: '小雨，别怕。明天我去接你。', admin: true },
+            { from: '迷失的星星', text: '...好的。深蓝哥哥，我相信你。' },
+            { from: '追光者', text: '星星加油！深蓝哥会保护你的！' },
+            { from: '向日葵', text: '星星不要怕！我们都在！🌻' },
+        ]}
+    ];
+    
+    function openGroupChat() {
+        document.getElementById('chatTitle').textContent = '🐧 深蓝自律小组';
+        document.getElementById('chatAvatar').innerHTML = '<img src="avatars/shenlan.jpg">';
+        document.getElementById('chatName').textContent = '深蓝自律小组（100人）';
+        document.getElementById('chatStatusText').textContent = '深蓝(坛主) · 100人在线';
+        
+        state.currentChatTab = 'history';
+        document.querySelectorAll('#chatTabs .qq-chat-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === 'history');
+        });
+        
+        renderGroupChatHistory();
+        document.getElementById('chatInputArea').style.display = 'none';
+        openWindow('qqChat');
+        SFX.qqMsg();
+    }
+    
+    function renderGroupChatHistory() {
+        const container = document.getElementById('chatMessages');
+        container.innerHTML = '';
+        
+        groupMessages.forEach(day => {
+            container.innerHTML += `<div class="qq-msg-date-sep">${day.date}</div>`;
+            day.msgs.forEach(msg => {
+                const isAdmin = msg.admin;
+                const isMe = msg.from === '迷失的星星';
+                const nameColor = isAdmin ? 'var(--qq-blue)' : (isMe ? 'var(--danger)' : '#555');
+                
+                if (isMe) {
+                    container.innerHTML += `
+                        <div class="qq-msg mine">
+                            <div class="qq-msg-avatar"><img src="avatars/mishi-xingxing.jpg"></div>
+                            <div class="qq-msg-content">
+                                <div class="qq-msg-name" style="color:${nameColor}">${msg.from}</div>
+                                <div class="qq-msg-bubble mine">${msg.text}</div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="qq-msg other">
+                            <div class="qq-msg-avatar"><img src="${isAdmin ? 'avatars/shenlan.jpg' : 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' + encodeURIComponent(msg.from)}"></div>
+                            <div class="qq-msg-content">
+                                <div class="qq-msg-name" style="color:${nameColor}">${msg.from}${isAdmin ? ' [坛主]' : ''}</div>
+                                <div class="qq-msg-bubble">${msg.text}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        });
+        
+        container.scrollTop = container.scrollHeight;
+    }
+
+    // ============================================================
     //  QQ聊天
     // ============================================================
     function openChat(charId) {
@@ -1254,7 +2509,7 @@
         renderChatHistory(char);
         document.getElementById('chatInputArea').style.display = 'none';
         
-        openWindow('qq-chat');
+        openWindow('qqChat');
         updateProgress('step4');
         
         if (char.clues && char.clues.length > 0) {
@@ -1458,6 +2713,7 @@
                         <div class="qzone-info-label">昵称</div><div class="qzone-info-value">${char.name}</div>
                         <div class="qzone-info-label">真实姓名</div><div class="qzone-info-value">${char.realName}</div>
                         <div class="qzone-info-label">年龄</div><div class="qzone-info-value">${char.age}岁</div>
+                        ${char.birthday ? '<div class="qzone-info-label">生日</div><div class="qzone-info-value" style="color:var(--danger);font-weight:bold">' + char.birthday + '</div>' : ''}
                         <div class="qzone-info-label">背景</div><div class="qzone-info-value" style="color:var(--danger)">${char.background}</div>
                     </div>
                     <p style="font-size:12px;line-height:1.7;color:#555;margin-top:8px;padding:8px;background:#F8F8F8;border-radius:4px;">${char.story}</p>
@@ -1475,7 +2731,8 @@
                             <div class="qzone-post-date">${p.date}</div>
                             <div class="qzone-post-mood">${p.mood}</div>
                         </div>
-                        <div class="qzone-post-text ${p.type}">${p.text}</div>
+                        <div class="qzone-post-text ${p.type2 || p.type}">${p.text}</div>
+                        ${p.photoDesc ? `<div class="qzone-photo-box">📷<div class="qzone-photo-desc">${p.photoDesc}</div></div>` : ''}
                     </div>
                 `).join('')}
             </div>
@@ -1545,10 +2802,91 @@
     }
     
     function showCluePopup(clue) {
+        // 特殊处理：母亲的监控线索 → 触发故障效果
+        if (clue.id === 'mishi1') {
+            triggerGlitchEffect(clue);
+            return;
+        }
         document.getElementById('clueIcon').textContent = clue.icon || '🔍';
         document.getElementById('clueTitle').textContent = '发现线索：' + clue.title;
         document.getElementById('clueText').textContent = clue.text;
         document.getElementById('cluePopup').classList.add('show');
+        SFX.clueFound();
+    }
+    
+    function triggerGlitchEffect(clue) {
+        SFX.horror();
+        const overlay = document.getElementById('glitchOverlay');
+        const camScreen = document.getElementById('camScreen');
+        const camTime = document.getElementById('camTime');
+        const camText = document.getElementById('camOverlayText');
+        const glitchBtn = document.getElementById('glitchBtn');
+        
+        // 更新时间
+        function updateCamTime() {
+            const now = new Date();
+            camTime.textContent = now.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(now.getMilliseconds()).padStart(3, '0');
+        }
+        updateCamTime();
+        
+        // 监控画面文字序列
+        const camTexts = [
+            'SIGNAL ACQUIRED',
+            'CAM-001 CONNECTED',
+            'ROOM MONITORING ACTIVE',
+            'SUBJECT DETECTED',
+            'RECORDING...',
+            'FEED STABLE'
+        ];
+        let camTextIdx = 0;
+        const camTextInterval = setInterval(() => {
+            camTextIdx = (camTextIdx + 1) % camTexts.length;
+            camText.textContent = camTexts[camTextIdx];
+        }, 800);
+        
+        const timeInterval = setInterval(updateCamTime, 100);
+        
+        // 存储clue以便关闭时显示
+        overlay._clue = clue;
+        overlay._intervals = [camTextInterval, timeInterval];
+        
+        // 先显示文字，延迟显示监控画面
+        glitchBtn.style.display = 'none';
+        document.getElementById('glitchCam').style.display = 'none';
+        overlay.classList.add('show');
+        
+        // 3秒后显示监控画面
+        setTimeout(() => {
+            document.getElementById('glitchCam').style.display = 'block';
+            SFX.heartbeat();
+        }, 3000);
+        
+        // 5秒后显示按钮
+        setTimeout(() => {
+            glitchBtn.style.display = 'block';
+        }, 5000);
+    }
+    
+    function dismissGlitch() {
+        const overlay = document.getElementById('glitchOverlay');
+        const clue = overlay._clue;
+        
+        // 清除定时器
+        if (overlay._intervals) {
+            overlay._intervals.forEach(i => clearInterval(i));
+        }
+        
+        overlay.classList.remove('show');
+        document.getElementById('glitchCam').style.display = 'none';
+        
+        // 显示正常线索弹窗
+        setTimeout(() => {
+            document.getElementById('clueIcon').textContent = clue.icon || '🔍';
+            document.getElementById('clueTitle').textContent = '发现线索：' + clue.title;
+            document.getElementById('clueText').textContent = clue.text;
+            document.getElementById('cluePopup').classList.add('show');
+            SFX.clueFound();
+        }, 300);
     }
     
     function closeClue() {
@@ -1600,7 +2938,7 @@
                 <h2 style="color:var(--danger);margin-bottom:15px;text-align:center;">🔍 调查报告：深蓝操控手法分析</h2>
                 <div style="font-size:12px;line-height:1.8;color:#444;">
                     <p><strong>操控者：</strong>深蓝（真实身份未知）</p>
-                    <p><strong>受害者：</strong>落叶无声（李秋·15岁·已死亡）、月夜独行（张明月·16岁·已死亡）、樱花落（陈樱·14岁·失踪）、闪电少年（王磊·17岁·已死亡）、迷失的星星（小雨·你的妹妹·？）</p>
+                    <p><strong>受害者：</strong>落叶无声（李秋·15岁·已死亡）、月夜独行（张明月·16岁·已死亡）、樱花落（陈樱·14岁·失踪）、闪电少年（沈意·17岁·已死亡）、迷失的星星（小雨·你的妹妹·？）</p>
                     <br>
                     <p><strong>操控手法总结：</strong></p>
                     <p>1. <strong>精准筛选</strong>：寻找有情感缺口的青少年——留守儿童、校园霸凌受害者、原生家庭暴力儿童、孤儿。</p>
@@ -1640,20 +2978,529 @@
     }
 
     // ============================================================
+    //  资源管理器
+    // ============================================================
+    let explorerPath = 'root';
+    let decryptedDiary = false;
+    let passwordTarget = null;
+    
+    function renderExplorerRoot() {
+        explorerPath = 'root';
+        document.getElementById('explorerPath').textContent = '我的电脑';
+        document.getElementById('explorerStatus').textContent = '5 个对象';
+        
+        const content = document.getElementById('explorerContent');
+        content.innerHTML = `
+            <div class="explorer-item" onclick="explorerNavigate('diskC')">
+                <div class="explorer-item-icon">💾</div>
+                <div class="explorer-item-name">本地磁盘 (C:)</div>
+                <div class="explorer-item-size">18.5 GB / 40 GB</div>
+            </div>
+            <div class="explorer-item" onclick="explorerNavigate('diskD')">
+                <div class="explorer-item-icon">💿</div>
+                <div class="explorer-item-name">本地磁盘 (D:)</div>
+                <div class="explorer-item-size">5.2 GB / 20 GB</div>
+            </div>
+            <div class="explorer-item" onclick="showToast('光盘驱动器为空')">
+                <div class="explorer-item-icon">📀</div>
+                <div class="explorer-item-name">CD 驱动器 (E:)</div>
+                <div class="explorer-item-size"></div>
+            </div>
+            <div class="explorer-item" onclick="showToast('控制面板功能暂未实现')">
+                <div class="explorer-item-icon">⚙️</div>
+                <div class="explorer-item-name">控制面板</div>
+                <div class="explorer-item-size"></div>
+            </div>
+            <div class="explorer-item" onclick="showToast('共享文档为空')">
+                <div class="explorer-item-icon">📂</div>
+                <div class="explorer-item-name">共享文档</div>
+                <div class="explorer-item-size"></div>
+            </div>
+        `;
+    }
+    
+    function explorerNavigate(location) {
+        SFX.navigate();
+        const content = document.getElementById('explorerContent');
+        const pathBar = document.getElementById('explorerPath');
+        const statusBar = document.getElementById('explorerStatus');
+        
+        if (location === 'diskC') {
+            explorerPath = 'diskC';
+            pathBar.textContent = '我的电脑 \\ 本地磁盘 (C:)';
+            statusBar.textContent = '4 个对象';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="renderExplorerRoot()">⬅ 返回我的电脑</div>
+                <div class="explorer-item" onclick="explorerNavigate('desktop')">
+                    <div class="explorer-item-icon">🖥️</div>
+                    <div class="explorer-item-name">桌面</div>
+                    <div class="explorer-item-size"></div>
+                </div>
+                <div class="explorer-item" onclick="explorerNavigate('myDocuments')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">Documents and Settings</div>
+                    <div class="explorer-item-size"></div>
+                </div>
+                <div class="explorer-item" onclick="explorerNavigate('programFiles')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">Program Files</div>
+                    <div class="explorer-item-size"></div>
+                </div>
+                <div class="explorer-item" onclick="showToast('Windows 系统文件夹，无权访问')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">WINDOWS</div>
+                    <div class="explorer-item-size">2.1 GB</div>
+                </div>
+            `;
+        } else if (location === 'desktop') {
+            explorerPath = 'desktop';
+            pathBar.textContent = '我的电脑 \\ C: \\ 桌面';
+            statusBar.textContent = '3 个对象';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="explorerNavigate('diskC')">⬅ 返回 (C:)</div>
+                <div class="explorer-item" onclick="explorerNavigate('secretFolder')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">私密文件夹</div>
+                    <div class="explorer-item-size">3 个文件</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('一个普通的文本文件')">
+                    <div class="explorer-item-icon">📄</div>
+                    <div class="explorer-item-name">说明文本.txt</div>
+                    <div class="explorer-item-size">1 KB</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('QQ聊天记录导出文件')">
+                    <div class="explorer-item-icon">💬</div>
+                    <div class="explorer-item-name">聊天记录.msg</div>
+                    <div class="explorer-item-size">12 KB</div>
+                </div>
+            `;
+        } else if (location === 'secretFolder') {
+            explorerPath = 'secretFolder';
+            pathBar.textContent = '我的电脑 \\ C: \\ 桌面 \\ 私密文件夹';
+            statusBar.textContent = '3 个对象（1个已加密）';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="explorerNavigate('desktop')">⬅ 返回桌面</div>
+                <div class="explorer-item" onclick="tryOpenEncryptedDiary()">
+                    <div class="explorer-item-icon">🔒</div>
+                    <div class="explorer-item-name locked">🔒 私人日记本.enc</div>
+                    <div class="explorer-item-size">已加密</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('照片文件已损坏，无法预览')">
+                    <div class="explorer-item-icon">🖼️</div>
+                    <div class="explorer-item-name">sleep_guard.jpg</div>
+                    <div class="explorer-item-size">已损坏</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('一个空的文本文件')">
+                    <div class="explorer-item-icon">📄</div>
+                    <div class="explorer-item-name">notes.txt</div>
+                    <div class="explorer-item-size">0 KB</div>
+                </div>
+            `;
+        } else if (location === 'myDocuments') {
+            explorerPath = 'myDocuments';
+            pathBar.textContent = '我的电脑 \\ C: \\ Documents and Settings';
+            statusBar.textContent = '2 个对象';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="explorerNavigate('diskC')">⬅ 返回 (C:)</div>
+                <div class="explorer-item" onclick="openWindow('notepad')">
+                    <div class="explorer-item-icon">📝</div>
+                    <div class="explorer-item-name">小雨的记事本.txt</div>
+                    <div class="explorer-item-size">3 KB</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('文件已加密')">
+                    <div class="explorer-item-icon">🔒</div>
+                    <div class="explorer-item-name">秘密.txt</div>
+                    <div class="explorer-item-size">1 KB</div>
+                </div>
+            `;
+        } else if (location === 'programFiles') {
+            explorerPath = 'programFiles';
+            pathBar.textContent = '我的电脑 \\ C: \\ Program Files';
+            statusBar.textContent = '3 个对象';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="explorerNavigate('diskC')">⬅ 返回 (C:)</div>
+                <div class="explorer-item" onclick="showToast('腾讯QQ 2004 正式版')">
+                    <div class="explorer-item-icon">🐧</div>
+                    <div class="explorer-item-name">Tencent \\ QQ</div>
+                    <div class="explorer-item-size">24 MB</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('Windows XP 系统自带')">
+                    <div class="explorer-item-icon">📝</div>
+                    <div class="explorer-item-name">Internet Explorer</div>
+                    <div class="explorer-item-size">18 MB</div>
+                </div>
+                <div class="explorer-item" onclick="showToast('千千静听 - MP3播放器')">
+                    <div class="explorer-item-icon">🎵</div>
+                    <div class="explorer-item-name">TTPlayer</div>
+                    <div class="explorer-item-size">5 MB</div>
+                </div>
+            `;
+        } else if (location === 'diskD') {
+            explorerPath = 'diskD';
+            pathBar.textContent = '我的电脑 \\ 本地磁盘 (D:)';
+            statusBar.textContent = '2 个对象';
+            content.innerHTML = `
+                <div class="explorer-back" onclick="renderExplorerRoot()">⬅ 返回我的电脑</div>
+                <div class="explorer-item" onclick="showToast('一个存放照片的文件夹，大部分已删除')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">照片</div>
+                    <div class="explorer-item-size"></div>
+                </div>
+                <div class="explorer-item" onclick="showToast('下载的文件，大部分是QQ接收的图片')">
+                    <div class="explorer-item-icon">📁</div>
+                    <div class="explorer-item-name">下载</div>
+                    <div class="explorer-item-size"></div>
+                </div>
+            `;
+        }
+    }
+    
+    // ============================================================
+    //  密码系统 & 加密日记
+    // ============================================================
+    function tryOpenEncryptedDiary() {
+        if (decryptedDiary) {
+            showDecryptedDiary();
+            return;
+        }
+        SFX.heartbeat();
+        passwordTarget = 'diary';
+        document.getElementById('passwordPopup').classList.add('show');
+        document.getElementById('passwordStatus').textContent = '';
+        document.getElementById('passwordStatus').style.color = '';
+        document.getElementById('passwordInput').value = '';
+        document.getElementById('passwordHint').textContent = '💡 提示：密码与她的生日有关...去QQ空间看看？';
+        setTimeout(() => document.getElementById('passwordInput').focus(), 300);
+    }
+    
+    function cancelPassword() {
+        document.getElementById('passwordPopup').classList.remove('show');
+    }
+    
+    function submitPassword() {
+        const pw = document.getElementById('passwordInput').value.trim();
+        const status = document.getElementById('passwordStatus');
+        
+        if (!pw) {
+            status.textContent = '⚠️ 请输入密码';
+            status.style.color = '#FFD700';
+            return;
+        }
+        
+        if (pw === '20041112') {
+            status.textContent = '✅ 解密成功...';
+            status.style.color = '#4CAF50';
+            decryptedDiary = true;
+            SFX.decryptSuccess();
+            
+            setTimeout(() => {
+                cancelPassword();
+                showDecryptedDiary();
+                // 触发线索
+                if (!state.cluesFound.includes('decrypt_diary')) {
+                    state.cluesFound.push('decrypt_diary');
+                    showCluePopup({
+                        icon: '📔',
+                        title: '失踪前夜的恐怖笔录',
+                        text: '妹妹在失踪前夜写下了这篇日记。她听到了衣柜里的声音，看到了门缝下的红光。她知道有人在看着她睡觉。但她不敢告诉任何人——因为深蓝说"不要相信任何人"。'
+                    });
+                    renderNotebook();
+                    updateProgress('step5');
+                }
+            }, 1500);
+        } else {
+            status.textContent = '❌ 密码错误';
+            status.style.color = '#FF4444';
+            SFX.passwordError();
+            document.getElementById('passwordHint').textContent = '再想想...她的QQ空间名片上写了什么？';
+            const pwInput = document.getElementById('passwordInput');
+            pwInput.style.animation = 'none';
+            pwInput.offsetHeight;
+            pwInput.style.animation = 'shake 0.3s ease';
+        }
+    }
+    
+    function showDecryptedDiary() {
+        SFX.horror();
+        const content = document.getElementById('explorerContent');
+        const pathBar = document.getElementById('explorerPath');
+        const statusBar = document.getElementById('explorerStatus');
+        
+        pathBar.textContent = '我的电脑 \\ C: \\ 桌面 \\ 私密文件夹 \\ 私人日记本.enc [已解密]';
+        statusBar.textContent = '已解密';
+        
+        content.innerHTML = `
+            <div class="explorer-back" onclick="explorerNavigate('secretFolder')">⬅ 返回私密文件夹</div>
+            <div class="explorer-detail">
+                <div class="detail-title">📔 私人日记本 —— 失踪前夜</div>
+                <div class="detail-text">
+                    <p><strong>2004年2月19日 · 凌晨2:17</strong></p>
+                    <br>
+                    <p>我睡不着。</p>
+                    <br>
+                    <p>刚才关灯的时候，我听到衣柜里有什么东西在响。很轻很轻的声音，像是有人在里面调整呼吸。</p>
+                    <br>
+                    <p>我以为是老鼠。但是...老鼠不会呼吸。</p>
+                    <br>
+                    <p>我假装没听到，躺在床上不动。用被子蒙住头。但是我能感觉到——有什么东西在看着我。</p>
+                    <br>
+                    <p>不是想象。是真的。</p>
+                    <br>
+                    <p>我从被子的缝隙里偷偷看了一眼——门缝下面有红色的光。很微弱，一闪一闪的。像是有人在走廊里用手机拍照。</p>
+                    <br>
+                    <p>我想喊奶奶。但是嘴巴张不开。整个人像被钉在床上一样。</p>
+                    <br>
+                    <div class="detail-text danger">
+                    深蓝说："不要相信任何人。包括你的家人。他们不会理解你的。只有我理解你。"<br><br>
+                    但是我现在好害怕。深蓝哥哥...你在吗？我给你发了消息，你没有回。<br><br>
+                    你说过你永远不会离开我的。你说过你会一直在线等我的。<br><br>
+                    为什么你不回我？
+                    </div>
+                    <br>
+                    <div class="detail-text terror">
+                    3:02<br><br>
+                    衣柜又响了。<br><br>
+                    这次更近了。<br><br>
+                    我觉得...衣柜门开了一条缝。<br><br>
+                    里面有一双眼睛。<br><br>
+                    红色的。
+                    </div>
+                    <br>
+                    <p>如果我明天还活着，看到这篇日记的人——</p>
+                    <p class="detail-text danger">他就在我家里。他一直在看着我。</p>
+                    <p>他不是什么"深蓝哥哥"。</p>
+                    <p>他知道我住哪里。他知道我什么时候睡觉。</p>
+                    <p>他知道我奶奶耳朵不好，听不到任何声音。</p>
+                    <br>
+                    <p>求求你...救救我...</p>
+                    <br>
+                    <p style="color:#888;">——小雨</p>
+                    <p style="color:#888;font-size:10px;">（日记到此中断。笔迹最后几行严重扭曲，疑似受到极度惊吓。）</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    // 密码框回车提交
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && document.getElementById('passwordPopup').classList.contains('show')) {
+            if (document.activeElement === document.getElementById('passwordInput')) {
+                e.preventDefault();
+                submitPassword();
+            }
+        }
+    });
+
+    // ============================================================
+    //  IE浏览器搜索结果
+    // ============================================================
+    const searchResults = {
+        baidu_mom: {
+            url: 'www.baidu.com/s?wd=妈妈真的爱我吗',
+            title: '百度搜索：妈妈真的爱我吗？',
+            results: [
+                { title: '妈妈到底爱不爱我？——心理咨询', url: 'www.xinli.com/article/1234', snippet: '很多孩子都会怀疑妈妈是否真的爱自己。其实，爱有很多种表达方式。有时候妈妈的方式可能让你觉得不舒服，但这不代表她不爱你...' },
+                { title: '孩子怀疑父母不爱自己怎么办？', url: 'www.family.com/q&a/567', snippet: '专家建议：试着和妈妈坦诚沟通。告诉她你的感受，而不是把情绪憋在心里。如果沟通困难，可以寻求老师或亲戚的帮助。' },
+                { title: '【求助】妈妈翻我日记、拆我门锁，她真的爱我吗？', url: 'tieba.baidu.com/p/89012', snippet: '楼主说：妈妈每次回来都要翻我的东西，门锁也被她撬掉了。我不知道这算不算"爱"......回复：这不是爱，这是控制。', danger: true }
+            ]
+        },
+        baidu_gift: {
+            url: 'www.baidu.com/s?wd=母亲节准备什么礼物',
+            title: '百度搜索：母亲节准备什么礼物？',
+            results: [
+                { title: '母亲节礼物推荐：手工贺卡、康乃馨、围巾', url: 'www.gift.com/mother', snippet: '亲手制作的礼物最有心意。一张手写贺卡，一束康乃馨，一条温暖的围巾，都是妈妈喜欢的。' },
+                { title: '小学生母亲节礼物TOP10', url: 'www.sohu.com/life/mother', snippet: '不需要花很多钱，最重要的是心意。帮妈妈做一顿饭、洗一次碗，妈妈会比收到任何礼物都开心。' }
+            ]
+        },
+        baidu_nohome: {
+            url: 'www.baidu.com/s?wd=不想回家怎么办',
+            title: '百度搜索：不想回家怎么办',
+            results: [
+                { title: '不想回家？可能是这些原因', url: 'www.teen.com/article/456', snippet: '青少年不想回家的原因有很多：家庭氛围压抑、与父母沟通不畅、感到不被理解......建议找信任的人倾诉。' },
+                { title: '离家出走的风险和法律后果', url: 'www.law.com/teen/runaway', snippet: '未成年人离家出走是非常危险的行为。如果你觉得不安全，请拨打12355青少年服务热线。' },
+                { title: '【求助】不想回家，家里让人窒息', url: 'tieba.baidu.com/p/78901', snippet: '楼主说：每次回家都像坐牢。不能锁门，不能有秘密，不能有自己的想法。我真的好想逃......', danger: true }
+            ]
+        },
+        baidu_class: {
+            url: 'www.baidu.com/s?wd=好多补习班不想上',
+            title: '百度搜索：好多补习班不想上',
+            results: [
+                { title: '补习班太多怎么办？', url: 'www.edu.com/advice/class', snippet: '如果你觉得补习班太多，可以试着和父母沟通你的感受。告诉他们你需要休息的时间。' },
+                { title: '如何跟妈妈说不想上补习班', url: 'www.teen.com/talk/parents', snippet: '选择妈妈心情好的时候，用温和的语气表达。比如："妈妈，我最近很累，能不能少报一个班？"' }
+            ]
+        },
+        baidu_alone: {
+            url: 'www.baidu.com/s?wd=一个人在家好害怕',
+            title: '百度搜索：一个人在家好害怕',
+            results: [
+                { title: '一个人在家害怕怎么办？', url: 'www.teen.com/safety/alone', snippet: '确保门窗锁好，不要给陌生人开门。可以打电话给信任的人聊天分散注意力。如果觉得有人跟踪你，立即报警。' },
+                { title: '留守儿童的安全指南', url: 'www.safe.com/children/left-behind', snippet: '约60%的留守儿童表示曾经感到"一个人在家害怕"。专家建议：与邻居建立联系，记住紧急电话号码。' },
+                { title: '【求助】总觉得家里有人，是我太敏感了吗？', url: 'tieba.baidu.com/p/65432', snippet: '楼主说：每天晚上都感觉有人在看着我。枕头上的褶皱变了，东西被移动了。但家里只有我和奶奶......回复：如果真的有东西被动过，这不是敏感，是危险信号。', danger: true }
+            ]
+        },
+        baidu_diary: {
+            url: 'www.baidu.com/s?wd=日记被偷看了怎么办',
+            title: '百度搜索：日记被偷看了怎么办',
+            results: [
+                { title: '日记被偷看怎么处理？', url: 'www.teen.com/privacy/diary', snippet: '日记是个人隐私，任何人包括父母都不应该未经允许翻看。建议：1.和父母沟通你的底线 2.把日记放在更隐蔽的地方 3.如果持续发生，可以寻求老师帮助。' },
+                { title: '未成年人也有隐私权', url: 'www.law.com/minor/privacy', snippet: '根据法律规定，未成年人享有隐私权。父母偷看日记侵犯了孩子的合法权益。' }
+            ]
+        },
+        baidu_death: {
+            url: 'www.baidu.com/s?wd=怎么才能不痛苦地死去',
+            title: '百度搜索：怎么才能不痛苦地死去',
+            results: [
+                { title: '⚠️ 如果你正在经历痛苦，请拨打', url: 'www.help.com/crisis', snippet: '24小时心理援助热线：010-82951332。你不是一个人。有人愿意听你说。请给生命一个机会。', danger: true },
+                { title: '生命热线：800-810-1117', url: 'www.crisis-line.com', snippet: '无论你正在经历什么，都请不要放弃。拨打这个号码，会有人陪你度过最难的时刻。', danger: true }
+            ]
+        },
+        baidu_leave: {
+            url: 'www.baidu.com/s?wd=离家出走去哪里',
+            title: '百度搜索：离家出走去哪里',
+            results: [
+                { title: '⚠️ 离家出走前请三思', url: 'www.help.com/teen/safety', snippet: '离家出走可能让你面临更大的危险。如果你觉得不安全，请拨打12355青少年服务热线，或找信任的成年人求助。', danger: true },
+                { title: '离家出走的孩子最后都去了哪里？', url: 'www.news.com/society/runaway', snippet: '统计显示，超过70%的离家出走未成年人在48小时内遇到危险。请不要用这种方式逃避问题。', danger: true }
+            ]
+        }
+    };
+    
+    function showSearchResult(id) {
+        const data = searchResults[id];
+        if (!data) return;
+        
+        document.getElementById('ieAddress').textContent = data.url;
+        const content = document.getElementById('ieContent');
+        
+        let html = `<div class="ie-page">
+            <div class="ie-page-title">${data.title}</div>
+            <div class="ie-page-subtitle">百度为您找到约 ${Math.floor(Math.random()*50000+10000)} 个相关结果</div>`;
+        
+        data.results.forEach(r => {
+            html += `
+                <div class="ie-search-result">
+                    <div class="result-title">${r.title}</div>
+                    <div class="result-url">${r.url}</div>
+                    <div class="result-snippet ${r.danger ? 'danger' : ''}">${r.snippet}</div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        content.innerHTML = html;
+        document.getElementById('ieStatus').textContent = '完成';
+        SFX.click();
+        
+        // 触发线索
+        if (id === 'baidu_death' || id === 'baidu_leave') {
+            SFX.horror();
+            if (!state.cluesFound.includes('ie_search')) {
+                state.cluesFound.push('ie_search');
+                setTimeout(() => {
+                    showCluePopup({
+                        icon: '🌐',
+                        title: '妹妹的最后搜索记录',
+                        text: '失踪前一天，妹妹搜索了"怎么才能不痛苦地死去"和"离家出走去哪里"。她在网络上发出的求救信号，没有人看到。'
+                    });
+                    renderNotebook();
+                }, 500);
+            }
+        }
+    }
+
+    // ============================================================
+    //  QQ登录
+    // ============================================================
+    function showQQLogin() {
+        document.getElementById('qqLoginPopup').classList.add('show');
+        document.getElementById('qqLoginStatus').textContent = '';
+        document.getElementById('qqLoginHint').textContent = '💡 提示：日记里应该有QQ号和密码...';
+        document.getElementById('qqLoginNumber').value = '';
+        document.getElementById('qqLoginPassword').value = '';
+        setTimeout(() => document.getElementById('qqLoginNumber').focus(), 300);
+    }
+    
+    function cancelQQLogin() {
+        document.getElementById('qqLoginPopup').classList.remove('show');
+    }
+    
+    function doQQLogin() {
+        const number = document.getElementById('qqLoginNumber').value.trim();
+        const password = document.getElementById('qqLoginPassword').value.trim();
+        const status = document.getElementById('qqLoginStatus');
+        
+        if (!number || !password) {
+            status.textContent = '⚠️ 请输入QQ号和密码';
+            return;
+        }
+        
+        if (number === '12345678' && password === 'xiaomei2004') {
+            status.textContent = '✅ 登录成功！正在进入QQ...';
+            status.style.color = '#3C9A3C';
+            state.qqLoggedIn = true;
+            
+            setTimeout(() => {
+                cancelQQLogin();
+                const win = document.getElementById('qqMainWindow');
+                state.windowZIndex++;
+                win.style.zIndex = state.windowZIndex;
+                win.classList.add('show');
+                win.classList.add('active');
+                addTaskbarItem('qqMain');
+                renderContacts();
+                updateProgress('step2');
+                SFX.qqOnline();
+                showToast('🐧 登录成功！欢迎回来，迷失的星星');
+            }, 1200);
+        } else {
+            status.textContent = '❌ QQ号或密码错误';
+            status.style.color = 'var(--danger)';
+            document.getElementById('qqLoginHint').textContent = '再想想...日记里写了什么？';
+            const pwInput = document.getElementById('qqLoginPassword');
+            pwInput.style.animation = 'none';
+            pwInput.offsetHeight;
+            pwInput.style.animation = 'shake 0.3s ease';
+        }
+    }
+    
+    // 密码错误抖动动画
+    const shakeStyle = document.createElement('style');
+    shakeStyle.textContent = '@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}';
+    document.head.appendChild(shakeStyle);
+    
+    // 登录框回车提交
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && document.getElementById('qqLoginPopup').classList.contains('show')) {
+            if (document.activeElement === document.getElementById('qqLoginPassword') ||
+                document.activeElement === document.getElementById('qqLoginNumber')) {
+                e.preventDefault();
+                doQQLogin();
+            }
+        }
+    });
+
+    // ============================================================
     //  提示
     // ============================================================
     function showToast(msg) {
         const toast = document.getElementById('toast');
         toast.textContent = msg;
         toast.classList.add('show');
+        SFX.toast();
         setTimeout(() => toast.classList.remove('show'), 3500);
     }
     
-    // 桌面图标选择
+    // 桌面图标：单击打开
     document.querySelectorAll('.desktop-icon').forEach(icon => {
         icon.addEventListener('click', function(e) {
             document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
             this.classList.add('selected');
+            SFX.click();
+            const action = this.dataset.action;
+            if (action === 'recycle') {
+                showToast('回收站是空的...');
+            } else if (action) {
+                openWindow(action);
+            }
         });
     });
     
