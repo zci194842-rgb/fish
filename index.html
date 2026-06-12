@@ -136,6 +136,7 @@
             cursor: move;
         }
         .xp-title { color: white; font-weight: bold; font-size: 12px; display: flex; align-items: center; gap: 5px; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .mobile-back-btn { display: none; }
         .xp-btns { display: flex; gap: 2px; }
         .xp-btn {
             width: 18px; height: 16px;
@@ -1087,7 +1088,18 @@
             /* 资源管理器 */
             .explorer-window { width: 100% !important; }
             .explorer-toolbar { flex-shrink: 0; }
-            .explorer-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .explorer-content { 
+                flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-content: flex-start !important;
+                padding: 10px !important;
+                gap: 10px !important;
+            }
+            .explorer-item {
+                width: calc(33% - 8px);
+                min-height: 60px;
+            }
             
             /* QQ登录弹窗 */
             .qq-login-box { width: 90vw; max-width: 320px; }
@@ -1097,6 +1109,33 @@
             /* 线索弹窗 */
             .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
             .clue-text { font-size: 13px; }
+            
+            /* 手机端：标题栏左侧添加返回按钮 */
+            .mobile-back-btn {
+                display: block !important;
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.4);
+                border-radius: 4px;
+                color: white;
+                font-size: 13px;
+                padding: 4px 12px;
+                cursor: pointer;
+                margin-right: 8px;
+                flex-shrink: 0;
+                min-height: 28px;
+                min-width: 50px;
+                text-align: center;
+            }
+            .mobile-back-btn:active { background: rgba(255,255,255,0.4); }
+            
+            /* 手机端：关闭按钮加大点击区域 */
+            .xp-btn.close {
+                min-width: 44px !important;
+                min-height: 32px !important;
+                width: 44px !important;
+                height: 32px !important;
+                font-size: 16px !important;
+            }
             
             /* 监控故障效果 */
             .glitch-text { font-size: 28px !important; letter-spacing: 2px; }
@@ -4647,6 +4686,26 @@ const AVATARS = {
             });
         }
     }
+
+    // 手机端：给每个窗口标题栏添加返回按钮
+    document.querySelectorAll('.xp-window').forEach(win => {
+        const type = win.id.replace('Window', '');
+        const titlebar = win.querySelector('.xp-titlebar');
+        if (titlebar && !titlebar.querySelector('.mobile-back-btn')) {
+            const backBtn = document.createElement('div');
+            backBtn.className = 'mobile-back-btn';
+            backBtn.textContent = '← 返回';
+            backBtn.onclick = function(e) {
+                e.stopPropagation();
+                closeWindow(type);
+            };
+            // 插入到标题前面
+            const title = titlebar.querySelector('.xp-title');
+            if (title) {
+                titlebar.insertBefore(backBtn, title);
+            }
+        }
+    });
 
     initAvatars();
 
