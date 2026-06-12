@@ -143,6 +143,8 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 10px; color: white; cursor: pointer;
             background: rgba(255,255,255,0.1);
+            padding: 0;
+            line-height: 1;
         }
         .xp-btn:hover { background: rgba(255,255,255,0.25); }
         .xp-btn.close { background: #C75050; border-color: #a04040; }
@@ -1000,7 +1002,12 @@
             }
             .xp-titlebar { padding: 6px 8px; flex-shrink: 0; }
             .xp-title { font-size: 11px; }
-            .xp-btn { width: 24px; height: 20px; font-size: 12px; }
+            .xp-btns { gap: 3px; }
+            .xp-btn { 
+                width: 32px !important; height: 28px !important; 
+                font-size: 14px !important;
+                min-width: 32px; min-height: 28px;
+            }
             .xp-body {
                 flex: 1 !important;
                 min-height: 0 !important;
@@ -2851,6 +2858,31 @@ const AVATARS = {
         removeTaskbarItem(type);
         SFX.windowClose();
     }
+    
+    // 手机端：向下滑动关闭窗口
+    document.addEventListener('touchstart', function(e) {
+        const win = e.target.closest('.xp-window.show');
+        if (!win) return;
+        const touch = e.touches[0];
+        win._touchStartY = touch.clientY;
+        win._touchStartX = touch.clientX;
+    }, { passive: true });
+    
+    document.addEventListener('touchend', function(e) {
+        const win = e.target.closest('.xp-window.show');
+        if (!win || win._touchStartY === undefined) return;
+        const touch = e.changedTouches[0];
+        const deltaY = touch.clientY - win._touchStartY;
+        const deltaX = Math.abs(touch.clientX - (win._touchStartX || 0));
+        // 向下滑动超过100px且主要是垂直滑动 → 关闭窗口
+        if (deltaY > 100 && deltaY > deltaX * 2) {
+            const type = win.id.replace('Window', '');
+            closeWindow(type);
+            showToast('下滑关闭窗口');
+        }
+        delete win._touchStartY;
+        delete win._touchStartX;
+    }, { passive: true });
     
     function minimizeWindow(type) {
         const win = document.getElementById(type + 'Window');
