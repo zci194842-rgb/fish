@@ -2801,6 +2801,7 @@ const AVATARS = {
             expWin.classList.add('show');
             expWin.classList.add('active');
             addTaskbarItem('explorer');
+            mobileHideOtherWindows('explorer');
             return;
         }
         
@@ -2812,6 +2813,7 @@ const AVATARS = {
             ieWin.classList.add('show');
             ieWin.classList.add('active');
             addTaskbarItem('ie');
+            mobileHideOtherWindows('ie');
             return;
         }
         
@@ -2831,6 +2833,7 @@ const AVATARS = {
         win.classList.add('active');
         addTaskbarItem(type);
         SFX.windowOpen();
+        mobileHideOtherWindows(type);
         
         if (type === 'notepad' && !state.readDiary) {
             state.readDiary = true;
@@ -2857,6 +2860,17 @@ const AVATARS = {
         }
         removeTaskbarItem(type);
         SFX.windowClose();
+    }
+    
+    // 手机端：隐藏其他窗口，只显示当前窗口
+    function mobileHideOtherWindows(currentType) {
+        if (window.innerWidth > 600) return; // 仅手机端生效
+        document.querySelectorAll('.xp-window.show').forEach(win => {
+            const winType = win.id.replace('Window', '');
+            if (winType !== currentType) {
+                win.classList.remove('show');
+            }
+        });
     }
     
     // 手机端：向下滑动关闭窗口
@@ -2895,6 +2909,15 @@ const AVATARS = {
             // 已存在，激活
             const item = document.querySelector(`.taskbar-item[data-type="${type}"]`);
             item.classList.add('active');
+            // 手机端：显示该窗口，隐藏其他
+            mobileHideOtherWindows(type);
+            const win = document.getElementById(type + 'Window');
+            if (win) {
+                state.windowZIndex++;
+                win.style.zIndex = state.windowZIndex;
+                win.classList.add('show');
+                win.classList.add('active');
+            }
             return;
         }
         const names = {
