@@ -24,7 +24,10 @@
             font-family: 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
             overflow: hidden;
             user-select: none;
+            -webkit-user-select: none;
             background: #000;
+            touch-action: none;
+            -webkit-touch-callout: none;
         }
         
         /* ====== 启动画面 ====== */
@@ -542,6 +545,195 @@
             50% { box-shadow: 0 0 20px rgba(255,0,0,0.6); }
         }
         
+        /* ====== 结局画面 ====== */
+        .ending-overlay {
+            position: fixed; inset: 0;
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+        .ending-overlay.show { display: flex; }
+        .ending-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%);
+        }
+        .ending-content {
+            position: relative; z-index: 1;
+            max-width: 700px; width: 90%;
+            max-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.5s ease;
+            padding: 20px 0;
+        }
+        .ending-content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .ending-news {
+            background: #f5f0e8;
+            color: #222;
+            padding: 30px 24px;
+            border-radius: 4px;
+            text-align: left;
+            font-family: 'SimSun', 'Noto Serif SC', serif;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+        .ending-news-header {
+            text-align: center;
+            border-bottom: 2px solid #c00;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .ending-news-logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #c00;
+            letter-spacing: 8px;
+        }
+        .ending-news-date {
+            font-size: 11px;
+            color: #888;
+            margin-top: 4px;
+        }
+        .ending-news-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        .ending-news-body {
+            font-size: 14px;
+            line-height: 1.9;
+            color: #333;
+            text-indent: 2em;
+        }
+        .ending-news-body p { margin-bottom: 10px; }
+        .ending-news-quote {
+            border-left: 3px solid #c00;
+            padding: 10px 16px;
+            margin: 16px 0;
+            background: rgba(200,0,0,0.05);
+            font-style: italic;
+            color: #555;
+            font-size: 13px;
+        }
+        .ending-news-footer {
+            text-align: right;
+            font-size: 11px;
+            color: #999;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+        }
+        .ending-verdict {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #c00;
+            margin: 20px 0;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: verdictFadeIn 2s ease 0.5s forwards;
+        }
+        @keyframes verdictFadeIn {
+            to { opacity: 1; }
+        }
+        .ending-epilogue {
+            color: #888;
+            font-size: 13px;
+            line-height: 2;
+            margin-top: 24px;
+            opacity: 0;
+            animation: epilogueFadeIn 2s ease 1.5s forwards;
+        }
+        @keyframes epilogueFadeIn {
+            to { opacity: 1; }
+        }
+        .ending-epilogue .name {
+            color: #ccc;
+            font-size: 15px;
+        }
+        .ending-credits {
+            margin-top: 40px;
+            color: #555;
+            font-size: 11px;
+            line-height: 2;
+            opacity: 0;
+            animation: creditsFadeIn 2s ease 3s forwards;
+        }
+        @keyframes creditsFadeIn {
+            to { opacity: 1; }
+        }
+        .ending-restart {
+            margin-top: 30px;
+            padding: 12px 40px;
+            background: transparent;
+            color: #666;
+            border: 1px solid #444;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            opacity: 0;
+            animation: creditsFadeIn 2s ease 4s forwards;
+            transition: all 0.3s;
+        }
+        .ending-restart:hover {
+            color: #aaa;
+            border-color: #888;
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* ====== 结局弹幕 ====== */
+        .danmaku-layer {
+            position: absolute; inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .danmaku-item {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            animation: danmakuScroll linear forwards;
+            will-change: transform;
+        }
+        .danmaku-item:nth-child(odd) { top: 15%; }
+        .danmaku-item:nth-child(even) { top: 30%; }
+        .danmaku-item:nth-child(3n) { top: 45%; font-size: 13px; color: rgba(255,255,255,0.5); }
+        .danmaku-item:nth-child(4n) { top: 60%; font-size: 15px; color: rgba(255,255,255,0.6); }
+        .danmaku-item:nth-child(5n) { top: 75%; font-size: 12px; color: rgba(255,255,255,0.4); }
+        .danmaku-item:nth-child(6n) { top: 85%; font-size: 13px; color: rgba(255,255,255,0.55); }
+        @keyframes danmakuScroll {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+        @media (max-width: 600px) {
+            .danmaku-item { font-size: 12px !important; }
+        }
+
+        /* 手机端结局适配 */
+        @media (max-width: 600px) {
+            .ending-content { max-height: calc(100vh - 40px); padding: 15px 0; }
+            .ending-news { padding: 20px 16px; }
+            .ending-news-logo { font-size: 22px; letter-spacing: 4px; }
+            .ending-news-title { font-size: 18px; }
+            .ending-news-body { font-size: 13px; }
+            .ending-verdict { font-size: 16px; }
+            .ending-epilogue { font-size: 12px; }
+            .ending-credits { font-size: 10px; }
+            .ending-restart { padding: 10px 30px; font-size: 13px; }
+        }
+
         /* ====== 提示 ====== */
         .toast {
             position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
@@ -768,6 +960,7 @@
                 display: flex; flex-direction: row; gap: 8px;
                 overflow-x: auto; overflow-y: hidden;
                 padding-bottom: 4px;
+                -webkit-overflow-scrolling: touch;
             }
             .desktop-icon {
                 flex-shrink: 0; width: 60px; padding: 3px;
@@ -781,6 +974,7 @@
                 padding: 6px 10px; font-size: 10px;
                 border-radius: 6px 6px 0 0;
                 max-height: 80px; overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
             .progress-title { font-size: 11px; }
             
@@ -798,36 +992,48 @@
                 height: calc(100vh - 40px) !important;
                 border-radius: 0;
                 border-left: none; border-right: none;
+                display: flex !important;
+                flex-direction: column !important;
             }
-            .xp-titlebar { padding: 6px 8px; }
+            .xp-titlebar { padding: 6px 8px; flex-shrink: 0; }
             .xp-title { font-size: 11px; }
             .xp-btn { width: 24px; height: 20px; font-size: 12px; }
+            .xp-body {
+                flex: 1 !important;
+                min-height: 0 !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                touch-action: pan-y;
+            }
             
             /* 文件夹窗口 */
             .folder-window .xp-body {
-                flex-direction: column; height: auto !important;
-                flex: 1; overflow: hidden;
+                flex-direction: column;
             }
             .folder-sidebar {
                 width: 100%; flex-direction: row;
                 display: flex; overflow-x: auto;
                 padding: 4px; border-right: none; border-bottom: 1px solid #A0A0A0;
+                flex-shrink: 0;
+                -webkit-overflow-scrolling: touch;
             }
             .folder-sidebar-item {
                 padding: 4px 10px; white-space: nowrap; flex-shrink: 0;
             }
-            .folder-content { flex: 1; overflow-y: auto; }
+            .folder-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             
             /* 记事本 */
             .notepad-window { width: 100% !important; }
-            .notepad-content { height: auto !important; flex: 1; font-size: 13px; padding: 12px; }
+            .notepad-content { font-size: 13px; padding: 12px; }
             
             /* QQ主界面 */
             .qq-main-window { width: 100% !important; }
-            .qq-header { padding: 10px; }
+            .qq-header { padding: 10px; flex-shrink: 0; }
             .qq-my-avatar { width: 42px; height: 42px; }
             .qq-my-name { font-size: 13px; }
-            .qq-search { margin: 6px 8px; font-size: 13px; padding: 6px 10px; }
+            .qq-search { margin: 6px 8px; font-size: 13px; padding: 6px 10px; flex-shrink: 0; }
+            .qq-tabs { flex-shrink: 0; }
+            .qq-contacts { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             .qq-contact { padding: 8px; }
             .qq-contact-avatar { width: 38px; height: 38px; }
             .qq-contact-name { font-size: 13px; }
@@ -836,20 +1042,19 @@
             
             /* QQ聊天窗口 */
             .qq-chat-window { width: 100% !important; }
-            .qq-chat-window .xp-body { height: auto !important; flex: 1; }
-            .qq-chat-header { padding: 8px 10px; }
+            .qq-chat-header { padding: 8px 10px; flex-shrink: 0; }
             .qq-chat-avatar { width: 36px; height: 36px; }
             .qq-chat-name { font-size: 13px; }
-            .qq-chat-tab { padding: 8px 12px; font-size: 12px; }
-            .qq-chat-messages { padding: 8px; }
+            .qq-chat-tabs { flex-shrink: 0; }
+            .qq-chat-messages { padding: 8px; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             .qq-msg-bubble { font-size: 13px; max-width: 260px; padding: 8px 10px; }
             .qq-msg-avatar { width: 32px; height: 32px; }
+            .qq-chat-input-area { flex-shrink: 0; }
             .qq-chat-input { font-size: 14px; height: 50px; padding: 10px; }
             .qq-chat-btn { padding: 8px 20px; font-size: 13px; }
             
             /* QQ空间 */
             .qzone-window { width: 100% !important; }
-            .qzone-window .xp-body { height: auto !important; flex: 1; overflow-y: auto; }
             .qzone-banner { height: 90px; }
             .qzone-profile { padding: 0 12px; }
             .qzone-avatar { width: 60px; height: 60px; }
@@ -860,7 +1065,19 @@
             
             /* 笔记本 */
             .notebook-window { width: 100% !important; }
-            .notebook-window .xp-body { height: auto !important; flex: 1; overflow-y: auto; }
+            .notebook-header { flex-shrink: 0; }
+            .notebook-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            
+            /* IE浏览器 */
+            .ie-window { width: 100% !important; }
+            .ie-toolbar { flex-shrink: 0; }
+            .ie-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .ie-status { flex-shrink: 0; }
+            
+            /* 资源管理器 */
+            .explorer-window { width: 100% !important; }
+            .explorer-toolbar { flex-shrink: 0; }
+            .explorer-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             
             /* QQ登录弹窗 */
             .qq-login-box { width: 90vw; max-width: 320px; }
@@ -871,11 +1088,25 @@
             .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
             .clue-text { font-size: 13px; }
             
+            /* 监控故障效果 */
+            .glitch-text { font-size: 28px !important; letter-spacing: 2px; }
+            .cam-feed { width: 280px !important; }
+            .cam-screen { width: 280px !important; height: 160px !important; }
+            .glitch-btn { padding: 10px 36px; font-size: 14px; }
+            
             /* 提示 */
             .toast { font-size: 12px; padding: 10px 16px; bottom: 56px; }
             
             /* 禁用拖拽（触控设备） */
             .xp-titlebar { cursor: default; }
+            
+            /* 全局触摸优化 */
+            * { -webkit-tap-highlight-color: transparent; }
+            button, .qq-contact, .qq-tab, .desktop-icon, .folder-sidebar-item,
+            .ie-history-item, .explorer-item, .folder-item, .qzone-tab {
+                min-height: 36px;
+                min-width: 36px;
+            }
         }
     </style>
 </head>
@@ -957,7 +1188,7 @@
                         <div class="folder-item-name">小雨的记事本.txt</div>
                         <div class="folder-item-size">3 KB</div>
                     </div>
-                    <div class="folder-item" ondblclick="showToast('文件已加密，需要密码才能打开')">
+                    <div class="folder-item" ondblclick="requestPassword('diary')">
                         <div class="folder-item-icon">🔒</div>
                         <div class="folder-item-name">秘密.txt</div>
                         <div class="folder-item-size">1 KB</div>
@@ -1031,6 +1262,12 @@
             </div>
         </div>
 
+        <!-- ====== 结局画面 ====== -->
+        <div class="ending-overlay" id="endingOverlay">
+            <div class="ending-bg"></div>
+            <div class="ending-content" id="endingContent"></div>
+        </div>
+
         <!-- ====== QQ主界面 ====== -->
         <div class="xp-window qq-main-window" id="qqMainWindow" style="left:180px;top:40px;">
             <div class="xp-titlebar">
@@ -1043,7 +1280,7 @@
             <div class="xp-body">
                 <div class="qq-header">
                     <div class="qq-my-info" style="cursor:pointer" onclick="openQzone('mishi')" title="点击查看自己的QQ空间">
-                        <div class="qq-my-avatar"><img src="avatars/mishi-xingxing.jpg"></div>
+                        <div class="qq-my-avatar" id="qqMyAvatar"><img></div>
                         <div>
                             <div class="qq-my-name">迷失的星星</div>
                             <div class="qq-my-status">🟢 在线 | 勿扰</div>
@@ -1071,7 +1308,7 @@
             </div>
             <div class="xp-body">
                 <div class="qq-chat-header">
-                    <div class="qq-chat-avatar" id="chatAvatar"><img src="avatars/shenlan.jpg"></div>
+                    <div class="qq-chat-avatar" id="chatAvatar"><img></div>
                     <div>
                         <div class="qq-chat-name" id="chatName">深蓝</div>
                         <div class="qq-chat-status-text" id="chatStatusText">🟢 在线</div>
@@ -1320,13 +1557,22 @@
     // ============================================================
     //  游戏数据 —— 深蓝的反社会人格操控体系
     // ============================================================
-    const characters = {
+const AVATARS = {
+    shenlan: "data:image/jpeg;base64,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",
+    yueye: "data:image/jpeg;base64,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",
+    yinghua: "data:image/jpeg;base64,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",
+    shandian: "data:image/jpeg;base64,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",
+    luoye: "data:image/jpeg;base64,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",
+    mishi: "data:image/jpeg;base64,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",
+};
+
+        const characters = {
 
         // ---- 深蓝：反社会人格者，坛主 ----
         shenlan: {
             id: 'shenlan',
             name: '深蓝',
-            avatar: 'avatars/shenlan.jpg',
+            avatar: AVATARS.shenlan,
             online: true,
             role: '坛主',
             signature: '愿做你人生路上的引路人 🌊',
@@ -1434,18 +1680,87 @@
                 ]}
             ],
             responses: {
-                '你是谁': '我是深蓝，一个愿意帮助别人变得更好的人。你呢？你是谁？',
-                '为什么': '为什么？因为他们需要我。他们孤独、迷茫、被世界伤害。而我，是唯一愿意接纳他们的人。',
-                '妹妹': '你妹妹...她是个好孩子。很努力，很勇敢。她每天都完成任务，从不抱怨。我为她骄傲。',
-                '真相': '真相？你想知道什么真相？真相是这个世界上没有人真正关心别人。除了我。',
-                '杀人': '杀人？多难听的词。我只是帮助他们找到了平静。他们活着比死了还痛苦，你不懂吗？',
-                '控制': '控制？不不不，这是"引导"。他们需要有人告诉他们该怎么做。他们太弱了，自己做不了决定。',
-                '毕业': '"毕业"就是完成了所有训练。他们去了更好的地方。你也会的。',
-                '帮助': '帮助？当然。我一直都在帮助他们。我每天花十几个小时陪他们聊天、鼓励他们、监督他们。还有谁会这么做？',
-                '孤独': '孤独是这个世界上最可怕的东西。比死亡还可怕。我知道，因为我曾经也孤独过。所以我不会让任何人再孤独。',
-                '爱': '爱？我不懂爱。我只懂"被需要"。他们需要我，这就够了。',
-                '反社会': '反社会？哈。社会从来没有接纳过我。是它先抛弃我的。我只是...还回去而已。',
-                '变态': '你觉得我是变态？也许吧。但至少有人因为他们而"不再痛苦"了。你呢？你为别人做过什么？'
+                // ====== 套话路径（自然聊天获取信息）======
+                // 阶段1：建立信任（信任度>60才能套出信息）
+                '你是谁': { reply: '我是深蓝，一个愿意帮助别人变得更好的人。你呢？你是谁？', trust: 5 },
+                '你是谁呀': { reply: '我叫深蓝。你妹妹叫我深蓝哥哥。', trust: 5 },
+                '多大': { reply: '我比你大一些。具体多大不重要，重要的是我能帮到你们。', trust: 3 },
+                '几岁': { reply: '24了。不小了，但也不大。正好是可以当哥哥的年纪。', trust: 3, info: 'age', infoText: '深蓝24岁' },
+                '哪里人': { reply: '我？我到处跑。不过最近在一个小镇上。', trust: 3 },
+                '哪个镇': { reply: '你问这么多干嘛？...我在湖南。', trust: -5 },
+                '湖南': { reply: '你怎么知道我在湖南？...我只是随便住住。', trust: -8 },
+                '住哪': { reply: '租了个房子。不告诉你的。', trust: -3 },
+                '住在哪里': { reply: '你问这个干嘛？', trust: -5 },
+                '地址': { reply: '你想查我户口？呵呵。', trust: -10 },
+                '家在哪': { reply: '我没有家。家是什么？我从来没拥有过。', trust: 5 },
+                '做什么工作': { reply: '工作？我不需要工作。我只需要帮助这些孩子。', trust: 3, info: 'job', infoText: '深蓝无业' },
+                '工作': { reply: '我不工作。帮助你们就是我的工作。', trust: 3 },
+                '职业': { reply: '你觉得"拯救者"算一种职业吗？', trust: 2 },
+                '姓什么': { reply: '姓什么...你叫我深蓝就好了。', trust: -3 },
+                '姓刘': { reply: '！！！你怎么知道我的姓？...谁告诉你的？', trust: -20, danger: true },
+                '刘某': { reply: '你到底是谁？你不是小雨。', trust: -25, danger: true },
+                '刘': { reply: '...你从哪里知道的？', trust: -15, danger: true },
+                '名字': { reply: '名字只是一个代号。叫我深蓝就好。', trust: -3 },
+                '真名': { reply: '每个人都有不想说的秘密。你也有吧？', trust: -5 },
+                '真实姓名': { reply: '你问这个做什么？', trust: -8 },
+                
+                // 套话关键词（需要信任度>60）
+                '无聊': { reply: '无聊？那聊聊吧。我最近在镇上新开的一家网吧上网，那里的网速还不错。就在邮局旁边那条街。', trust: 5, needTrust: 50, info: 'location', infoText: '深蓝在邮局旁边的网吧上网' },
+                '好冷': { reply: '是啊，湖南的冬天真的好冷。我租的房子没有暖气，只能多穿几件。不过没关系，陪你们聊天就不冷了。', trust: 5, needTrust: 50, info: 'location2', infoText: '深蓝在湖南，租的房子没有暖气' },
+                '网吧': { reply: '你也在网吧？我在邮局旁边那家，叫"飞宇网吧"。你呢？', trust: 3, needTrust: 40, info: 'netbar', infoText: '深蓝常去"飞宇网吧"（邮局旁边）' },
+                '饿': { reply: '我也饿了。冰箱里只有泡面了。一个人住就是这样，懒得做饭。', trust: 5, needTrust: 55, info: 'live_alone', infoText: '深蓝一个人住，吃泡面' },
+                '一个人': { reply: '嗯，我一个人住。房东是个老太太，人挺好的，不怎么管我。房租也不贵。', trust: 5, needTrust: 55, info: 'landlord', infoText: '深蓝租的房子，房东是老太太' },
+                '邮局': { reply: '邮局？你寄东西？我就在邮局旁边住。', trust: 3, needTrust: 45, info: 'location3', infoText: '深蓝住在邮局旁边' },
+                '搬家': { reply: '搬什么家...我在这住得好好的。虽然房子旧了点，但便宜。一个月才150块。', trust: 5, needTrust: 60, info: 'rent', infoText: '房租一个月150块' },
+                '照片': { reply: '照片？我不怎么拍照。不过上次在网吧门口的照相馆照过一张证件照。', trust: 3, needTrust: 50, info: 'photo', infoText: '深蓝在网吧门口照相馆照过证件照' },
+                '镇上': { reply: '这个镇子挺小的。就一条主街，邮局、网吧、照相馆都在那条街上。我每天的生活就是上网、陪你们聊天。', trust: 5, needTrust: 50, info: 'town', infoText: '深蓝在小镇，邮局/网吧/照相馆都在一条主街' },
+                '见面': { reply: '见面？...也许有一天吧。等你们都"毕业"了。', trust: -3 },
+                '想见你': { reply: '不用见面的。在网上，我就是你们最亲近的人。见面反而会破坏这种感觉。', trust: -5 },
+                '身份证': { reply: '你想看我的身份证？...你到底想干什么？', trust: -15, danger: true },
+                '警察': { reply: '警察？你叫警察干什么？我犯了什么法？', trust: -20, danger: true },
+                '报警': { reply: '你要报警？...呵呵。你觉得警察会相信你吗？一个在网上聊天的人，犯了什么法？', trust: -25, danger: true },
+                '抓你': { reply: '抓我？凭什么？我只是陪孩子们聊天而已。你有什么证据？', trust: -20, danger: true },
+                '证据': { reply: '证据？什么证据？聊天记录？那些都是正常的聊天。你报警也没用。', trust: -15, danger: true },
+                '举报': { reply: '举报？...你试试看。', trust: -25, danger: true },
+                
+                // 关于受害者
+                '妹妹': { reply: '你妹妹...她是个好孩子。很努力，很勇敢。她每天都完成任务，从不抱怨。我为她骄傲。', trust: 5 },
+                '小雨': { reply: '小雨是我最特别的孩子。她比其他人都坚强。', trust: 3 },
+                '落叶': { reply: '落叶...她"毕业"了。你不用再担心她了。', trust: -3 },
+                '月夜': { reply: '月月也是个好孩子。她只是太孤独了。', trust: 3 },
+                '樱花': { reply: '樱花...她最近在完成最后的训练。', trust: 3 },
+                '闪电': { reply: '闪电是我最勇敢的孩子。他比任何人都真实。', trust: 3 },
+                '沈意': { reply: '你怎么知道他的真名？...小雨告诉你的吧。', trust: -5 },
+                '死了': { reply: '死了？谁死了？...你不要乱说。她们只是"毕业"了。', trust: -10 },
+                '死亡': { reply: '死亡不是终点，是新的开始。你不这么觉得吗？', trust: -5 },
+                '自杀': { reply: '自杀？多难听的词。我从来没有让任何人自杀。我只是帮助她们找到平静。', trust: -15, danger: true },
+                '杀人': { reply: '杀人？多难听的词。我只是帮助他们找到了平静。他们活着比死了还痛苦，你不懂吗？', trust: -15, danger: true },
+                '控制': { reply: '控制？不不不，这是"引导"。他们需要有人告诉他们该怎么做。他们太弱了，自己做不了决定。', trust: -10 },
+                '毕业': { reply: '"毕业"就是完成了所有训练。他们去了更好的地方。你也会的。', trust: -5 },
+                '净化': { reply: '净化是一种释放痛苦的方式。你不觉得有时候痛苦太多了，需要释放吗？', trust: -5 },
+                '训练': { reply: '训练是为了让他们变得更强。你不会理解这种爱的。', trust: -5 },
+                '刀': { reply: '刀？...你在说什么？', trust: -10 },
+                '划': { reply: '划什么？...我不知道你在说什么。', trust: -8 },
+                '帮助': { reply: '帮助？当然。我一直都在帮助他们。我每天花十几个小时陪他们聊天、鼓励他们、监督他们。还有谁会这么做？', trust: 5 },
+                '孤独': { reply: '孤独是这个世界上最可怕的东西。比死亡还可怕。我知道，因为我曾经也孤独过。所以我不会让任何人再孤独。', trust: 5 },
+                '爱': { reply: '爱？我不懂爱。我只懂"被需要"。他们需要我，这就够了。', trust: 5 },
+                '为什么': { reply: '为什么？因为他们需要我。他们孤独、迷茫、被世界伤害。而我，是唯一愿意接纳他们的人。', trust: 5 },
+                '真相': { reply: '真相？你想知道什么真相？真相是这个世界上没有人真正关心别人。除了我。', trust: -5 },
+                '反社会': { reply: '反社会？哈。社会从来没有接纳过我。是它先抛弃我的。我只是...还回去而已。', trust: -10, danger: true },
+                '变态': { reply: '你觉得我是变态？也许吧。但至少有人因为他们而"不再痛苦"了。你呢？你为别人做过什么？', trust: -10, danger: true },
+                '好人': { reply: '我是好人还是坏人，不重要。重要的是，她们需要我的时候，我在。你呢？', trust: 3 },
+                '坏': { reply: '你觉得我坏？...也许吧。但这个世界比我坏多了。', trust: -3 },
+                '谢谢': { reply: '不客气。我一直都在。', trust: 5 },
+                '哥哥': { reply: '嗯？', trust: 3 },
+                '深蓝哥哥': { reply: '我在。怎么了？', trust: 5 },
+                '害怕': { reply: '不要怕。有我在。我一直都在。', trust: 5 },
+                '难过': { reply: '难过的时候，想想那些美好的事情。或者...跟我聊聊。', trust: 5 },
+                '开心': { reply: '开心就好。看到你开心，我也开心。', trust: 5 },
+                '哈哈': { reply: '呵呵。', trust: 3 },
+                '你好': { reply: '你好。你是小雨的...？', trust: 3 },
+                '在吗': { reply: '在的。怎么了？', trust: 3 },
+                '嗯': { reply: '嗯。', trust: 1 },
+                '哦': { reply: '哦。', trust: 1 },
             }
         },
 
@@ -1454,7 +1769,7 @@
             id: 'yueye',
             name: '月夜独行',
             realName: '张明月',
-            avatar: 'avatars/yueye-duxing.jpg',
+            avatar: AVATARS.yueye,
             online: false,
             role: '受害者·已死亡',
             age: 16,
@@ -1596,7 +1911,7 @@
             id: 'yinghua',
             name: '樱花落',
             realName: '陈樱',
-            avatar: 'avatars/yinghualuo.jpg',
+            avatar: AVATARS.yinghua,
             online: false,
             role: '受害者·失踪',
             age: 14,
@@ -1673,7 +1988,7 @@
             id: 'shandian',
             name: '闪电少年',
             realName: '沈意',
-            avatar: 'avatars/shandian-shaonian.jpg',
+            avatar: AVATARS.shandian,
             online: false,
             role: '受害者·已死亡',
             age: 17,
@@ -1782,7 +2097,7 @@
             id: 'luoye',
             name: '落叶无声',
             realName: '李秋',
-            avatar: 'avatars/luoye-wusheng.jpg',
+            avatar: AVATARS.luoye,
             online: false,
             role: '受害者·已死亡（最早）',
             age: 15,
@@ -1853,7 +2168,7 @@
             id: 'mishi',
             name: '迷失的星星',
             realName: '小雨',
-            avatar: 'avatars/mishi-xingxing.jpg',
+            avatar: AVATARS.mishi,
             online: false,
             role: '受害者·失踪',
             age: 13,
@@ -2220,7 +2535,7 @@
         if (state.qqMainTab === 'groups') {
             container.innerHTML = `
                 <div class="qq-contact" onclick="openGroupChat()">
-                    <div class="qq-contact-avatar"><img src="avatars/shenlan.jpg"></div>
+                    <div class="qq-contact-avatar"><img src="${AVATARS.shenlan}"></div>
                     <div class="qq-contact-info">
                         <div class="qq-contact-name">深蓝自律小组</div>
                         <div class="qq-contact-signature">深蓝(坛主) · 100人</div>
@@ -2435,7 +2750,7 @@
     
     function openGroupChat() {
         document.getElementById('chatTitle').textContent = '🐧 深蓝自律小组';
-        document.getElementById('chatAvatar').innerHTML = '<img src="avatars/shenlan.jpg">';
+        document.getElementById('chatAvatar').innerHTML = '<img src="' + AVATARS.shenlan + '">';
         document.getElementById('chatName').textContent = '深蓝自律小组（100人）';
         document.getElementById('chatStatusText').textContent = '深蓝(坛主) · 100人在线';
         
@@ -2464,7 +2779,7 @@
                 if (isMe) {
                     container.innerHTML += `
                         <div class="qq-msg mine">
-                            <div class="qq-msg-avatar"><img src="avatars/mishi-xingxing.jpg"></div>
+                            <div class="qq-msg-avatar"><img src="${AVATARS.mishi}"></div>
                             <div class="qq-msg-content">
                                 <div class="qq-msg-name" style="color:${nameColor}">${msg.from}</div>
                                 <div class="qq-msg-bubble mine">${msg.text}</div>
@@ -2474,7 +2789,7 @@
                 } else {
                     container.innerHTML += `
                         <div class="qq-msg other">
-                            <div class="qq-msg-avatar"><img src="${isAdmin ? 'avatars/shenlan.jpg' : 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' + encodeURIComponent(msg.from)}"></div>
+                            <div class="qq-msg-avatar"><img src="${isAdmin ? AVATARS.shenlan : 'https://api.dicebear.com/7.x/fun-emoji/svg?seed=' + encodeURIComponent(msg.from)}"></div>
                             <div class="qq-msg-content">
                                 <div class="qq-msg-name" style="color:${nameColor}">${msg.from}${isAdmin ? ' [坛主]' : ''}</div>
                                 <div class="qq-msg-bubble">${msg.text}</div>
@@ -2531,7 +2846,7 @@
             day.msgs.forEach((msg, idx) => {
                 const isAdmin = msg.from === 'admin';
                 const isMe = msg.from === 'me';
-                const avatar = isAdmin ? char.avatar : 'avatars/mishi-xingxing.jpg';
+                const avatar = isAdmin ? char.avatar : AVATARS.mishi;
                 const name = isAdmin ? char.name : '我（小雨）';
                 const nameClass = isAdmin ? 'admin' : 'me';
                 const bubbleClass = msg.type || '';
@@ -2593,7 +2908,9 @@
             container.innerHTML = `
                 <div style="padding:30px;text-align:center;color:#AAA;font-size:12px;">
                     ${state.currentChat === 'shenlan' ? 
-                        '深蓝在线。你可以尝试与他对话。<br><span style="color:#888;">试试问：你是谁 / 为什么 / 杀人 / 控制 / 毕业 / 爱 / 反社会</span>' : 
+                        (state.shenlanBlocked ? 
+                            '⚠️ 深蓝已将你拉黑。无法继续对话。<br><span style="color:var(--danger);">套话失败，无法获取身份信息。</span>' :
+                            '深蓝在线。你可以尝试与他对话。<br><span style="color:#888;">💡 提示：先聊日常建立信任，再自然地套出他的信息。<br>直接问姓名/地址会被识破拉黑！<br>试试聊：无聊 / 好冷 / 饿 / 镇上 / 网吧 / 一个人 / 搬家</span>') : 
                         '该用户已离线，无法发送消息。<br>请查看"聊天记录"或"QQ空间"。'}
                 </div>
             `;
@@ -2617,12 +2934,19 @@
             return;
         }
         
+        // 检查是否已被拉黑
+        if (state.shenlanBlocked) {
+            showToast('⚠️ 对方已将你拉黑，无法发送消息');
+            input.value = '';
+            return;
+        }
+        
         const container = document.getElementById('chatMessages');
         
         // 用户消息
         container.innerHTML += `
             <div class="qq-msg">
-                <div class="qq-msg-avatar"><img src="avatars/mishi-xingxing.jpg"></div>
+                <div class="qq-msg-avatar"><img src="${AVATARS.mishi}"></div>
                 <div class="qq-msg-content">
                     <div class="qq-msg-name me">我（小雨）</div>
                     <div class="qq-msg-bubble me">${msg}</div>
@@ -2639,33 +2963,123 @@
             const typing = document.getElementById('typingIndicator');
             if (typing) typing.remove();
             
+            // 初始化信任度
+            if (state.shenlanTrust === undefined) state.shenlanTrust = 30;
+            if (!state.shenlanInfo) state.shenlanInfo = [];
+            if (state.shenlanDangerCount === undefined) state.shenlanDangerCount = 0;
+            
             // 匹配回复
-            let response = null;
+            let matched = null;
+            let bestMatch = null;
+            
             for (const [key, val] of Object.entries(char.responses)) {
-                if (msg.includes(key)) { response = val; break; }
-            }
-            if (!response) {
-                const defaults = [
-                    '你想知道什么？',
-                    '有些事情，不是你能理解的。',
-                    '你问太多了。',
-                    '...你和她一样，一开始都不相信我。',
-                    '我帮了那么多人，没有人感谢我。',
-                    '你觉得我是坏人？那这个世界呢？这个世界对她们好吗？'
-                ];
-                response = defaults[Math.floor(Math.random() * defaults.length)];
+                if (msg.includes(key)) {
+                    matched = val;
+                    break;
+                }
             }
             
-            container.innerHTML += `
+            if (!matched) {
+                // 默认回复
+                const defaults = [
+                    { reply: '你想知道什么？', trust: 0 },
+                    { reply: '有些事情，不是你能理解的。', trust: -2 },
+                    { reply: '你问太多了。', trust: -3 },
+                    { reply: '...你和她一样，一开始都不相信我。', trust: -2 },
+                    { reply: '我帮了那么多人，没有人感谢我。', trust: 0 },
+                    { reply: '你觉得我是坏人？那这个世界呢？这个世界对她们好吗？', trust: -3 },
+                    { reply: '呵呵。', trust: 0 },
+                    { reply: '你跟她真像。一样的固执。', trust: 2 },
+                    { reply: '别问了。有些事情知道了反而痛苦。', trust: -2 },
+                ];
+                bestMatch = defaults[Math.floor(Math.random() * defaults.length)];
+            } else {
+                bestMatch = matched;
+            }
+            
+            // 更新信任度
+            const trustChange = bestMatch.trust || 0;
+            state.shenlanTrust = Math.max(0, Math.min(100, state.shenlanTrust + trustChange));
+            
+            // 检查是否触发信息收集
+            let infoCollected = null;
+            if (bestMatch.info && !state.shenlanInfo.includes(bestMatch.info)) {
+                // 检查信任度是否足够
+                const needTrust = bestMatch.needTrust || 0;
+                if (state.shenlanTrust >= needTrust) {
+                    state.shenlanInfo.push(bestMatch.info);
+                    infoCollected = bestMatch.infoText;
+                } else {
+                    // 信任度不够，不透露信息，换一个保守回复
+                    bestMatch.reply = '你问这么多干嘛？...聊点别的吧。';
+                }
+            }
+            
+            // 检查是否触发危险
+            if (bestMatch.danger) {
+                state.shenlanDangerCount++;
+                SFX.horror();
+                
+                // 危险次数过多，拉黑
+                if (state.shenlanDangerCount >= 3) {
+                    container.innerHTML += `
+                        <div class="qq-msg">
+                            <div class="qq-msg-avatar"><img src="${char.avatar}"></div>
+                            <div class="qq-msg-content">
+                                <div class="qq-msg-name admin">${char.name}</div>
+                                <div class="qq-msg-bubble admin" style="color:var(--danger);">你不是小雨。你到底是谁？<br>...算了。我不想再跟你说话了。</div>
+                            </div>
+                        </div>
+                        <div style="padding:10px;text-align:center;color:#888;font-size:11px;border-top:1px solid #E0E0E0;">
+                            对方已将你拉黑。你无法再发送消息。<br>
+                            <span style="color:var(--danger);">⚠️ 套话失败。你无法获得深蓝的真实身份信息。</span>
+                        </div>
+                    `;
+                    state.shenlanBlocked = true;
+                    container.scrollTop = container.scrollHeight;
+                    renderNotebook();
+                    return;
+                }
+            }
+            
+            // 显示回复
+            let replyHtml = `
                 <div class="qq-msg">
                     <div class="qq-msg-avatar"><img src="${char.avatar}"></div>
                     <div class="qq-msg-content">
                         <div class="qq-msg-name admin">${char.name}</div>
-                        <div class="qq-msg-bubble admin">${response}</div>
+                        <div class="qq-msg-bubble admin">${bestMatch.reply}</div>
                     </div>
                 </div>
             `;
+            
+            // 如果收集到信息，显示线索提示
+            if (infoCollected) {
+                replyHtml += `
+                    <div style="padding:5px 10px;font-size:11px;color:var(--qq-blue);border-left:2px solid var(--qq-blue);margin:5px 10px;background:rgba(0,88,240,0.05);">
+                        📋 收集到信息：${infoCollected}
+                    </div>
+                `;
+                SFX.clueFound();
+            }
+            
+            // 显示信任度变化提示（仅变化较大时）
+            if (Math.abs(trustChange) >= 10) {
+                const trustDir = trustChange > 0 ? '↑' : '↓';
+                const trustColor = trustChange > 0 ? '#2E7D32' : 'var(--danger)';
+                replyHtml += `
+                    <div style="padding:2px 10px;font-size:10px;color:${trustColor};text-align:right;">
+                        深蓝的警惕${trustDir}
+                    </div>
+                `;
+            }
+            
+            container.innerHTML += replyHtml;
             container.scrollTop = container.scrollHeight;
+            
+            // 更新笔记本
+            renderNotebook();
+            
         }, 800 + Math.random() * 1200);
     }
     
@@ -2894,7 +3308,8 @@
     }
     
     function renderNotebook() {
-        const totalClues = Object.values(characters).reduce((sum, c) => sum + (c.clues?.length || 0), 0);
+        const charClues = Object.values(characters).reduce((sum, c) => sum + (c.clues?.length || 0), 0);
+        const totalClues = charClues + 2; // +2 for decrypt_diary and ie_search
         document.getElementById('notebookCount').textContent = `已收集 ${state.cluesFound.length} / ${totalClues} 条线索`;
         
         const container = document.getElementById('notebookContent');
@@ -2904,9 +3319,29 @@
         }
         
         let html = '';
+        // 特殊线索数据
+        const specialClues = {
+            'decrypt_diary': { icon: '📔', title: '失踪前夜的恐怖笔录', text: '妹妹在失踪前夜写下了这篇日记。她听到了衣柜里的声音，看到了门缝下的红光。她知道有人在看着她睡觉。但她不敢告诉任何人——因为深蓝说"不要相信任何人"。', source: '加密日记（秘密.txt）' },
+            'ie_search': { icon: '🌐', title: '妹妹的最后搜索记录', text: '失踪前一天，妹妹搜索了"怎么才能不痛苦地死去"和"离家出走去哪里"。她在网络上发出的求救信号，没有人看到。', source: 'IE浏览器记录' }
+        };
+        
         state.cluesFound.forEach(fullId => {
+            // 特殊线索
+            if (specialClues[fullId]) {
+                const sc = specialClues[fullId];
+                html += `
+                    <div class="notebook-clue">
+                        <div class="notebook-clue-title">${sc.icon} ${sc.title}</div>
+                        <div class="notebook-clue-text">${sc.text}</div>
+                        <div class="notebook-clue-source">来源：${sc.source}</div>
+                    </div>
+                `;
+                return;
+            }
+            
             const [charId, clueIdx] = fullId.split('_');
             const char = characters[charId];
+            if (!char || !char.clues) return;
             const clue = char.clues[parseInt(clueIdx)];
             if (!clue) return;
             
@@ -2919,11 +3354,33 @@
             `;
         });
         
+        // 收集满线索后显示提交按钮
+        if (state.cluesFound.length >= totalClues) {
+            html += `
+                <div style="text-align:center;padding:20px;margin-top:10px;border-top:2px solid var(--danger);">
+                    <div style="color:var(--danger);font-size:14px;font-weight:bold;margin-bottom:12px;">
+                        🎉 全部 ${totalClues} 条线索已收集！深蓝的操控手法已完全暴露！
+                    </div>
+                    <button onclick="showFinalReport()" style="
+                        padding:12px 36px;
+                        background:linear-gradient(180deg,#c00,#900);
+                        color:white;
+                        border:none;
+                        border-radius:4px;
+                        font-size:15px;
+                        cursor:pointer;
+                        box-shadow:0 2px 8px rgba(200,0,0,0.4);
+                    ">📋 生成调查报告</button>
+                </div>
+            `;
+        }
+        
         container.innerHTML = html;
     }
     
     function checkComplete() {
-        const totalClues = Object.values(characters).reduce((sum, c) => sum + (c.clues?.length || 0), 0);
+        const charClues = Object.values(characters).reduce((sum, c) => sum + (c.clues?.length || 0), 0);
+        const totalClues = charClues + 2; // +2 for decrypt_diary and ie_search
         if (state.cluesFound.length >= totalClues) {
             showToast('🎉 你已收集全部线索！深蓝的操控手法已完全暴露...');
             setTimeout(() => {
@@ -2933,11 +3390,40 @@
     }
     
     function showFinalReport() {
+        const hasIdentity = state.shenlanInfo && state.shenlanInfo.length >= 3;
+        
         const html = `
             <div style="padding:20px;background:white;">
                 <h2 style="color:var(--danger);margin-bottom:15px;text-align:center;">🔍 调查报告：深蓝操控手法分析</h2>
                 <div style="font-size:12px;line-height:1.8;color:#444;">
-                    <p><strong>操控者：</strong>深蓝（真实身份未知）</p>
+                    <p><strong>操控者：</strong>深蓝（真实身份${hasIdentity ? '已确认' : '未知'}）</p>
+                    ${hasIdentity ? `
+                    <div style="background:#FFF8E1;border:1px solid #FFD54F;padding:10px;border-radius:4px;margin:8px 0;">
+                        <strong style="color:#F57F17;">📋 已收集到的身份信息：</strong>
+                        <ul style="margin:5px 0;padding-left:20px;">
+                            ${state.shenlanInfo.map(id => {
+                                const infoTexts = {
+                                    'age': '深蓝24岁',
+                                    'job': '深蓝无业',
+                                    'location': '深蓝在邮局旁边的网吧上网',
+                                    'location2': '深蓝在湖南，租的房子没有暖气',
+                                    'netbar': '深蓝常去"飞宇网吧"（邮局旁边）',
+                                    'live_alone': '深蓝一个人住，吃泡面',
+                                    'landlord': '深蓝租的房子，房东是老太太',
+                                    'location3': '深蓝住在邮局旁边',
+                                    'rent': '房租一个月150块',
+                                    'photo': '深蓝在网吧门口照相馆照过证件照',
+                                    'town': '深蓝在小镇，邮局/网吧/照相馆都在一条主街'
+                                };
+                                return `<li>${infoTexts[id] || id}</li>`;
+                            }).join('')}
+                        </ul>
+                    </div>` : `
+                    <div style="background:#FFF3F3;border:1px solid #FFCDD2;padding:10px;border-radius:4px;margin:8px 0;">
+                        <strong style="color:#C62828;">⚠️ 未收集到足够的身份信息</strong><br>
+                        你没有通过和深蓝的对话获取到他的真实姓名和住址。<br>
+                        没有身份信息，警方无法锁定嫌疑人。
+                    </div>`}
                     <p><strong>受害者：</strong>落叶无声（李秋·15岁·已死亡）、月夜独行（张明月·16岁·已死亡）、樱花落（陈樱·14岁·失踪）、闪电少年（沈意·17岁·已死亡）、迷失的星星（小雨·你的妹妹·？）</p>
                     <br>
                     <p><strong>操控手法总结：</strong></p>
@@ -2950,7 +3436,29 @@
                     <p>7. <strong>死亡引导</strong>：最终以"毕业"为名，引导受害者自杀。</p>
                     <br>
                     <p style="color:var(--danger);font-weight:bold;">你的妹妹小雨也是受害者之一。她的日记是最后的求救信号。</p>
-                    <p style="color:var(--danger);font-weight:bold;">深蓝仍然在线。</p>
+                    <br>
+                    <div style="text-align:center;margin-top:20px;">
+                        ${hasIdentity ? `
+                        <button onclick="triggerEnding()" style="
+                            padding:12px 36px;
+                            background:linear-gradient(180deg,#c00,#900);
+                            color:white;
+                            border:none;
+                            border-radius:4px;
+                            font-size:15px;
+                            cursor:pointer;
+                            box-shadow:0 2px 8px rgba(200,0,0,0.4);
+                        ">📋 将证据提交给警方</button>` : `
+                        <button onclick="triggerEnding1()" style="
+                            padding:12px 36px;
+                            background:linear-gradient(180deg,#666,#444);
+                            color:white;
+                            border:none;
+                            border-radius:4px;
+                            font-size:15px;
+                            cursor:pointer;
+                        ">📰 查看后续报道</button>`}
+                    </div>
                 </div>
             </div>
         `;
@@ -2958,6 +3466,198 @@
         document.getElementById('qzoneTitle').textContent = '⚠️ 最终调查报告';
         document.getElementById('qzoneBody').innerHTML = html;
         openWindow('qzone');
+    }
+    
+    // ============================================================
+    //  结局一：没有身份信息 → 悲剧结局
+    // ============================================================
+    function triggerEnding1() {
+        const overlay = document.getElementById('endingOverlay');
+        const content = document.getElementById('endingContent');
+        
+        content.innerHTML = `
+            <div class="danmaku-layer" id="danmakuLayer"></div>
+            <div class="ending-news">
+                <div class="ending-news-header">
+                    <div class="ending-news-logo" style="color:#555;">社会观察</div>
+                    <div class="ending-news-date">2004年5月20日 · 第七版</div>
+                </div>
+                <div class="ending-news-title" style="color:#555;">湖南某镇四名青少年相继死亡或失踪<br>警方初步排除他杀可能</div>
+                <div class="ending-news-body">
+                    <p>本报讯 近日，湖南省某镇陆续发生四起青少年死亡或失踪事件。死者包括李秋（15岁）、张明月（16岁）、沈意（17岁），失踪者为陈樱（14岁）。</p>
+                    <p>据当地警方通报，李秋系高坠死亡，张明月系高坠死亡，沈意系溺亡。三起事件初步排除他杀可能，认定为自杀。</p>
+                    <p>失踪者陈樱目前仍在搜寻中。警方表示已展开调查，但暂无重大线索。</p>
+                    <p>值得注意的是，四名青少年均为同一QQ群成员。但警方表示，网络聊天记录属于个人隐私，暂未作为调查重点。</p>
+                    <div class="ending-news-quote" style="border-left-color:#888;">
+                        "现在的孩子，心理承受能力太差了。"<br>
+                        —— 某不愿透露姓名的邻居
+                    </div>
+                    <p>另一名QQ群成员小雨（13岁）于2月20日失踪，至今下落不明。其家属表示已报案，但目前仍无进展。</p>
+                </div>
+                <div class="ending-news-footer">
+                    本报记者 周洋<br>
+                    责任编辑：刘芳
+                </div>
+            </div>
+            
+            <div class="ending-verdict" style="color:#555;">无 人 问 津</div>
+            
+            <div class="ending-epilogue">
+                <p>四条年轻的生命消失了。</p>
+                <p>没有人追查原因。</p>
+                <p>没有人深挖真相。</p>
+                <br>
+                <p>深蓝仍然在线。</p>
+                <p>他正在寻找下一个"孩子"。</p>
+                <br>
+                <p style="color:#666;">如果你在和小雨的对话中更聪明一些，<br>也许结局会不一样。</p>
+                <br>
+                <p style="color:#555;font-size:14px;">如果你能更早发现妹妹的不对劲，<br>也许结局会不一样。</p>
+                <br>
+                <p class="name" style="color:#888;">——献给每一个被忽视的求救信号</p>
+            </div>
+            
+            <div class="ending-credits">
+                <p>如果你或身边的人正在经历心理困扰</p>
+                <p>请拨打 24小时心理援助热线</p>
+                <p style="font-size:16px;color:#FFD700;margin-top:8px;">📞 010-82951332</p>
+                <p style="font-size:16px;color:#FFD700;">📞 800-810-1117</p>
+                <p style="margin-top:12px;">你不是一个人。</p>
+            </div>
+            
+            <button class="ending-restart" onclick="restartGame()">重新开始</button>
+        `;
+        
+        overlay.classList.add('show');
+        setTimeout(() => { content.classList.add('show'); }, 500);
+        
+        // 启动弹幕
+        startDanmaku();
+    }
+    
+    function startDanmaku() {
+        const comments = [
+            '都是手机玩多了',
+            '给学校交这么多钱就是这么管孩子的？',
+            '我们那个年代啥事没经历过，现在小孩就是娇生惯养',
+            '同意。给他们好的还给出问题来了',
+            '我看现在的孩子就该棒棍底下出孝子',
+            '现在的孩子心理太脆弱了',
+            '家长也有责任吧，平时多关心关心孩子',
+            '就是，我们小时候被打骂也没事',
+            '网络害人啊',
+            '这种事以前也有，只是没现在这么多',
+            '唉，可怜',
+            '现在的教育真的有问题',
+        ];
+        
+        const layer = document.getElementById('danmakuLayer');
+        if (!layer) return;
+        
+        let idx = 0;
+        function spawnDanmaku() {
+            if (!document.getElementById('danmakuLayer')) return;
+            
+            const item = document.createElement('div');
+            item.className = 'danmaku-item';
+            item.textContent = comments[idx % comments.length];
+            
+            // 随机速度 8-14秒
+            const duration = 8 + Math.random() * 6;
+            item.style.animationDuration = duration + 's';
+            
+            // 随机垂直位置（避免重叠）
+            const topPos = 10 + Math.random() * 80;
+            item.style.top = topPos + '%';
+            
+            // 随机透明度
+            const opacity = 0.3 + Math.random() * 0.5;
+            item.style.color = `rgba(255,255,255,${opacity})`;
+            
+            layer.appendChild(item);
+            
+            // 动画结束后移除
+            item.addEventListener('animationend', () => item.remove());
+            
+            idx++;
+            
+            // 每1.5-3秒发一条
+            const delay = 1500 + Math.random() * 1500;
+            setTimeout(spawnDanmaku, delay);
+        }
+        
+        // 1秒后开始发弹幕
+        setTimeout(spawnDanmaku, 1000);
+    }
+    
+    // ============================================================
+    //  结局二：有身份信息 → 深蓝入狱
+    // ============================================================
+    function triggerEnding() {
+        SFX.horror();
+        const overlay = document.getElementById('endingOverlay');
+        const content = document.getElementById('endingContent');
+        
+        content.innerHTML = `
+            <div class="ending-news">
+                <div class="ending-news-header">
+                    <div class="ending-news-logo">法制日报</div>
+                    <div class="ending-news-date">2004年4月15日 · 第三版</div>
+                </div>
+                <div class="ending-news-title">"深蓝自律小组"幕后操控者落网<br>涉嫌利用网络教唆未成年人自杀</div>
+                <div class="ending-news-body">
+                    <p>本报讯（记者 李明）经过两个月的缜密侦查，公安部网络安全局于昨日成功抓获网络系列教唆自杀案犯罪嫌疑人。嫌疑人刘某，男，24岁，无业，利用QQ群"深蓝自律小组"对多名未成年人实施长期心理操控，导致至少4名未成年人死亡或失踪。</p>
+                    <p>据调查，刘某自2003年12月起，通过网络论坛寻找有情感缺失的未成年人，以"知心大哥哥"的身份接近受害者。在取得信任后，他通过"勇气训练""净化仪式"等名义，逐步引导受害者进行自残行为，最终以"毕业"为代号，教唆受害者自杀。</p>
+                    <div class="ending-news-quote">
+                        "他说的每一句话都像是在关心你。但那些关心，是他精心设计的陷阱。"<br>
+                        —— 幸存者家属
+                    </div>
+                    <p>目前已确认的受害者包括：李秋（女，15岁）、张明月（女，16岁）、沈意（男，17岁）三人死亡，陈樱（女，14岁）失踪。第五名受害者小雨（女，13岁）在失踪前留下记事本和QQ聊天记录，成为破案关键证据。</p>
+                    <p>警方表示，小雨的哥哥在发现妹妹失踪后，登录其QQ账号，逐一联系了群内其他成员，收集了大量聊天记录和QQ空间日志作为证据，最终协助警方锁定嫌疑人真实身份。</p>
+                </div>
+                <div class="ending-news-footer">
+                    记者 李明　通讯员 王强<br>
+                    责任编辑：赵芳
+                </div>
+            </div>
+            
+            <div class="ending-verdict">罪 有 应 得</div>
+            
+            <div class="ending-epilogue">
+                <p>刘某因涉嫌故意杀人罪、教唆未成年人自杀罪，<br>被依法逮捕，判处无期徒刑。</p>
+                <br>
+                <p>小雨至今下落不明。</p>
+                <p>但她的记事本，救了更多人。</p>
+                <br>
+                <p class="name">——献给每一个在黑暗中发出求救信号的孩子</p>
+            </div>
+            
+            <div class="ending-credits">
+                <p>如果你或身边的人正在经历心理困扰</p>
+                <p>请拨打 24小时心理援助热线</p>
+                <p style="font-size:16px;color:#FFD700;margin-top:8px;">📞 010-82951332</p>
+                <p style="font-size:16px;color:#FFD700;">📞 800-810-1117</p>
+                <p style="margin-top:12px;">你不是一个人。</p>
+            </div>
+            
+            <button class="ending-restart" onclick="restartGame()">重新开始</button>
+        `;
+        
+        overlay.classList.add('show');
+        
+        // 延迟显示内容（淡入动画）
+        setTimeout(() => {
+            content.classList.add('show');
+        }, 500);
+        
+        // 播放低沉音效
+        setTimeout(() => {
+            SFX.heartbeat();
+        }, 1000);
+    }
+    
+    function restartGame() {
+        location.reload();
     }
 
     // ============================================================
@@ -3158,19 +3858,23 @@
     // ============================================================
     //  密码系统 & 加密日记
     // ============================================================
-    function tryOpenEncryptedDiary() {
-        if (decryptedDiary) {
+    function requestPassword(target) {
+        if (target === 'diary' && decryptedDiary) {
             showDecryptedDiary();
             return;
         }
         SFX.heartbeat();
-        passwordTarget = 'diary';
+        passwordTarget = target;
         document.getElementById('passwordPopup').classList.add('show');
         document.getElementById('passwordStatus').textContent = '';
         document.getElementById('passwordStatus').style.color = '';
         document.getElementById('passwordInput').value = '';
         document.getElementById('passwordHint').textContent = '💡 提示：密码与她的生日有关...去QQ空间看看？';
         setTimeout(() => document.getElementById('passwordInput').focus(), 300);
+    }
+    
+    function tryOpenEncryptedDiary() {
+        requestPassword('diary');
     }
     
     function cancelPassword() {
@@ -3489,6 +4193,74 @@
         setTimeout(() => toast.classList.remove('show'), 3500);
     }
     
+    // 初始化静态HTML中的头像
+    function initAvatars() {
+        const myAvatar = document.getElementById('qqMyAvatar');
+        if (myAvatar) myAvatar.querySelector('img').src = AVATARS.mishi;
+        const chatAvatar = document.getElementById('chatAvatar');
+        if (chatAvatar) chatAvatar.querySelector('img').src = AVATARS.shenlan;
+    }
+    initAvatars();
+
+    // 调试快捷键：Ctrl+Shift+D 解锁全部线索
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+            e.preventDefault();
+            unlockAllClues();
+        }
+    });
+    
+    function unlockAllClues() {
+        // 收集所有角色线索
+        Object.entries(characters).forEach(([charId, char]) => {
+            if (char.clues) {
+                char.clues.forEach((clue, idx) => {
+                    const fullId = charId + '_' + idx;
+                    if (!state.cluesFound.includes(fullId)) {
+                        state.cluesFound.push(fullId);
+                    }
+                });
+            }
+        });
+        // 特殊线索
+        if (!state.cluesFound.includes('decrypt_diary')) state.cluesFound.push('decrypt_diary');
+        if (!state.cluesFound.includes('ie_search')) state.cluesFound.push('ie_search');
+        
+        // 标记日记已解密
+        decryptedDiary = true;
+        
+        // 更新所有进度步骤
+        ['step1','step2','step3','step4','step5'].forEach(s => {
+            const el = document.getElementById(s);
+            if (el) { el.classList.remove('current'); el.classList.add('done'); }
+        });
+        
+        renderNotebook();
+        showToast('🔓 调试模式：已解锁全部 ' + state.cluesFound.length + ' 条线索');
+        showToast('💡 打开调查笔记查看，或按 Ctrl+Shift+E 触发结局二 / Ctrl+Shift+F 触发结局一');
+    }
+    
+    // 调试快捷键：Ctrl+Shift+E 直接触发结局二（深蓝入狱）
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'E') {
+            e.preventDefault();
+            unlockAllClues();
+            // 模拟已收集深蓝身份信息
+            state.shenlanInfo = ['age', 'job', 'location', 'netbar', 'town'];
+            setTimeout(() => showFinalReport(), 500);
+        }
+    });
+    
+    // 调试快捷键：Ctrl+Shift+F 直接触发结局一（无人问津）
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.shiftKey && e.key === 'F') {
+            e.preventDefault();
+            unlockAllClues();
+            // 不设置身份信息 → 结局一
+            setTimeout(() => showFinalReport(), 500);
+        }
+    });
+
     // 桌面图标：单击打开
     document.querySelectorAll('.desktop-icon').forEach(icon => {
         icon.addEventListener('click', function(e) {
