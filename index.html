@@ -960,6 +960,78 @@
 
         /* ====== 手机适配 ====== */
         @media (max-width: 600px) {
+            /* 手机端：模拟电脑显示器外框 */
+            body {
+                background: #2a2a2a !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-height: 100vh;
+                min-height: 100dvh;
+            }
+            
+            /* 显示器外壳 */
+            .desktop {
+                width: 100vw !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                position: relative !important;
+                border: 6px solid #333 !important;
+                border-top: 4px solid #444 !important;
+                border-radius: 8px !important;
+                box-shadow: 
+                    0 0 0 2px #222,
+                    0 0 0 8px #1a1a1a,
+                    0 0 30px rgba(0,0,0,0.8),
+                    inset 0 0 60px rgba(0,0,0,0.3) !important;
+                overflow: hidden !important;
+            }
+            
+            /* 显示器底座 - 用伪元素 */
+            .desktop::after {
+                content: '';
+                display: none; /* 简化：不添加底座，让屏幕占满 */
+            }
+            
+            /* 启动画面也在屏幕内 */
+            .boot-screen {
+                border-radius: 4px;
+                border: 6px solid #333;
+                border-top: 4px solid #444;
+                box-shadow: 
+                    0 0 0 2px #222,
+                    0 0 0 8px #1a1a1a,
+                    0 0 30px rgba(0,0,0,0.8);
+            }
+            
+            /* 所有fixed定位的子元素改为absolute（相对于desktop） */
+            .desktop > * {
+                position: absolute !important;
+            }
+            .taskbar {
+                position: absolute !important;
+                bottom: 0; left: 0; right: 0;
+            }
+            .progress-box {
+                position: absolute !important;
+            }
+            .toast {
+                position: absolute !important;
+            }
+            .qq-login-popup {
+                position: absolute !important;
+            }
+            .clue-overlay {
+                position: absolute !important;
+            }
+            .ending-overlay {
+                position: absolute !important;
+            }
+            .crt-scanlines {
+                position: absolute !important;
+            }
+            
             /* 桌面图标横排 */
             .desktop-icons {
                 position: absolute; top: 8px; left: 8px; right: 8px;
@@ -990,12 +1062,12 @@
             .taskbar-item { font-size: 10px; padding: 2px 6px; min-width: 40px; }
             .system-tray { font-size: 10px; gap: 5px; }
             
-            /* 窗口全屏化 */
+            /* 窗口在显示器框内全屏 */
             .xp-window {
-                position: fixed !important;
+                position: absolute !important;
                 left: 0 !important; top: 0 !important;
-                width: 100vw !important;
-                height: calc(100vh - 40px) !important;
+                width: 100% !important;
+                height: calc(100% - 40px) !important;
                 border-radius: 0;
                 border-left: none; border-right: none;
                 display: flex !important;
