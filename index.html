@@ -973,8 +973,9 @@
         ::-webkit-scrollbar-thumb { background: #C0C0C0; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #A0A0A0; }
 
-        /* ====== 手机适配（默认） ====== */
-        body { background: #1a1a1a; }
+        /* ====== 手机适配 ====== */
+        @media (max-width: 600px) {
+            body { background: #1a1a1a; }
 
             .desktop {
                 position: relative;
@@ -1173,6 +1174,7 @@
             .story-text { font-size: 13px; }
             .story-choice { padding: 8px 24px; font-size: 12px; min-width: 140px; }
             .story-diary-entry { padding: 8px 10px; font-size: 11px; }
+        }
 
         /* ====== CRT扫描线效果 ====== */
         .crt-toggle {
