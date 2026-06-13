@@ -3851,9 +3851,12 @@ const AVATARS = {
         showCluePopup(clue);
         updateProgress('step5');
         renderNotebook();
-        checkComplete();
-        // 检查是否触发月夜独行支线
+        // 先检查月夜支线（如果触发，会阻塞checkComplete直到支线结束）
         checkYueyeStory();
+        // 如果月夜支线没触发，再检查是否集齐全部线索
+        if (!yueyeStoryTriggered) {
+            checkComplete();
+        }
     }
     
     function triggerQzoneClue(charId, postIdx) {
@@ -4044,7 +4047,7 @@ const AVATARS = {
     
     function checkComplete() {
         const charClues = Object.values(characters).reduce((sum, c) => sum + (c.clues?.length || 0), 0);
-        const totalClues = charClues + 2; // +2 for decrypt_diary and ie_search
+        const totalClues = charClues + 2 + (state.cluesFound.includes('yueye_secret') ? 1 : 0); // +2特殊线索 +可能的月夜隐藏线索
         if (state.cluesFound.length >= totalClues) {
             showToast('🎉 你已收集全部线索！深蓝的操控手法已完全暴露...');
             setTimeout(() => {
@@ -4250,6 +4253,10 @@ function closeStoryOverlay() {
     // 恢复text显示
     document.getElementById('storyText').style.display = 'block';
     showToast('📓 发现隐藏线索：月夜独行的秘密');
+    // 月夜支线结束后，检查是否集齐全部线索
+    setTimeout(function() {
+        checkComplete();
+    }, 1500);
 }
 
 // 在renderNotebook中添加月夜隐藏线索的显示
