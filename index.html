@@ -723,17 +723,17 @@
             position: absolute;
             white-space: nowrap;
             font-size: 14px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,60,60,0.85);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
             animation: danmakuScroll linear forwards;
             will-change: transform;
         }
         .danmaku-item:nth-child(odd) { top: 15%; }
         .danmaku-item:nth-child(even) { top: 30%; }
-        .danmaku-item:nth-child(3n) { top: 45%; font-size: 13px; color: rgba(255,255,255,0.5); }
-        .danmaku-item:nth-child(4n) { top: 60%; font-size: 15px; color: rgba(255,255,255,0.6); }
-        .danmaku-item:nth-child(5n) { top: 75%; font-size: 12px; color: rgba(255,255,255,0.4); }
-        .danmaku-item:nth-child(6n) { top: 85%; font-size: 13px; color: rgba(255,255,255,0.55); }
+        .danmaku-item:nth-child(3n) { top: 45%; font-size: 13px; color: rgba(255,80,80,0.7); }
+        .danmaku-item:nth-child(4n) { top: 60%; font-size: 15px; color: rgba(255,50,50,0.8); }
+        .danmaku-item:nth-child(5n) { top: 75%; font-size: 12px; color: rgba(255,100,100,0.6); }
+        .danmaku-item:nth-child(6n) { top: 85%; font-size: 13px; color: rgba(255,70,70,0.75); }
         @keyframes danmakuScroll {
             from { transform: translateX(100vw); }
             to { transform: translateX(-100%); }
@@ -3096,29 +3096,20 @@ const AVATARS = {
     
     // 手机端：向下滑动关闭窗口
     document.addEventListener('touchstart', function(e) {
-        const win = e.target.closest('.xp-window.show');
-        if (!win) return;
-        const touch = e.touches[0];
-        win._touchStartY = touch.clientY;
-        win._touchStartX = touch.clientX;
+        // 触摸开始（不再监听下滑关闭）
     }, { passive: true });
     
     document.addEventListener('touchend', function(e) {
-        const win = e.target.closest('.xp-window.show');
-        if (!win || win._touchStartY === undefined) return;
-        const touch = e.changedTouches[0];
-        const deltaY = touch.clientY - win._touchStartY;
-        const deltaX = Math.abs(touch.clientX - (win._touchStartX || 0));
-        // 向下滑动超过100px且主要是垂直滑动 → 关闭窗口
-        if (deltaY > 100 && deltaY > deltaX * 2) {
-            const type = win.id.replace('Window', '');
-            closeWindow(type);
-            showToast('下滑关闭窗口');
-        }
-        delete win._touchStartY;
-        delete win._touchStartX;
+        // 触摸结束（不再监听下滑关闭）
     }, { passive: true });
     
+    // 手机端：阻止返回键退出页面
+    history.pushState(null, '', location.href);
+    window.addEventListener('popstate', function(e) {
+        history.pushState(null, '', location.href);
+        e.preventDefault();
+    });
+
     function minimizeWindow(type) {
         const win = document.getElementById(type + 'Window');
         if (win) win.classList.remove('show');
@@ -4518,6 +4509,29 @@ function closeStoryOverlay() {
                 <div class="ending-news-footer">
                     记者 李明　通讯员 王强<br>
                     责任编辑：赵芳
+                </div>
+            </div>
+            
+            <div class="ending-news" style="margin-top:20px;border-top:2px solid #8B0000;padding-top:20px;">
+                <div class="ending-news-header">
+                    <div class="ending-news-logo" style="color:#8B0000;">⚠️ 真实案件追踪</div>
+                    <div class="ending-news-date">2023年9月4日</div>
+                </div>
+                <div class="ending-news-title" style="color:#8B0000;">湖北随县博爱特校校长<span style="color:#ff4444;font-weight:bold;">刘爱业</span>强奸案<br>多名残疾女学生遭侵害 校长获刑15年</div>
+                <div class="ending-news-body">
+                    <p>2023年6月，媒体曝光湖北省随县博爱特校校长<span style="color:#ff4444;font-weight:bold;">刘爱业</span>长期性侵在校残疾女学生一案，引发社会广泛关注。</p>
+                    <p>据受害者家属透露，<span style="color:#ff4444;font-weight:bold;">刘爱业</span>多次在办公室、宿舍等场所对多名智力障碍女学生实施强奸。部分受害者在案发前曾试图向家长反映，但未引起重视。</p>
+                    <div style="margin:12px 0;border-radius:6px;overflow:hidden;border:1px solid #333;">
+                        <img src="liuaiye_news.png" style="width:100%;display:block;" alt="刘爱业案件新闻报道截图">
+                        <div style="background:#111;color:#888;font-size:10px;padding:4px 8px;text-align:center;">▲ 新闻报道截图：受害家属指证"有时候也在办公室强奸过"</div>
+                    </div>
+                    <p>法院经审理查明，<span style="color:#ff4444;font-weight:bold;">刘爱业</span>利用特校校长身份，在长达数年时间内对多名未成年残疾学生实施性侵害。最终以强奸罪判处其有期徒刑十五年。</p>
+                    <div class="ending-news-quote" style="border-left-color:#8B0000;">
+                        "月夜独行"张明月的故事，正是基于此类真实案件改编。<br>
+                        在现实中，这样的"刘爱业"并不只有一个。<br>
+                        而那些被侵害的孩子，很多从未得到倾听。<br>
+                        但这一次，有人选择了不沉默。
+                    </div>
                 </div>
             </div>
             
