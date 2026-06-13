@@ -169,7 +169,7 @@
         .xp-body { background: var(--xp-bg); overflow: hidden; display: flex; flex-direction: column; }
         
         /* ====== 文件夹窗口 ====== */
-        .folder-window { width: 420px; }
+        .folder-window { max-width: 420px; width: 90vw; }
         .folder-window .xp-body { padding: 0; display: flex; height: 300px; }
         .folder-sidebar { width: 140px; background: linear-gradient(180deg, #D4D0C8, #C8C4B8); padding: 8px 0; border-right: 1px solid #A0A0A0; }
         .folder-sidebar-item { padding: 5px 12px; font-size: 11px; cursor: pointer; border-radius: 2px; margin: 1px 5px; }
@@ -183,7 +183,7 @@
         .folder-item-size { font-size: 10px; color: #888; margin-left: auto; }
         
         /* ====== 记事本 ====== */
-        .notepad-window { width: 480px; }
+        .notepad-window { max-width: 480px; width: 90vw; }
         .notepad-window .xp-body { padding: 0; }
         .notepad-menu { background: #F0F0F0; padding: 2px 5px; font-size: 11px; border-bottom: 1px solid #C0C0C0; display: flex; gap: 2px; }
         .notepad-menu span { padding: 2px 8px; cursor: pointer; border-radius: 2px; }
@@ -238,7 +238,7 @@
         .qq-contact-online-dot.offline { background: #999; }
         
         /* ====== QQ聊天窗口 ====== */
-        .qq-chat-window { width: 480px; }
+        .qq-chat-window { max-width: 480px; width: 90vw; }
         .qq-chat-window .xp-body { padding: 0; display: flex; flex-direction: column; height: 460px; }
         .qq-chat-header {
             background: linear-gradient(180deg, #F8F8F8, #EEEEEE);
@@ -292,7 +292,7 @@
         .qq-chat-btn.send:hover { background: linear-gradient(180deg, #6BABE5, #4B8BCF); }
         
         /* ====== QQ空间 ====== */
-        .qzone-window { width: 520px; }
+        .qzone-window { max-width: 520px; width: 90vw; }
         .qzone-window .xp-body { padding: 0; height: 480px; overflow-y: auto; }
         .qzone-banner {
             height: 120px; position: relative;
@@ -336,7 +336,7 @@
         .qzone-comment.important { border-left-color: var(--danger); background: #FFF8F8; padding: 3px 8px; border-radius: 0 3px 3px 0; }
         
         /* ====== 笔记本/线索面板 ====== */
-        .notebook-window { width: 350px; }
+        .notebook-window { max-width: 350px; width: 90vw; }
         .notebook-window .xp-body { padding: 0; height: 380px; overflow-y: auto; }
         .notebook-header { background: linear-gradient(180deg, #F5E6C8, #E8D5A8); padding: 10px 15px; border-bottom: 1px solid #C0A060; }
         .notebook-title { font-size: 14px; font-weight: bold; color: #5A4020; }
@@ -767,7 +767,7 @@
         .toast.show { opacity: 1; }
         
         /* ====== IE浏览器 ====== */
-        .ie-window { width: 560px; }
+        .ie-window { max-width: 560px; width: 90vw; }
         .ie-window .xp-body { padding: 0; display: flex; flex-direction: column; height: 420px; }
         .ie-toolbar {
             background: linear-gradient(180deg, #F0F0F0, #E0E0E0);
@@ -812,7 +812,7 @@
         }
 
         /* ====== 资源管理器 ====== */
-        .explorer-window { width: 500px; }
+        .explorer-window { max-width: 500px; width: 90vw; }
         .explorer-window .xp-body { padding: 0; display: flex; flex-direction: column; height: 380px; }
         .explorer-toolbar {
             background: linear-gradient(180deg, #F0F0F0, #E0E0E0);
@@ -978,18 +978,18 @@
         @media (max-width: 600px) {
             /* 手机端：模拟CRT显示器外框 */
             body {
-                background: #1a1a1a !important;
+                background: #1a1a1a;
             }
             .desktop {
-                position: relative !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                height: 100dvh !important;
-                box-sizing: border-box !important;
-                border: 4px solid #333 !important;
-                border-radius: 6px !important;
-                box-shadow: 0 0 0 1px #111, 0 4px 20px rgba(0,0,0,0.6) !important;
-                overflow: hidden !important;
+                position: relative;
+                width: 100vw;
+                height: 100vh;
+                height: 100dvh;
+                box-sizing: border-box;
+                border: 4px solid #333;
+                border-radius: 6px;
+                box-shadow: 0 0 0 1px #111, 0 4px 20px rgba(0,0,0,0.6);
+                overflow: hidden;
             }
             .boot-screen {
                 border-radius: 2px;
@@ -998,12 +998,12 @@
                 box-sizing: border-box;
             }
             .boot-logo {
-                width: 60px !important; height: 60px !important;
-                font-size: 30px !important;
-                margin-bottom: 16px !important;
+                width: 60px; height: 60px;
+                font-size: 30px;
+                margin-bottom: 16px;
             }
-            .boot-text { font-size: 12px !important; }
-            .boot-progress { width: 160px !important; }
+            .boot-text { font-size: 12px; }
+            .boot-progress { width: 160px; }
             .boot-screen::after {
                 content: '';
                 display: block;
@@ -1031,7 +1031,7 @@
             
             /* 进度面板缩小 */
             .progress-box {
-                position: fixed !important;
+                position: fixed;
                 top: auto; bottom: 44px; right: 8px; left: 8px;
                 padding: 6px 10px; font-size: 10px;
                 border-radius: 6px 6px 0 0;
@@ -1043,7 +1043,7 @@
             
             /* 任务栏 */
             .taskbar {
-                position: fixed !important;
+                position: fixed;
                 bottom: 0; left: 0; right: 0;
                 height: 40px; padding: 0 4px;
                 z-index: 100;
@@ -1056,12 +1056,11 @@
             
             /* 窗口全屏化 */
             .xp-window {
-                position: absolute !important;
+                position: absolute;
                 left: 0 !important; top: 0 !important;
-                width: 100% !important;
-                height: calc(100% - 40px) !important;
-                border-radius: 0 !important;
-                border-left: none !important; border-right: none !important;
+                height: calc(100% - 40px);
+                border-radius: 0;
+                border-left: none; border-right: none;
                 display: flex !important;
                 flex-direction: column !important;
                 z-index: 10;
@@ -1070,14 +1069,14 @@
             .xp-title { font-size: 11px; }
             .xp-btns { gap: 3px; }
             .xp-btn { 
-                width: 32px !important; height: 28px !important; 
-                font-size: 14px !important;
+                width: 32px; height: 28px; 
+                font-size: 14px;
                 min-width: 32px; min-height: 28px;
             }
             .xp-body {
-                flex: 1 !important;
-                min-height: 0 !important;
-                overflow-y: auto !important;
+                flex: 1;
+                min-height: 0;
+                overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
             
@@ -1147,11 +1146,11 @@
             .explorer-toolbar { flex-shrink: 0; }
             .explorer-content { 
                 flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                display: flex !important;
-                flex-wrap: wrap !important;
-                align-content: flex-start !important;
-                padding: 10px !important;
-                gap: 10px !important;
+                display: flex;
+                flex-wrap: wrap;
+                align-content: flex-start;
+                padding: 10px;
+                gap: 10px;
             }
             .explorer-item {
                 width: calc(33% - 8px);
@@ -1160,7 +1159,7 @@
             
             /* QQ登录弹窗 */
             .qq-login-popup {
-                position: fixed !important;
+                position: fixed;
                 z-index: 200;
             }
             .qq-login-box { width: 90vw; max-width: 320px; }
@@ -1169,7 +1168,7 @@
             
             /* 线索弹窗 */
             .clue-overlay {
-                position: fixed !important;
+                position: fixed;
                 z-index: 200;
             }
             .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
@@ -1177,19 +1176,19 @@
             
             /* 结局画面 */
             .ending-overlay {
-                position: fixed !important;
+                position: fixed;
                 z-index: 300;
             }
             
             /* CRT扫描线 */
             .crt-scanlines {
-                position: fixed !important;
+                position: fixed;
                 z-index: 99998;
             }
             
             /* 返回按钮（手机端显示） */
             .mobile-back-btn {
-                display: block !important;
+                display: block;
                 background: rgba(255,255,255,0.2);
                 border: 1px solid rgba(255,255,255,0.4);
                 border-radius: 4px;
@@ -1207,22 +1206,22 @@
             
             /* 关闭按钮加大 */
             .xp-btn.close {
-                min-width: 44px !important;
-                min-height: 32px !important;
-                width: 44px !important;
-                height: 32px !important;
-                font-size: 16px !important;
+                min-width: 44px;
+                min-height: 32px;
+                width: 44px;
+                height: 32px;
+                font-size: 16px;
             }
             
             /* 监控故障效果 */
-            .glitch-text { font-size: 28px !important; letter-spacing: 2px; }
-            .cam-feed { width: 280px !important; }
-            .cam-screen { width: 280px !important; height: 160px !important; }
+            .glitch-text { font-size: 28px; letter-spacing: 2px; }
+            .cam-feed { width: 280px; }
+            .cam-screen { width: 280px; height: 160px; }
             .glitch-btn { padding: 10px 36px; font-size: 14px; }
             
             /* 提示 */
             .toast {
-                position: fixed !important;
+                position: fixed;
                 font-size: 12px; padding: 10px 16px; bottom: 56px;
                 z-index: 500;
             }
