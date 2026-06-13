@@ -973,9 +973,8 @@
         ::-webkit-scrollbar-thumb { background: #C0C0C0; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #A0A0A0; }
 
-        /* ====== 手机适配 ====== */
-        @media (max-width: 600px) {
-            body { background: #1a1a1a; }
+        /* ====== 手机适配（默认） ====== */
+        body { background: #1a1a1a; }
 
             .desktop {
                 position: relative;
@@ -989,7 +988,7 @@
             }
 
             /* 开屏：隐藏logo和底座 */
-            .boot-logo { display: none; }
+            .boot-logo { width: 50px; height: 50px; font-size: 26px; margin-bottom: 12px; }
             .boot-screen::after { display: none; }
             .boot-text { font-size: 12px; }
             .boot-progress { width: 150px; }
@@ -1174,8 +1173,7 @@
             .story-text { font-size: 13px; }
             .story-choice { padding: 8px 24px; font-size: 12px; min-width: 140px; }
             .story-diary-entry { padding: 8px 10px; font-size: 11px; }
-        }
-        
+
         /* ====== CRT扫描线效果 ====== */
         .crt-toggle {
             display: flex; align-items: center; gap: 3px;
