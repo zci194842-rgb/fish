@@ -975,289 +975,205 @@
 
         /* ====== 手机适配 ====== */
         @media (max-width: 600px) {
-            /* 手机端：模拟CRT显示器外框 */
-            body {
-                background: #1a1a1a;
-            }
+            body { background: #1a1a1a; }
+
             .desktop {
                 position: relative;
                 width: 100vw;
                 height: 100vh;
                 height: 100dvh;
                 box-sizing: border-box;
-                border: 4px solid #333;
-                border-radius: 6px;
-                box-shadow: 0 0 0 1px #111, 0 4px 20px rgba(0,0,0,0.6);
+                border: 3px solid #444;
+                border-radius: 4px;
                 overflow: hidden;
             }
-            .boot-screen {
-                border-radius: 2px;
-                border: 4px solid #333;
-                box-shadow: 0 0 0 1px #111, 0 4px 20px rgba(0,0,0,0.6);
-                box-sizing: border-box;
-            }
-            .boot-logo {
-                width: 60px; height: 60px;
-                font-size: 30px;
-                margin-bottom: 16px;
-            }
-            .boot-text { font-size: 12px; }
-            .boot-progress { width: 160px; }
-            .boot-screen::after {
-                display: none;
-            }
-            
-            /* 桌面图标横排 */
+
+            /* 开屏：隐藏logo和底座 */
             .boot-logo { display: none; }
+            .boot-screen::after { display: none; }
+            .boot-text { font-size: 12px; }
+            .boot-progress { width: 150px; }
+
+            /* 桌面图标：横排滑动 */
             .desktop-icons {
-                position: absolute; top: 8px; left: 8px; right: 8px;
-                display: flex; flex-direction: row; gap: 8px;
+                position: absolute; top: 6px; left: 6px; right: 6px;
+                display: flex; flex-direction: row; gap: 6px;
                 overflow-x: auto; overflow-y: hidden;
                 padding-bottom: 4px;
                 -webkit-overflow-scrolling: touch;
                 z-index: 1;
+                touch-action: pan-x;
             }
-            .desktop-icon {
-                flex-shrink: 0; width: 60px; padding: 3px;
-            }
-            .icon-box { width: 40px; height: 40px; font-size: 22px; }
-            .icon-name { font-size: 10px; }
-            
-            /* 进度面板缩小 */
+            .desktop-icon { flex-shrink: 0; width: 54px; padding: 2px; }
+            .icon-box { width: 36px; height: 36px; font-size: 20px; }
+            .icon-name { font-size: 9px; }
+
+            /* 进度面板 */
             .progress-box {
                 position: fixed;
-                top: auto; bottom: 44px; right: 8px; left: 8px;
-                padding: 6px 10px; font-size: 10px;
-                border-radius: 6px 6px 0 0;
-                max-height: 80px; overflow-y: auto;
+                top: auto; bottom: 40px; right: 6px; left: 6px;
+                padding: 4px 8px; font-size: 9px;
+                border-radius: 4px 4px 0 0;
+                max-height: 60px; overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
                 z-index: 50;
             }
-            .progress-title { font-size: 11px; }
-            
+
             /* 任务栏 */
             .taskbar {
                 position: fixed;
                 bottom: 0; left: 0; right: 0;
-                height: 40px; padding: 0 4px;
+                height: 36px; padding: 0 4px;
                 z-index: 100;
-                width: 100%; 
                 box-sizing: border-box;
             }
-            .start-btn { font-size: 11px; padding: 3px 8px; }
-            .taskbar-item { font-size: 10px; padding: 2px 6px; min-width: 40px; }
-            .system-tray { font-size: 10px; gap: 5px; }
-            
-            /* 窗口全屏化 */
-            .xp-window {
-                position: absolute;
+            .start-btn { font-size: 10px; padding: 2px 6px; }
+            .taskbar-item { font-size: 9px; padding: 2px 4px; min-width: 32px; }
+            .system-tray { font-size: 9px; gap: 4px; }
+
+            /* 窗口：仅.show的窗口全屏 */
+            .xp-window.show {
+                position: absolute !important;
                 left: 0 !important; top: 0 !important;
-                height: calc(100% - 40px);
-                border-radius: 0;
-                border-left: none; border-right: none;
+                width: 100% !important;
+                max-width: 100% !important;
+                height: calc(100% - 36px) !important;
+                border-radius: 0 !important;
+                border-left: none !important;
+                border-right: none !important;
                 display: flex !important;
                 flex-direction: column !important;
                 z-index: 10;
             }
-            .xp-titlebar { padding: 6px 8px; flex-shrink: 0; }
-            .xp-title { font-size: 11px; }
-            .xp-btns { gap: 3px; }
-            .xp-btn { 
-                width: 32px; height: 28px; 
-                font-size: 14px;
-                min-width: 32px; min-height: 28px;
+            .xp-titlebar { padding: 4px 6px; flex-shrink: 0; }
+            .xp-title { font-size: 10px; }
+            .xp-btns { gap: 2px; }
+            .xp-btn { width: 28px; height: 24px; font-size: 12px; min-width: 28px; min-height: 24px; }
+            .xp-body { flex: 1; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+            /* 返回按钮 */
+            .mobile-back-btn {
+                display: block;
+                background: rgba(255,255,255,0.2);
+                border: 1px solid rgba(255,255,255,0.3);
+                border-radius: 3px;
+                color: white; font-size: 11px;
+                padding: 2px 8px; cursor: pointer;
+                margin-right: 4px; flex-shrink: 0;
             }
-            .xp-body {
-                flex: 1;
-                min-height: 0;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            /* 文件夹窗口 */
-            .folder-window .xp-body {
-                flex-direction: column;
-            }
-            .folder-sidebar {
-                width: 100%; flex-direction: row;
-                display: flex; overflow-x: auto;
-                padding: 4px; border-right: none; border-bottom: 1px solid #A0A0A0;
-                flex-shrink: 0;
-                -webkit-overflow-scrolling: touch;
-            }
-            .folder-sidebar-item {
-                padding: 4px 10px; white-space: nowrap; flex-shrink: 0;
-            }
+            .mobile-back-btn:active { background: rgba(255,255,255,0.4); }
+
+            /* 关闭按钮加大 */
+            .xp-btn.close { min-width: 40px; min-height: 28px; width: 40px; height: 28px; font-size: 14px; }
+
+            /* 文件夹 */
+            .folder-window .xp-body { flex-direction: column; }
+            .folder-sidebar { width: 100%; flex-direction: row; display: flex; overflow-x: auto; padding: 3px; border-right: none; border-bottom: 1px solid #A0A0A0; flex-shrink: 0; -webkit-overflow-scrolling: touch; }
+            .folder-sidebar-item { padding: 3px 8px; white-space: nowrap; flex-shrink: 0; font-size: 10px; }
             .folder-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            
+
             /* 记事本 */
-            .notepad-content { font-size: 13px; padding: 12px; }
-            
+            .notepad-content { font-size: 12px; padding: 8px; }
+
             /* QQ主界面 */
-            .qq-header { padding: 10px; flex-shrink: 0; }
-            .qq-my-avatar { width: 42px; height: 42px; }
-            .qq-my-name { font-size: 13px; }
-            .qq-search { margin: 6px 8px; font-size: 13px; padding: 6px 10px; flex-shrink: 0; }
+            .qq-header { padding: 6px; flex-shrink: 0; }
+            .qq-my-avatar { width: 36px; height: 36px; }
+            .qq-my-name { font-size: 12px; }
+            .qq-search { margin: 4px 6px; font-size: 12px; padding: 4px 8px; flex-shrink: 0; }
             .qq-tabs { flex-shrink: 0; }
             .qq-contacts { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            .qq-contact { padding: 8px; }
-            .qq-contact-avatar { width: 38px; height: 38px; }
-            .qq-contact-name { font-size: 13px; }
-            .qq-contact-signature { font-size: 11px; }
-            .qq-contact-badge { font-size: 10px; padding: 2px 5px; }
-            
-            /* QQ聊天窗口 */
-            .qq-chat-header { padding: 8px 10px; flex-shrink: 0; }
-            .qq-chat-avatar { width: 36px; height: 36px; }
-            .qq-chat-name { font-size: 13px; }
+            .qq-contact { padding: 6px; }
+            .qq-contact-avatar { width: 32px; height: 32px; }
+            .qq-contact-name { font-size: 12px; }
+            .qq-contact-signature { font-size: 10px; }
+            .qq-contact-badge { font-size: 9px; padding: 1px 4px; }
+
+            /* QQ聊天 */
+            .qq-chat-header { padding: 6px 8px; flex-shrink: 0; }
+            .qq-chat-avatar { width: 30px; height: 30px; }
+            .qq-chat-name { font-size: 12px; }
             .qq-chat-tabs { flex-shrink: 0; }
-            .qq-chat-messages { padding: 8px; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            .qq-msg-bubble { font-size: 13px; max-width: 260px; padding: 8px 10px; }
-            .qq-msg-avatar { width: 32px; height: 32px; }
+            .qq-chat-messages { padding: 6px; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .qq-msg-bubble { font-size: 12px; max-width: 220px; padding: 6px 8px; }
+            .qq-msg-avatar { width: 28px; height: 28px; }
             .qq-chat-input-area { flex-shrink: 0; }
-            .qq-chat-input { font-size: 14px; height: 50px; padding: 10px; }
-            .qq-chat-btn { padding: 8px 20px; font-size: 13px; }
-            
+            .qq-chat-input { font-size: 13px; height: 44px; padding: 8px; }
+            .qq-chat-btn { padding: 6px 16px; font-size: 12px; }
+
             /* QQ空间 */
-            .qzone-banner { height: 90px; }
-            .qzone-profile { padding: 0 12px; }
-            .qzone-avatar { width: 60px; height: 60px; }
-            .qzone-name { font-size: 15px; }
-            .qzone-body { padding: 12px; }
-            .qzone-post { padding: 10px; }
-            .qzone-post-text { font-size: 13px; }
-            
+            .qzone-banner { height: 70px; }
+            .qzone-profile { padding: 0 8px; }
+            .qzone-avatar { width: 48px; height: 48px; }
+            .qzone-name { font-size: 13px; }
+            .qzone-body { padding: 8px; }
+            .qzone-post { padding: 8px; }
+            .qzone-post-text { font-size: 12px; }
+
             /* 笔记本 */
             .notebook-header { flex-shrink: 0; }
             .notebook-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-            
+
             /* IE浏览器 */
             .ie-toolbar { flex-shrink: 0; }
             .ie-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
             .ie-status { flex-shrink: 0; }
-            
+
             /* 资源管理器 */
             .explorer-toolbar { flex-shrink: 0; }
-            .explorer-content { 
-                flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-                display: flex;
-                flex-wrap: wrap;
-                align-content: flex-start;
-                padding: 10px;
-                gap: 10px;
-            }
-            .explorer-item {
-                width: calc(33% - 8px);
-                min-height: 60px;
-            }
-            
-            /* QQ登录弹窗 */
-            .qq-login-popup {
-                position: fixed;
-                z-index: 200;
-            }
-            .qq-login-box { width: 90vw; max-width: 320px; }
-            .qq-login-input { font-size: 16px; padding: 10px; height: 44px; }
-            .qq-login-btn { padding: 10px; font-size: 14px; }
-            
-            /* 线索弹窗 */
-            .clue-overlay {
-                position: fixed;
-                z-index: 200;
-            }
-            .clue-box { max-width: 90vw; margin: 0 10px; padding: 16px; }
-            .clue-text { font-size: 13px; }
-            
-            /* 结局画面 */
-            .ending-overlay {
-                position: fixed;
-                z-index: 300;
-            }
-            
-            /* CRT扫描线 */
-            .crt-scanlines {
-                position: fixed;
-                z-index: 99998;
-            }
-            
-            /* 返回按钮（手机端显示） */
-            .mobile-back-btn {
-                display: block;
-                background: rgba(255,255,255,0.2);
-                border: 1px solid rgba(255,255,255,0.4);
-                border-radius: 4px;
-                color: white;
-                font-size: 13px;
-                padding: 4px 12px;
-                cursor: pointer;
-                margin-right: 8px;
-                flex-shrink: 0;
-                min-height: 28px;
-                min-width: 50px;
-                text-align: center;
-            }
-            .mobile-back-btn:active { background: rgba(255,255,255,0.4); }
-            
-            /* 关闭按钮加大 */
-            .xp-btn.close {
-                min-width: 44px;
-                min-height: 32px;
-                width: 44px;
-                height: 32px;
-                font-size: 16px;
-            }
-            
-            /* 监控故障效果 */
-            .glitch-text { font-size: 28px; letter-spacing: 2px; }
-            .cam-feed { width: 280px; }
-            .cam-screen { width: 280px; height: 160px; }
-            .glitch-btn { padding: 10px 36px; font-size: 14px; }
-            
+            .explorer-content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; display: flex; flex-wrap: wrap; align-content: flex-start; padding: 8px; gap: 8px; }
+            .explorer-item { width: calc(33% - 6px); min-height: 50px; }
+
+            /* 弹窗 */
+            .qq-login-popup { position: fixed; z-index: 200; }
+            .qq-login-box { width: 85vw; max-width: 300px; }
+            .qq-login-input { font-size: 15px; padding: 8px; height: 40px; }
+            .qq-login-btn { padding: 8px; font-size: 13px; }
+            .clue-overlay { position: fixed; z-index: 200; }
+            .clue-box { max-width: 85vw; margin: 0 8px; padding: 12px; }
+            .clue-text { font-size: 12px; }
+            .ending-overlay { position: fixed; z-index: 300; }
+            .crt-scanlines { position: fixed; z-index: 99998; }
+
             /* 提示 */
-            .toast {
-                position: fixed;
-                font-size: 12px; padding: 10px 16px; bottom: 56px;
-                z-index: 500;
-            }
-            
-            /* 禁用拖拽（触控设备） */
+            .toast { position: fixed; font-size: 11px; padding: 8px 12px; bottom: 48px; z-index: 500; }
+
+            /* 禁用拖拽 */
             .xp-titlebar { cursor: default; }
-            
-            /* 全局触摸优化 */
+
+            /* 触摸优化 */
             * { -webkit-tap-highlight-color: transparent; }
             button, .qq-contact, .qq-tab, .desktop-icon, .folder-sidebar-item,
             .ie-history-item, .explorer-item, .folder-item, .qzone-tab,
             .mobile-back-btn, .xp-btn, .qq-chat-tab, .start-btn, .taskbar-item {
-                min-height: 36px;
-                min-width: 36px;
+                min-height: 32px; min-width: 32px;
             }
-            
-            /* 确保所有可滚动区域支持触摸 */
+
+            /* 可滚动区域触摸 */
             .qq-contacts, .qq-chat-messages, .qzone-body, .notebook-content,
             .ie-content, .explorer-content, .folder-content, .folder-sidebar,
-            .ending-content, .notepad-content {
-                touch-action: pan-y !important;
-                -webkit-overflow-scrolling: touch !important;
+            .ending-content, .notepad-content, .progress-box {
+                touch-action: pan-y;
+                -webkit-overflow-scrolling: touch;
             }
-            
-            /* 头像图片确保显示 */
+
+            /* 头像图片 */
             .qq-my-avatar img, .qq-contact-avatar img, .qq-chat-avatar img,
             .qq-msg-avatar img, .qzone-avatar img {
-                width: 100% !important;
-                height: 100% !important;
-                object-fit: cover !important;
-                display: block !important;
+                width: 100%; height: 100%; object-fit: cover; display: block;
             }
-            
-            /* 桌面图标横排可滑动 */
-            .desktop-icons { touch-action: pan-x; }
-            
-            /* 支线故事对话框 */
-            .story-overlay { padding: 20px; }
-            .story-dialogue { padding: 20px; }
-            .story-text { font-size: 14px; }
-            .story-choice { padding: 10px 30px; font-size: 13px; min-width: 160px; }
-            .story-diary-entry { padding: 10px 12px; font-size: 12px; }
+
+            /* 监控故障 */
+            .glitch-text { font-size: 22px; letter-spacing: 1px; }
+            .cam-feed { width: 240px; }
+            .cam-screen { width: 240px; height: 140px; }
+            .glitch-btn { padding: 8px 28px; font-size: 13px; }
+
+            /* 支线故事 */
+            .story-overlay { padding: 16px; }
+            .story-dialogue { padding: 16px; }
+            .story-text { font-size: 13px; }
+            .story-choice { padding: 8px 24px; font-size: 12px; min-width: 140px; }
+            .story-diary-entry { padding: 8px 10px; font-size: 11px; }
         }
         
         /* ====== CRT扫描线效果 ====== */
